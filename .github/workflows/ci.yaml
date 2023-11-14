@@ -1,0 +1,22 @@
+name: "[CDK]: Lint and Compile"
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  cdk-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: install dependencies
+        run: yarn install --frozen-lockfile
+
+      - run: yarn lint
+      - run: yarn prettier
+      - run: yarn compile
+      - run: yarn synth
+        if: github.repository != 'AleCo3lho/aws-cdk-template'
+      - run: yarn test

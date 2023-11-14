@@ -1,0 +1,35 @@
+# https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+version: 2
+updates:
+  # Maintain dependencies for GitHub Actions
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+  - package-ecosystem: 'npm'
+    directory: '/'
+    schedule:
+      interval: 'weekly'
+    versioning-strategy: increase
+    reviewers:
+      - 'AleCo3lho'
+    groups:
+      # This is the name of your group, it will be used in PR titles and branch names
+      aws-cdk-dependencies:
+        patterns:
+          - "aws-cdk*"
+          # This is for custom packages, such as `@aws-cdk/lambda-layer-kubectl-v23`
+          - "@aws-cdk/*"
+      eslint-dependencies:
+        patterns:
+          - eslint
+          - eslint-*
+          - "@eslint/*"
+          - "@eslint-community/*"
+          - "@typescript-eslint/*"
+      jest-dependencies:
+        patterns:
+          - jest
+          - ts-jest
+          - jest-*
+          - "@jest/*"
