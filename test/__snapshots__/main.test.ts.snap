@@ -639,7 +639,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
           },
           "Type": "S3",
         },
-        "Name": "SynthPipeline",
+        "Name": "BlogIacPipeline",
         "RestartExecutionOnUpdate": true,
         "RoleArn": {
           "Fn::GetAtt": [
@@ -1122,7 +1122,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
           "PrivilegedMode": false,
           "Type": "LINUX_CONTAINER",
         },
-        "Name": "SynthPipeline-selfupdate",
+        "Name": "BlogIacPipeline-selfupdate",
         "ServiceRole": {
           "Fn::GetAtt": [
             "PipelineStackUpdatePipelineSelfMutationRole759DEB9D",

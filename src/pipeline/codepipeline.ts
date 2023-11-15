@@ -17,9 +17,6 @@ export class PipelineStage extends Stage {
   }
 }
 
-/**
- * Stack to that creates a CDK CodePipeline pipeline
- */
 export class CodePipelineStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
@@ -33,7 +30,7 @@ export class CodePipelineStack extends Stack {
     });
 
     const pipeline = new CodePipeline(this, "PipelineStack", {
-      pipelineName: "SynthPipeline",
+      pipelineName: "BlogIacPipeline",
       synth: new ShellStep("Synth", {
         input: githubConnection,
         commands: ["yarn", "yarn run cdk synth"],
