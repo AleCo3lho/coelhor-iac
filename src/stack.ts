@@ -22,10 +22,14 @@ export class CoelhorIac extends Stack {
       validation: acm.CertificateValidation.fromDns(hostedzone),
     });
 
+    blogCert.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
     const blogBucket = new s3.Bucket(this, "BlogBucket", {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
     });
+
+    blogBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const blogCF = new cloudfront.Distribution(this, "BlogCF", {
       defaultBehavior: {
@@ -37,11 +41,15 @@ export class CoelhorIac extends Stack {
       defaultRootObject: "index.html",
     });
 
-    new route53.ARecord(this, "BlogAliasRecord", {
+    blogCF.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const blogAliasRecord = new route53.ARecord(this, "BlogAliasRecord", {
       target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(blogCF)),
       zone: hostedzone,
       recordName: "coelhor.dev",
     });
+
+    blogAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     Tags.of(this).add("Project", "coelhor-iac");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");

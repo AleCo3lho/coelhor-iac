@@ -1376,6 +1376,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
   },
   "Resources": {
     "BlogAliasRecord6BC43687": {
+      "DeletionPolicy": "Delete",
       "Properties": {
         "AliasTarget": {
           "DNSName": {
@@ -1399,6 +1400,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         "Type": "A",
       },
       "Type": "AWS::Route53::RecordSet",
+      "UpdateReplacePolicy": "Delete",
     },
     "BlogBucket3E358F18": {
       "DeletionPolicy": "Delete",
@@ -1519,6 +1521,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::S3::BucketPolicy",
     },
     "BlogCF6DF9B024": {
+      "DeletionPolicy": "Delete",
       "Properties": {
         "DistributionConfig": {
           "Aliases": [
@@ -1579,6 +1582,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         ],
       },
       "Type": "AWS::CloudFront::Distribution",
+      "UpdateReplacePolicy": "Delete",
     },
     "BlogCFOrigin1S3Origin81D7F982": {
       "Properties": {
@@ -1589,6 +1593,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
     },
     "BlogCert0B44B7E7": {
+      "DeletionPolicy": "Delete",
       "Properties": {
         "DomainName": "coelhor.dev",
         "DomainValidationOptions": [
@@ -1617,6 +1622,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         "ValidationMethod": "DNS",
       },
       "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Delete",
     },
     "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
       "DependsOn": [

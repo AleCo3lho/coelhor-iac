@@ -1,5 +1,5 @@
 {
-  "name": "aws-cdk-template-CHANGE-ME",
+  "name": "coelhor-iac",
   "version": "0.0.1",
   "private": true,
   "license": "UNLICENSED",
@@ -12,7 +12,7 @@
     "lint": "eslint src",
     "lint:fix": "eslint --fix src",
     "prettier": "prettier --check src/",
-    "prettier:fix": "prettier --write src/",
+    "prettier:fix": "prettier --write src/*",
     "test": "jest",
     "test:fix": "jest --updateSnapshot"
   },
