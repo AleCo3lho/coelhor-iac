@@ -4,6 +4,8 @@ import * as route53 from "aws-cdk-lib/aws-route53";
 import * as acm from "aws-cdk-lib/aws-certificatemanager";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
+import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
+import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 
 export class CoelhorIac extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -25,18 +27,20 @@ export class CoelhorIac extends Stack {
       removalPolicy: RemovalPolicy.DESTROY,
     });
 
-    new cloudfront.CloudFrontWebDistribution(this, "BlogCF", {
-      originConfigs: [
-        {
-          s3OriginSource: {
-            s3BucketSource: blogBucket,
-          },
-          behaviors: [{ isDefaultBehavior: true }],
-        },
-      ],
-      viewerCertificate: cloudfront.ViewerCertificate.fromAcmCertificate(blogCert, {
-        aliases: ["coelhor.dev"],
-      }),
+    const blogCF = new cloudfront.Distribution(this, "BlogCF", {
+      defaultBehavior: {
+        origin: new origins.S3Origin(blogBucket),
+        viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+      },
+      domainNames: ["coelhor.dev", "*.coelhor.dev"],
+      certificate: blogCert,
+      defaultRootObject: "index.html",
+    });
+
+    new route53.ARecord(this, "BlogAliasRecord", {
+      target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(blogCF)),
+      zone: hostedzone,
+      recordName: "coelhor.dev",
     });
 
     Tags.of(this).add("Project", "coelhor-iac");
