@@ -3,17 +3,27 @@ import { CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelin
 import { Construct } from "constructs";
 import { CoelhorIac } from "../stack";
 import { prodConfig } from "../config";
+import { BlogPipelineStack } from "./blogpipeline";
 
 export class PipelineStage extends Stage {
   constructor(scope: Construct, id: string, props?: StageProps) {
     super(scope, id, props);
 
-    new CoelhorIac(this, "InfraStack", {
+    const blogIac = new CoelhorIac(this, "InfraStack", {
       env: {
         account: `${prodConfig.env.account}`,
         region: `${prodConfig.env.region}`,
       },
     });
+
+    const blogPipeline = new BlogPipelineStack(this, "BlogPipeline", {
+      env: {
+        account: `${prodConfig.env.account}`,
+        region: `${prodConfig.env.region}`,
+      },
+    });
+
+    blogPipeline.addDependency(blogIac);
   }
 }
 
