@@ -9,4 +9,5 @@ export const config = {
   hostedzone: "Z0595012323F7RI1KVDD2",
   owner: "AleCo3lho",
   blogRepo: "coelhor-blog",
+  blogBranch: "main",
 } as const satisfies Config;

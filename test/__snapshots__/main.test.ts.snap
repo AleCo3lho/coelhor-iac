@@ -393,7 +393,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                   "Version": "1",
                 },
                 "Configuration": {
-                  "Branch": "master",
+                  "Branch": "main",
                   "OAuthToken": "{{resolve:secretsmanager:GitHubToken:SecretString:::}}",
                   "Owner": "AleCo3lho",
                   "PollForSourceChanges": false,

@@ -7,4 +7,5 @@ export type Config = {
   hostedzone: string;
   blogRepo?: string;
   owner?: string;
+  blogBranch?: string;
 };

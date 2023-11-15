@@ -24,6 +24,7 @@ export class BlogPipelineStack extends Stack {
       actionName: "GitHub_Source",
       owner: `${prodConfig.owner}`,
       repo: `${prodConfig.blogRepo}`,
+      branch: `${prodConfig.blogBranch}`,
       oauthToken: oauth,
       output: sourceArtifact,
     });
