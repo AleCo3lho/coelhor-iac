@@ -54,7 +54,7 @@ export class BlogPipelineStack extends Stack {
               commands: ["echo In pre_build stage", "echo Current directory is $CODEBUILD_SRC_DIR", "ls -la"],
             },
             build: {
-              commands: ["hugo -v", "ls -al public"],
+              commands: ["hugo -v", "ls -al public", "ls -al themes"],
             },
           },
           artifacts: {
