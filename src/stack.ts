@@ -8,6 +8,7 @@ import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as ssm from "aws-cdk-lib/aws-ssm";
 import { prodConfig } from "./config";
+import * as lambda from "aws-cdk-lib/aws-lambda";
 
 export class CoelhorIac extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -37,11 +38,10 @@ export class CoelhorIac extends Stack {
       parameterName: "/blog/s3/bucket-arn",
     });
 
-    const cfFunction = new cloudfront.Function(this, "CloudFrontFunction", {
-      code: cloudfront.FunctionCode.fromFile({
-        filePath: "src/utils/lambda/rewrite.js",
-      }),
-      comment: "Function to rewrite the request path to /index.html",
+    const cfFunction = new cloudfront.experimental.EdgeFunction(this, "MyFunction", {
+      runtime: lambda.Runtime.NODEJS_LATEST,
+      handler: "index.handler",
+      code: lambda.Code.fromAsset("src/utils/lambda/rewrite.zip"),
     });
 
     const blogCF = new cloudfront.Distribution(this, "BlogCF", {
