@@ -49,7 +49,7 @@ export class BlogPipelineStack extends Stack {
           phases: {
             build: {
               commands: [
-                "git submodule update --init --recursive --depth 1", 
+                "git submodule update --init --recursive --depth 1",
                 "wget https://github.com/gohugoio/hugo/releases/download/v0.120.4/hugo_extended_0.120.4_Linux-64bit.tar.gz",
                 "tar -xzf hugo_extended_0.120.4_Linux-64bit.tar.gz",
                 "mv hugo /usr/bin/hugo",
