@@ -20,6 +20,7 @@ export class BlogPipelineStack extends Stack {
     const blogBucketARN = ssm.StringParameter.fromStringParameterName(this, "BlogBucketARN", "/blog/s3/bucket-arn");
     const oauth = SecretValue.secretsManager("GitHubToken");
     const sourceArtifact = new codepipeline.Artifact("SourceInput");
+    const buildArtifact = new codepipeline.Artifact("BuildOutput");
     const sourceAction = new cpactions.GitHubSourceAction({
       actionName: "GitHub_Source",
       owner: `${prodConfig.owner}`,
@@ -29,10 +30,36 @@ export class BlogPipelineStack extends Stack {
       output: sourceArtifact,
     });
 
+    const buildAction = new cpactions.CodeBuildAction({
+      actionName: "Build",
+      input: sourceArtifact,
+      outputs: [buildArtifact],
+      project: new codebuild.PipelineProject(this, "Build", {
+        environment: {
+          buildImage: codebuild.LinuxBuildImage.STANDARD_7_0,
+        },
+        buildSpec: codebuild.BuildSpec.fromObject({
+          version: "0.2",
+          phases: {
+            install: {
+              commands: ["sudo apt install hugo"],
+            },
+            build: {
+              commands: ["hugo --environment production --minify"],
+            },
+          },
+          artifacts: {
+            "base-directory": "public",
+            files: ["**/*"],
+          },
+        }),
+      }),
+    });
+
     const deployAction = new cpactions.S3DeployAction({
       bucket: s3.Bucket.fromBucketArn(this, "Bucket", `${blogBucketARN.stringValue}`),
       actionName: "Deploy",
-      input: sourceArtifact,
+      input: buildArtifact,
       runOrder: 1,
     });
 
@@ -58,7 +85,7 @@ export class BlogPipelineStack extends Stack {
     const invalidateCFAction = new cpactions.CodeBuildAction({
       actionName: "CloudFormation_Invalidation",
       project: invalidateCFProject,
-      input: sourceArtifact,
+      input: buildArtifact,
       runOrder: 2,
       environmentVariables: {
         CLOUDFRONT_ID: { value: `${blogCloudFrontID.stringValue}` },
@@ -71,6 +98,10 @@ export class BlogPipelineStack extends Stack {
         {
           stageName: "Source",
           actions: [sourceAction],
+        },
+        {
+          stageName: "Build",
+          actions: [buildAction],
         },
         {
           stageName: "Deploy",
