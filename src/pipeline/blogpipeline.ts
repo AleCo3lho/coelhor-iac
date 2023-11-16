@@ -51,10 +51,10 @@ export class BlogPipelineStack extends Stack {
               commands: ["apt-get update", "echo Installing Hugo", "apt-get install -y hugo"],
             },
             pre_build: {
-              commands: ["echo In pre_build stage", "echo Current directory is $CODEBUILD_SRC_DIR", "ls -la"],
+              commands: ["echo In pre_build stage", "echo Current directory is $CODEBUILD_SRC_DIR"],
             },
             build: {
-              commands: ["hugo -v", "ls -al public", "ls -al themes"],
+              commands: ["hugo mod get -u", "hugo"],
             },
           },
           artifacts: {

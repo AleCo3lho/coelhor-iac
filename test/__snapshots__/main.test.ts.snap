@@ -59,14 +59,13 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
     "pre_build": {
       "commands": [
         "echo In pre_build stage",
-        "echo Current directory is $CODEBUILD_SRC_DIR",
-        "ls -la"
+        "echo Current directory is $CODEBUILD_SRC_DIR"
       ]
     },
     "build": {
       "commands": [
-        "hugo -v",
-        "ls -al public"
+        "hugo mod get -u",
+        "hugo"
       ]
     }
   },
