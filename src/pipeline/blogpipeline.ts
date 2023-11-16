@@ -35,7 +35,6 @@ export class BlogPipelineStack extends Stack {
       input: sourceArtifact,
       outputs: [buildArtifact],
       environmentVariables: {
-        DART_SASS_VERSION: { value: "1.69.5" },
         HUGO_VERSION: { value: "0.120.4" },
         GO_VERSION: { value: "1.21.4" },
       },
@@ -49,11 +48,10 @@ export class BlogPipelineStack extends Stack {
           phases: {
             build: {
               commands: [
-                "git submodule update --init --recursive --depth 1",
-                "wget https://github.com/gohugoio/hugo/releases/download/v0.120.4/hugo_extended_0.120.4_Linux-64bit.tar.gz",
-                "tar -xzf hugo_extended_0.120.4_Linux-64bit.tar.gz",
+                "wget https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz",
+                "tar -xzf hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz",
                 "mv hugo /usr/bin/hugo",
-                "rm -rf hugo_extended_0.120.4_Linux-64bit.tar.gz",
+                "rm -rf hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz",
                 "hugo",
               ],
             },
