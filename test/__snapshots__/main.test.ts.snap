@@ -51,6 +51,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
   "phases": {
     "install": {
       "commands": [
+        "sudo apt update",
         "sudo apt install hugo"
       ]
     },
