@@ -42,7 +42,7 @@ export class BlogPipelineStack extends Stack {
           version: "0.2",
           phases: {
             install: {
-              commands: ["sudo apt install hugo"],
+              commands: ["sudo apt update", "sudo apt install hugo"],
             },
             build: {
               commands: ["hugo --environment production --minify"],
