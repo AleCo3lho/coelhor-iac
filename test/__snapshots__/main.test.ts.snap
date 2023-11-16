@@ -52,7 +52,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
     "install": {
       "commands": [
         "sudo apt update",
-        "sudo apt install hugo"
+        "sudo apt install hugo -y"
       ]
     },
     "build": {
