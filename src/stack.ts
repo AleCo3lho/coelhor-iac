@@ -39,7 +39,7 @@ export class CoelhorIac extends Stack {
 
     const cfFunction = new cloudfront.Function(this, "CloudFrontFunction", {
       code: cloudfront.FunctionCode.fromFile({
-        filePath: "/src/utils/lambda/rewrite.js",
+        filePath: "src/utils/lambda/rewrite.js",
       }),
       comment: "Function to rewrite the request path to /index.html",
     });
