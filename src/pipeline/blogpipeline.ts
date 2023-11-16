@@ -34,18 +34,27 @@ export class BlogPipelineStack extends Stack {
       actionName: "Build",
       input: sourceArtifact,
       outputs: [buildArtifact],
+      environmentVariables: {
+        DART_SASS_VERSION: { value: "1.69.5" },
+        HUGO_VERSION: { value: "0.120.4" },
+        GO_VERSION: { value: "1.21.4" },
+      },
       project: new codebuild.PipelineProject(this, "Build", {
         environment: {
           buildImage: codebuild.LinuxBuildImage.STANDARD_7_0,
+          privileged: true,
         },
         buildSpec: codebuild.BuildSpec.fromObject({
           version: "0.2",
           phases: {
             install: {
-              commands: ["sudo apt update", "sudo apt install hugo -y"],
+              commands: ["apt-get update", "echo Installing Hugo", "apt-get install -y hugo"],
+            },
+            pre_build: {
+              commands: ["echo In pre_build stage", "echo Current directory is $CODEBUILD_SRC_DIR", "ls -la"],
             },
             build: {
-              commands: ["hugo --environment production --minify"],
+              commands: ["hugo -v", "ls -al public"],
             },
           },
           artifacts: {

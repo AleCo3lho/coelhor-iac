@@ -36,7 +36,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
           "ComputeType": "BUILD_GENERAL1_SMALL",
           "Image": "aws/codebuild/standard:7.0",
           "ImagePullCredentialsType": "CODEBUILD",
-          "PrivilegedMode": false,
+          "PrivilegedMode": true,
           "Type": "LINUX_CONTAINER",
         },
         "ServiceRole": {
@@ -51,13 +51,22 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
   "phases": {
     "install": {
       "commands": [
-        "sudo apt update",
-        "sudo apt install hugo -y"
+        "apt-get update",
+        "echo Installing Hugo",
+        "apt-get install -y hugo"
+      ]
+    },
+    "pre_build": {
+      "commands": [
+        "echo In pre_build stage",
+        "echo Current directory is $CODEBUILD_SRC_DIR",
+        "ls -la"
       ]
     },
     "build": {
       "commands": [
-        "hugo --environment production --minify"
+        "hugo -v",
+        "ls -al public"
       ]
     }
   },
@@ -701,6 +710,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                   "Version": "1",
                 },
                 "Configuration": {
+                  "EnvironmentVariables": "[{"name":"DART_SASS_VERSION","type":"PLAINTEXT","value":"1.69.5"},{"name":"HUGO_VERSION","type":"PLAINTEXT","value":"0.120.4"},{"name":"GO_VERSION","type":"PLAINTEXT","value":"1.21.4"}]",
                   "ProjectName": {
                     "Ref": "Build45A36621",
                   },
