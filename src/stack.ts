@@ -37,10 +37,24 @@ export class CoelhorIac extends Stack {
       parameterName: "/blog/s3/bucket-arn",
     });
 
+    const cfFunction = new cloudfront.Function(this, "CloudFrontFunction", {
+      code: cloudfront.FunctionCode.fromFile({
+        filePath: "src/utils/lambda/rewrite.js",
+      }),
+      comment: "Function to rewrite the request path to /index.html",
+    });
+
     const blogCF = new cloudfront.Distribution(this, "BlogCF", {
       defaultBehavior: {
         origin: new origins.S3Origin(blogBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
+        functionAssociations: [
+          {
+            function: cfFunction,
+            eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+          },
+        ],
       },
       domainNames: [`${prodConfig.domain}`, `*.${prodConfig.domain}`],
       certificate: blogCert,

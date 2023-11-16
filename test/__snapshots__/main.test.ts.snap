@@ -2780,8 +2780,19 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "*.coelhor.dev",
           ],
           "DefaultCacheBehavior": {
-            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
             "Compress": true,
+            "FunctionAssociations": [
+              {
+                "EventType": "viewer-request",
+                "FunctionARN": {
+                  "Fn::GetAtt": [
+                    "CloudFrontFunctionF735DE97",
+                    "FunctionARN",
+                  ],
+                },
+              },
+            ],
             "TargetOriginId": "MyTestStackBlogCFOrigin1A38252BB",
             "ViewerProtocolPolicy": "redirect-to-https",
           },
@@ -2888,6 +2899,39 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Delete",
+    },
+    "CloudFrontFunctionF735DE97": {
+      "Properties": {
+        "AutoPublish": true,
+        "FunctionCode": "'use strict';
+exports.handler = (event, context, callback) => {
+    
+    // Extract the request from the CloudFront event that is sent to Lambda@Edge 
+    var request = event.Records[0].cf.request;
+
+    // Extract the URI from the request
+    var olduri = request.uri;
+
+    // Match any '/' that occurs at the end of a URI. Replace it with a default index
+    var newuri = olduri.replace(/\\/$/, '\\/index.html');
+    
+    // Log the URI as received by CloudFront and the new URI to be used to fetch from origin
+    console.log("Old URI: " + olduri);
+    console.log("New URI: " + newuri);
+    
+    // Replace the received URI with the URI that includes the index page
+    request.uri = newuri;
+    
+    // Return to CloudFront
+    return callback(null, request);
+};",
+        "FunctionConfig": {
+          "Comment": "Function to rewrite the request path to /index.html",
+          "Runtime": "cloudfront-js-1.0",
+        },
+        "Name": "us-east-1MyTestStackCloudFrontFunction071AADE4",
+      },
+      "Type": "AWS::CloudFront::Function",
     },
     "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
       "DependsOn": [
