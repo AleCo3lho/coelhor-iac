@@ -1,4 +1,4 @@
-import { Stack, StackProps, SecretValue } from "aws-cdk-lib";
+import { Stack, StackProps, SecretValue, Tags } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as codepipeline from "aws-cdk-lib/aws-codepipeline";
 import * as cpactions from "aws-cdk-lib/aws-codepipeline-actions";
@@ -117,5 +117,8 @@ export class BlogPipelineStack extends Stack {
         },
       ],
     });
+
+    Tags.of(this).add("Project", "coelhor-iac");
+    Tags.of(this).add("Author", "Alexandre Coelho Ramos");
   }
 }

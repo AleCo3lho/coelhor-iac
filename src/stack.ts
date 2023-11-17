@@ -41,7 +41,6 @@ export class CoelhorIac extends Stack {
       defaultBehavior: {
         origin: new origins.S3Origin(blogBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
       },
       domainNames: [`${prodConfig.domain}`, `*.${prodConfig.domain}`],
       certificate: blogCert,

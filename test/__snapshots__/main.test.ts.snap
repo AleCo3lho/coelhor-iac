@@ -68,6 +68,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
 }",
           "Type": "CODEPIPELINE",
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
@@ -85,6 +95,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -279,6 +299,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
 }",
           "Type": "CODEPIPELINE",
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::CodeBuild::Project",
     },
@@ -296,6 +326,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -479,6 +519,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
           "IgnorePublicAcls": true,
           "RestrictPublicBuckets": true,
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Retain",
@@ -510,6 +560,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::KMS::Key",
       "UpdateReplacePolicy": "Delete",
@@ -600,6 +660,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -817,6 +887,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
             "Name": "Deploy",
           },
         ],
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::CodePipeline::Pipeline",
     },
@@ -845,6 +925,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -903,6 +993,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -1007,6 +1107,16 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
           ],
           "Version": "2012-10-17",
         },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
       },
       "Type": "AWS::IAM::Role",
     },
@@ -2040,6 +2150,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                     ],
                   },
                   "StackName": "Prod-BlogPipeline",
+                  "TemplateConfiguration": "Synth_Output::assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdBlogPipeline39CE1D8B.template.json.config.json",
                   "TemplatePath": "Synth_Output::assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdBlogPipeline39CE1D8B.template.json",
                 },
                 "InputArtifacts": [
