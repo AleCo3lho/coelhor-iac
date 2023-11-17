@@ -29,12 +29,10 @@ export class CoelhorIac extends Stack {
     const blogBucket = new s3.Bucket(this, "BlogBucket", {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
-      websiteIndexDocument: "index.html",
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
       accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
     });
     blogBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
-    blogBucket.grantPublicAccess();
 
     new ssm.StringParameter(this, "BlogBucketArn", {
       stringValue: blogBucket.bucketArn,
@@ -45,9 +43,41 @@ export class CoelhorIac extends Stack {
       defaultBehavior: {
         origin: new origins.S3Origin(blogBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
+        functionAssociations: [
+          {
+            eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
+            function: new cloudfront.Function(this, "BlogCFRedirect", {
+              code: cloudfront.FunctionCode.fromInline(`
+                function handler(event) {
+                  var request = event.request;
+                  var uri = request.uri;
+                  if (uri.endsWith('/')) {
+                    request.uri += 'index.html';
+                  } 
+                  else if (!uri.includes('.')) {
+                    request.uri += '/index.html';
+                  }
+                  return request;
+              `),
+            }),
+          },
+        ],
       },
       domainNames: [`${prodConfig.domain}`, `*.${prodConfig.domain}`],
       certificate: blogCert,
+      defaultRootObject: "index.html",
+      errorResponses: [
+        {
+          httpStatus: 404,
+          responseHttpStatus: 200,
+          responsePagePath: "/index.html",
+        },
+        {
+          httpStatus: 403,
+          responseHttpStatus: 200,
+          responsePagePath: "/index.html",
+        },
+      ],
     });
 
     blogCF.applyRemovalPolicy(RemovalPolicy.DESTROY);

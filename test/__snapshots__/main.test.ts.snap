@@ -2769,9 +2769,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "Value": "coelhor-iac",
           },
         ],
-        "WebsiteConfiguration": {
-          "IndexDocument": "index.html",
-        },
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
@@ -2862,7 +2859,12 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               "Action": "s3:GetObject",
               "Effect": "Allow",
               "Principal": {
-                "AWS": "*",
+                "CanonicalUser": {
+                  "Fn::GetAtt": [
+                    "BlogCFOrigin1S3Origin81D7F982",
+                    "S3CanonicalUserId",
+                  ],
+                },
               },
               "Resource": {
                 "Fn::Join": [
@@ -2893,40 +2895,61 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "coelhor.dev",
             "*.coelhor.dev",
           ],
+          "CustomErrorResponses": [
+            {
+              "ErrorCode": 404,
+              "ResponseCode": 200,
+              "ResponsePagePath": "/index.html",
+            },
+            {
+              "ErrorCode": 403,
+              "ResponseCode": 200,
+              "ResponsePagePath": "/index.html",
+            },
+          ],
           "DefaultCacheBehavior": {
             "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
             "Compress": true,
+            "FunctionAssociations": [
+              {
+                "EventType": "viewer-request",
+                "FunctionARN": {
+                  "Fn::GetAtt": [
+                    "BlogCFRedirectA793392E",
+                    "FunctionARN",
+                  ],
+                },
+              },
+            ],
             "TargetOriginId": "MyTestStackBlogCFOrigin1A38252BB",
             "ViewerProtocolPolicy": "redirect-to-https",
           },
+          "DefaultRootObject": "index.html",
           "Enabled": true,
           "HttpVersion": "http2",
           "IPV6Enabled": true,
           "Origins": [
             {
-              "CustomOriginConfig": {
-                "OriginProtocolPolicy": "http-only",
-                "OriginSSLProtocols": [
-                  "TLSv1.2",
-                ],
-              },
               "DomainName": {
-                "Fn::Select": [
-                  2,
-                  {
-                    "Fn::Split": [
-                      "/",
-                      {
-                        "Fn::GetAtt": [
-                          "BlogBucket3E358F18",
-                          "WebsiteURL",
-                        ],
-                      },
-                    ],
-                  },
+                "Fn::GetAtt": [
+                  "BlogBucket3E358F18",
+                  "RegionalDomainName",
                 ],
               },
               "Id": "MyTestStackBlogCFOrigin1A38252BB",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "origin-access-identity/cloudfront/",
+                      {
+                        "Ref": "BlogCFOrigin1S3Origin81D7F982",
+                      },
+                    ],
+                  ],
+                },
+              },
             },
           ],
           "ViewerCertificate": {
@@ -2964,6 +2987,37 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         },
       },
       "Type": "AWS::SSM::Parameter",
+    },
+    "BlogCFOrigin1S3Origin81D7F982": {
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": "Identity for MyTestStackBlogCFOrigin1A38252BB",
+        },
+      },
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+    },
+    "BlogCFRedirectA793392E": {
+      "Properties": {
+        "AutoPublish": true,
+        "FunctionCode": "
+                function handler(event) {
+                  var request = event.request;
+                  var uri = request.uri;
+                  if (uri.endsWith('/')) {
+                    request.uri += 'index.html';
+                  } 
+                  else if (!uri.includes('.')) {
+                    request.uri += '/index.html';
+                  }
+                  return request;
+              ",
+        "FunctionConfig": {
+          "Comment": "us-east-1MyTestStackBlogCFRedirectDF86BDAA",
+          "Runtime": "cloudfront-js-1.0",
+        },
+        "Name": "us-east-1MyTestStackBlogCFRedirectDF86BDAA",
+      },
+      "Type": "AWS::CloudFront::Function",
     },
     "BlogCert0B44B7E7": {
       "DeletionPolicy": "Delete",
