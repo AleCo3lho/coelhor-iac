@@ -1225,60 +1225,6 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
       },
       "Type": "AWS::CodeBuild::Project",
     },
-    "PipelineStackAssetsFileAsset231FF7529": {
-      "Properties": {
-        "Artifacts": {
-          "Type": "CODEPIPELINE",
-        },
-        "Cache": {
-          "Type": "NO_CACHE",
-        },
-        "Description": "Pipeline step MyCodePipelineStack/Pipeline/Assets/FileAsset2",
-        "EncryptionKey": "alias/aws/s3",
-        "Environment": {
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/standard:7.0",
-          "ImagePullCredentialsType": "CODEBUILD",
-          "PrivilegedMode": false,
-          "Type": "LINUX_CONTAINER",
-        },
-        "ServiceRole": {
-          "Fn::GetAtt": [
-            "PipelineStackAssetsFileRole7DF1BA0E",
-            "Arn",
-          ],
-        },
-        "Source": {
-          "BuildSpec": "{
-  "version": "0.2",
-  "phases": {
-    "install": {
-      "commands": [
-        "npm install -g cdk-assets@2"
-      ]
-    },
-    "build": {
-      "commands": [
-        "cdk-assets --path \\"assembly-MyCodePipelineStack-prod/MyCodePipelineStackprodInfraStackA7D7889D.assets.json\\" --verbose publish \\"970f0c26ceb1eb073a95e36ecacaaec784bc05c13e7d5064d4c0a5999a78a9bf:239828624774-us-east-1\\""
-      ]
-    }
-  }
-}",
-          "Type": "CODEPIPELINE",
-        },
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
-          },
-        ],
-      },
-      "Type": "AWS::CodeBuild::Project",
-    },
     "PipelineStackAssetsFileRole7DF1BA0E": {
       "Properties": {
         "AssumeRolePolicyDocument": {
@@ -1502,20 +1448,6 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
               "Resource": {
                 "Fn::GetAtt": [
                   "PipelineStackAssetsFileAsset139747991",
-                  "Arn",
-                ],
-              },
-            },
-            {
-              "Action": [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "PipelineStackAssetsFileAsset231FF7529",
                   "Arn",
                 ],
               },
@@ -1997,32 +1929,6 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                   },
                 ],
                 "Name": "FileAsset1",
-                "RoleArn": {
-                  "Fn::GetAtt": [
-                    "PipelineStackCodeBuildActionRoleBF300C35",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-              {
-                "ActionTypeId": {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": {
-                  "ProjectName": {
-                    "Ref": "PipelineStackAssetsFileAsset231FF7529",
-                  },
-                },
-                "InputArtifacts": [
-                  {
-                    "Name": "Synth_Output",
-                  },
-                ],
-                "Name": "FileAsset2",
                 "RoleArn": {
                   "Fn::GetAtt": [
                     "PipelineStackCodeBuildActionRoleBF300C35",
@@ -2747,6 +2653,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "Value": "coelhor-iac",
           },
         ],
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html",
+        },
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
@@ -2795,6 +2704,27 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         "PolicyDocument": {
           "Statement": [
             {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": "*",
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "BlogBucket3E358F18",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+            {
               "Action": [
                 "s3:PutBucketPolicy",
                 "s3:GetBucket*",
@@ -2833,32 +2763,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                 },
               ],
             },
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Principal": {
-                "CanonicalUser": {
-                  "Fn::GetAtt": [
-                    "BlogCFOrigin1S3Origin81D7F982",
-                    "S3CanonicalUserId",
-                  ],
-                },
-              },
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Fn::GetAtt": [
-                        "BlogBucket3E358F18",
-                        "Arn",
-                      ],
-                    },
-                    "/*",
-                  ],
-                ],
-              },
-            },
           ],
           "Version": "2012-10-17",
         },
@@ -2874,16 +2778,8 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "*.coelhor.dev",
           ],
           "DefaultCacheBehavior": {
-            "CachePolicyId": "4135ea2d-6df8-44a3-9df3-4b5a84be39ad",
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
             "Compress": true,
-            "FunctionAssociations": [
-              {
-                "EventType": "viewer-request",
-                "FunctionARN": {
-                  "Ref": "MyFunctionFnCurrentVersion3744DBD7d558dc1806cd972de681002d030b96f5",
-                },
-              },
-            ],
             "TargetOriginId": "MyTestStackBlogCFOrigin1A38252BB",
             "ViewerProtocolPolicy": "redirect-to-https",
           },
@@ -2893,26 +2789,19 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           "IPV6Enabled": true,
           "Origins": [
             {
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "https-only",
+                "OriginSSLProtocols": [
+                  "TLSv1.2",
+                ],
+              },
               "DomainName": {
                 "Fn::GetAtt": [
                   "BlogBucket3E358F18",
-                  "RegionalDomainName",
+                  "WebsiteURL",
                 ],
               },
               "Id": "MyTestStackBlogCFOrigin1A38252BB",
-              "S3OriginConfig": {
-                "OriginAccessIdentity": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "origin-access-identity/cloudfront/",
-                      {
-                        "Ref": "BlogCFOrigin1S3Origin81D7F982",
-                      },
-                    ],
-                  ],
-                },
-              },
             },
           ],
           "ViewerCertificate": {
@@ -2950,14 +2839,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         },
       },
       "Type": "AWS::SSM::Parameter",
-    },
-    "BlogCFOrigin1S3Origin81D7F982": {
-      "Properties": {
-        "CloudFrontOriginAccessIdentityConfig": {
-          "Comment": "Identity for MyTestStackBlogCFOrigin1A38252BB",
-        },
-      },
-      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
     },
     "BlogCert0B44B7E7": {
       "DeletionPolicy": "Delete",
@@ -3042,92 +2923,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         "ManagedPolicyArns": [
           {
             "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "MyFunctionFnBB888140": {
-      "DependsOn": [
-        "MyFunctionFnServiceRoleE00F892D",
-      ],
-      "Properties": {
-        "Code": {
-          "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "970f0c26ceb1eb073a95e36ecacaaec784bc05c13e7d5064d4c0a5999a78a9bf.zip",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "MyFunctionFnServiceRoleE00F892D",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs18.x",
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
-          },
-        ],
-      },
-      "Type": "AWS::Lambda::Function",
-    },
-    "MyFunctionFnCurrentVersion3744DBD7d558dc1806cd972de681002d030b96f5": {
-      "Properties": {
-        "FunctionName": {
-          "Ref": "MyFunctionFnBB888140",
-        },
-      },
-      "Type": "AWS::Lambda::Version",
-    },
-    "MyFunctionFnServiceRoleE00F892D": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "edgelambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
           },
         ],
       },

@@ -8,7 +8,6 @@ import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as ssm from "aws-cdk-lib/aws-ssm";
 import { prodConfig } from "./config";
-import * as lambda from "aws-cdk-lib/aws-lambda";
 
 export class CoelhorIac extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -30,6 +29,8 @@ export class CoelhorIac extends Stack {
     const blogBucket = new s3.Bucket(this, "BlogBucket", {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
+      publicReadAccess: true,
+      websiteIndexDocument: "index.html",
     });
     blogBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
@@ -38,23 +39,11 @@ export class CoelhorIac extends Stack {
       parameterName: "/blog/s3/bucket-arn",
     });
 
-    const cfFunction = new cloudfront.experimental.EdgeFunction(this, "MyFunction", {
-      runtime: lambda.Runtime.NODEJS_LATEST,
-      handler: "index.handler",
-      code: lambda.Code.fromAsset("src/utils/lambda/rewrite.zip"),
-    });
-
     const blogCF = new cloudfront.Distribution(this, "BlogCF", {
       defaultBehavior: {
-        origin: new origins.S3Origin(blogBucket),
+        origin: new origins.HttpOrigin(`${blogBucket.bucketWebsiteUrl}`),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
-        cachePolicy: cloudfront.CachePolicy.CACHING_DISABLED,
-        functionAssociations: [
-          {
-            function: cfFunction,
-            eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
-          },
-        ],
+        cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
       },
       domainNames: [`${prodConfig.domain}`, `*.${prodConfig.domain}`],
       certificate: blogCert,
