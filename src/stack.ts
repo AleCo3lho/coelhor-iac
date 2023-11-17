@@ -29,6 +29,7 @@ export class CoelhorIac extends Stack {
     const blogBucket = new s3.Bucket(this, "BlogBucket", {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
+      websiteIndexDocument: "index.html",
     });
     blogBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
 

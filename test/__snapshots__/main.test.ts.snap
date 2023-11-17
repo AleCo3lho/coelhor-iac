@@ -2764,6 +2764,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "Value": "coelhor-iac",
           },
         ],
+        "WebsiteConfiguration": {
+          "IndexDocument": "index.html",
+        },
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
@@ -2850,32 +2853,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                 },
               ],
             },
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Principal": {
-                "CanonicalUser": {
-                  "Fn::GetAtt": [
-                    "BlogCFOrigin1S3Origin81D7F982",
-                    "S3CanonicalUserId",
-                  ],
-                },
-              },
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Fn::GetAtt": [
-                        "BlogBucket3E358F18",
-                        "Arn",
-                      ],
-                    },
-                    "/*",
-                  ],
-                ],
-              },
-            },
           ],
           "Version": "2012-10-17",
         },
@@ -2901,26 +2878,29 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           "IPV6Enabled": true,
           "Origins": [
             {
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "http-only",
+                "OriginSSLProtocols": [
+                  "TLSv1.2",
+                ],
+              },
               "DomainName": {
-                "Fn::GetAtt": [
-                  "BlogBucket3E358F18",
-                  "RegionalDomainName",
+                "Fn::Select": [
+                  2,
+                  {
+                    "Fn::Split": [
+                      "/",
+                      {
+                        "Fn::GetAtt": [
+                          "BlogBucket3E358F18",
+                          "WebsiteURL",
+                        ],
+                      },
+                    ],
+                  },
                 ],
               },
               "Id": "MyTestStackBlogCFOrigin1A38252BB",
-              "S3OriginConfig": {
-                "OriginAccessIdentity": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "origin-access-identity/cloudfront/",
-                      {
-                        "Ref": "BlogCFOrigin1S3Origin81D7F982",
-                      },
-                    ],
-                  ],
-                },
-              },
             },
           ],
           "ViewerCertificate": {
@@ -2958,14 +2938,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         },
       },
       "Type": "AWS::SSM::Parameter",
-    },
-    "BlogCFOrigin1S3Origin81D7F982": {
-      "Properties": {
-        "CloudFrontOriginAccessIdentityConfig": {
-          "Comment": "Identity for MyTestStackBlogCFOrigin1A38252BB",
-        },
-      },
-      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
     },
     "BlogCert0B44B7E7": {
       "DeletionPolicy": "Delete",
