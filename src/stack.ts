@@ -29,8 +29,6 @@ export class CoelhorIac extends Stack {
     const blogBucket = new s3.Bucket(this, "BlogBucket", {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
-      publicReadAccess: true,
-      websiteIndexDocument: "index.html",
     });
     blogBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
@@ -41,13 +39,12 @@ export class CoelhorIac extends Stack {
 
     const blogCF = new cloudfront.Distribution(this, "BlogCF", {
       defaultBehavior: {
-        origin: new origins.HttpOrigin(`${blogBucket.bucketWebsiteUrl}`),
+        origin: new origins.S3Origin(blogBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         cachePolicy: cloudfront.CachePolicy.CACHING_OPTIMIZED,
       },
       domainNames: [`${prodConfig.domain}`, `*.${prodConfig.domain}`],
       certificate: blogCert,
-      defaultRootObject: "index.html",
     });
 
     blogCF.applyRemovalPolicy(RemovalPolicy.DESTROY);
