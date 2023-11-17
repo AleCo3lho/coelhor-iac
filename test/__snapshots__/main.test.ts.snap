@@ -3009,7 +3009,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                     request.uri += '/index.html';
                   }
                   return request;
-              ",
+                }",
         "FunctionConfig": {
           "Comment": "us-east-1MyTestStackBlogCFRedirectDF86BDAA",
           "Runtime": "cloudfront-js-1.0",

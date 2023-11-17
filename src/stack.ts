@@ -58,7 +58,7 @@ export class CoelhorIac extends Stack {
                     request.uri += '/index.html';
                   }
                   return request;
-              `),
+                }`),
             }),
           },
         ],
