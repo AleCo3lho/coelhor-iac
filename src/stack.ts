@@ -65,7 +65,6 @@ export class CoelhorIac extends Stack {
       },
       domainNames: [`${prodConfig.domain}`, `*.${prodConfig.domain}`],
       certificate: blogCert,
-      defaultRootObject: "index.html",
       errorResponses: [
         {
           httpStatus: 404,

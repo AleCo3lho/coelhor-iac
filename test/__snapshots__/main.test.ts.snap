@@ -2924,7 +2924,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "TargetOriginId": "MyTestStackBlogCFOrigin1A38252BB",
             "ViewerProtocolPolicy": "redirect-to-https",
           },
-          "DefaultRootObject": "index.html",
           "Enabled": true,
           "HttpVersion": "http2",
           "IPV6Enabled": true,
