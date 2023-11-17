@@ -50,7 +50,7 @@ export class CodePipelineStack extends Stack {
       crossAccountKeys: false,
     });
 
-    pipeline.addStage(new PipelineStage(this, "prod", {}));
+    pipeline.addStage(new PipelineStage(this, "Prod", {}));
 
     Tags.of(this).add("Project", "coelhor-iac");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");

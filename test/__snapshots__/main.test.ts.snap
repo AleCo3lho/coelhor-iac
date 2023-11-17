@@ -1205,7 +1205,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
     },
     "build": {
       "commands": [
-        "cdk-assets --path \\"assembly-MyCodePipelineStack-prod/MyCodePipelineStackprodInfraStackA7D7889D.assets.json\\" --verbose publish \\"b7f33614a69548d6bafe224d751a7ef238cde19097415e553fe8b63a4c8fd8a6:239828624774-us-east-1\\""
+        "cdk-assets --path \\"assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.assets.json\\" --verbose publish \\"b7f33614a69548d6bafe224d751a7ef238cde19097415e553fe8b63a4c8fd8a6:239828624774-us-east-1\\""
       ]
     }
   }
@@ -1965,9 +1965,9 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                       ],
                     ],
                   },
-                  "StackName": "prod-InfraStack",
-                  "TemplateConfiguration": "Synth_Output::assembly-MyCodePipelineStack-prod/MyCodePipelineStackprodInfraStackA7D7889D.template.json.config.json",
-                  "TemplatePath": "Synth_Output::assembly-MyCodePipelineStack-prod/MyCodePipelineStackprodInfraStackA7D7889D.template.json",
+                  "StackName": "Prod-InfraStack",
+                  "TemplateConfiguration": "Synth_Output::assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.template.json.config.json",
+                  "TemplatePath": "Synth_Output::assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.template.json",
                 },
                 "InputArtifacts": [
                   {
@@ -1999,7 +1999,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                 "Configuration": {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "prod-InfraStack",
+                  "StackName": "Prod-InfraStack",
                 },
                 "Name": "InfraStack.Deploy",
                 "RoleArn": {
@@ -2039,8 +2039,8 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                       ],
                     ],
                   },
-                  "StackName": "prod-BlogPipeline",
-                  "TemplatePath": "Synth_Output::assembly-MyCodePipelineStack-prod/MyCodePipelineStackprodBlogPipeline550C35E5.template.json",
+                  "StackName": "Prod-BlogPipeline",
+                  "TemplatePath": "Synth_Output::assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdBlogPipeline39CE1D8B.template.json",
                 },
                 "InputArtifacts": [
                   {
@@ -2072,7 +2072,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                 "Configuration": {
                   "ActionMode": "CHANGE_SET_EXECUTE",
                   "ChangeSetName": "PipelineChange",
-                  "StackName": "prod-BlogPipeline",
+                  "StackName": "Prod-BlogPipeline",
                 },
                 "Name": "BlogPipeline.Deploy",
                 "RoleArn": {
@@ -2090,7 +2090,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                 "RunOrder": 4,
               },
             ],
-            "Name": "prod",
+            "Name": "Prod",
           },
         ],
         "Tags": [
