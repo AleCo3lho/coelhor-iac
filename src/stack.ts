@@ -32,6 +32,7 @@ export class CoelhorIac extends Stack {
       websiteIndexDocument: "index.html",
     });
     blogBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    blogBucket.grantPublicAccess();
 
     new ssm.StringParameter(this, "BlogBucketArn", {
       stringValue: blogBucket.bucketArn,
