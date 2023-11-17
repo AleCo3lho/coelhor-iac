@@ -30,6 +30,8 @@ export class CoelhorIac extends Stack {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
       websiteIndexDocument: "index.html",
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
+      accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
     });
     blogBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
     blogBucket.grantPublicAccess();

@@ -2750,6 +2750,11 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     "BlogBucket3E358F18": {
       "DeletionPolicy": "Delete",
       "Properties": {
+        "AccessControl": "BucketOwnerFullControl",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+        },
         "Tags": [
           {
             "Key": "Author",
