@@ -52,7 +52,7 @@ export class BlogPipelineStack extends Stack {
                 "tar -xzf hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz",
                 "mv hugo /usr/bin/hugo",
                 "rm -rf hugo_extended_${HUGO_VERSION}_Linux-64bit.tar.gz",
-                "hugo",
+                "hugo --environment production --minify",
               ],
             },
           },
