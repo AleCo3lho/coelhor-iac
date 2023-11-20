@@ -107,6 +107,10 @@ export class CoelhorIac extends Stack {
         certificate: blogCert,
       },
       proxy: false,
+      defaultCorsPreflightOptions: {
+        allowOrigins: ["coelhor.dev"],
+        allowMethods: ["POST"],
+      },
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
