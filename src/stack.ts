@@ -96,11 +96,6 @@ export class CoelhorIac extends Stack {
     const fnNewsletter = new lambda.Function(this, "NewsletterFunc", {
       runtime: lambda.Runtime.NODEJS_LATEST,
       handler: "index.handler",
-      environment: {
-        myDomain: `${prodConfig.domain}`,
-        key: `${prodConfig.mailerKey}`,
-        group: `${prodConfig.mailerGroup}`,
-      },
       code: lambda.Code.fromAsset("src/utils/lambdas/newsletter"),
     });
     fnNewsletter.applyRemovalPolicy(RemovalPolicy.DESTROY);
