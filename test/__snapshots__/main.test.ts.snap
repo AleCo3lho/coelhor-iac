@@ -3307,7 +3307,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::ApiGateway::RestApi",
       "UpdateReplacePolicy": "Delete",
     },
-    "CoelhorAPIDeployment33FA297Daac7511e1539060eff46ffbeb04d1bbb": {
+    "CoelhorAPIDeployment33FA297D0eae5379f5aaeb6104098d36beee6e77": {
       "DependsOn": [
         "CoelhorAPInewsletterOPTIONS63727C51",
         "CoelhorAPInewsletterPOST6D5C9F89",
@@ -3328,7 +3328,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "CoelhorAPIDeployment33FA297Daac7511e1539060eff46ffbeb04d1bbb",
+          "Ref": "CoelhorAPIDeployment33FA297D0eae5379f5aaeb6104098d36beee6e77",
         },
         "RestApiId": {
           "Ref": "CoelhorAPID9CE5F72",
@@ -3357,9 +3357,8 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             {
               "ResponseParameters": {
                 "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'POST'",
-                "method.response.header.Access-Control-Allow-Origin": "'coelhor.dev'",
-                "method.response.header.Vary": "'Origin'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
               },
               "StatusCode": "204",
             },
@@ -3375,7 +3374,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               "method.response.header.Access-Control-Allow-Headers": true,
               "method.response.header.Access-Control-Allow-Methods": true,
               "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
             },
             "StatusCode": "204",
           },
@@ -3419,9 +3417,8 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             {
               "ResponseParameters": {
                 "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'POST'",
-                "method.response.header.Access-Control-Allow-Origin": "'coelhor.dev'",
-                "method.response.header.Vary": "'Origin'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
               },
               "StatusCode": "204",
             },
@@ -3437,7 +3434,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               "method.response.header.Access-Control-Allow-Headers": true,
               "method.response.header.Access-Control-Allow-Methods": true,
               "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
             },
             "StatusCode": "204",
           },

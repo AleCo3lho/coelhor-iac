@@ -108,8 +108,7 @@ export class CoelhorIac extends Stack {
       },
       proxy: false,
       defaultCorsPreflightOptions: {
-        allowOrigins: ["coelhor.dev"],
-        allowMethods: ["POST"],
+        allowOrigins: apigw.Cors.ALL_ORIGINS,
       },
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
