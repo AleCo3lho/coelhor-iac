@@ -11,7 +11,7 @@
     "synth": "cdk synth",
     "lint": "eslint src/*.ts & eslint src/**/*.ts",
     "lint:fix": "eslint --fix src",
-    "prettier": "prettier --check src/",
+    "prettier": "prettier --check src/*.ts & prettier --check src/**/*.ts",
     "prettier:fix": "prettier --write src/*.ts & prettier --write src/**/*.ts",
     "test": "jest",
     "test:fix": "jest --updateSnapshot"
