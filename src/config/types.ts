@@ -8,4 +8,6 @@ export type Config = {
   blogRepo?: string;
   owner?: string;
   blogBranch?: string;
+  mailerKey?: string;
+  mailerGroup?: string;
 };

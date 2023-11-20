@@ -7,6 +7,8 @@ import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as ssm from "aws-cdk-lib/aws-ssm";
+import * as lambda from "aws-cdk-lib/aws-lambda";
+import * as apigw from "aws-cdk-lib/aws-apigateway";
 import { prodConfig } from "./config";
 
 export class CoelhorIac extends Stack {
@@ -23,7 +25,6 @@ export class CoelhorIac extends Stack {
       subjectAlternativeNames: [`*.${prodConfig.domain}`],
       validation: acm.CertificateValidation.fromDns(hostedzone),
     });
-
     blogCert.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const blogBucket = new s3.Bucket(this, "BlogBucket", {
@@ -90,8 +91,40 @@ export class CoelhorIac extends Stack {
       zone: hostedzone,
       recordName: `${prodConfig.domain}`,
     });
-
     blogAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const fnNewsletter = new lambda.Function(this, "NewsletterFunc", {
+      runtime: lambda.Runtime.NODEJS_LATEST,
+      handler: "index.handler",
+      environment: {
+        myDomain: `${prodConfig.domain}`,
+        key: `${prodConfig.mailerKey}`,
+        group: `${prodConfig.mailerGroup}`,
+      },
+      code: lambda.Code.fromAsset("src/utils/lambdas/newsletter"),
+    });
+    fnNewsletter.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const api = new apigw.LambdaRestApi(this, "CoelhorAPI", {
+      handler: fnNewsletter,
+      domainName: {
+        domainName: `api.${prodConfig.domain}`,
+        certificate: blogCert,
+      },
+      proxy: false,
+    });
+    api.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const newsletter = api.root.addResource("newsletter");
+    newsletter.addMethod("POST");
+    newsletter.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const apiAliasRecord = new route53.ARecord(this, "ApiAliasRecord", {
+      target: route53.RecordTarget.fromAlias(new route53Targets.ApiGateway(api)),
+      zone: hostedzone,
+      recordName: `api.${prodConfig.domain}`,
+    });
+    apiAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     Tags.of(this).add("Project", "coelhor-iac");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");
