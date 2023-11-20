@@ -4,11 +4,11 @@ const key = process.env.KEY;
 const group = process.env.GROUP;
 
 const defaultOptions = {
-  host: "api.mailerlite.com",
+  host: "connect.mailerlite.com",
   port: 443,
   headers: {
     "Content-Type": "application/json",
-    "X-MailerLite-ApiKey": key,
+    Authorization: key,
   },
 };
 
@@ -52,7 +52,7 @@ function generateError(code, err) {
 
 module.exports.handler = async (event) => {
   try {
-    const data = await post("/api/v2/groups/" + group + "/subscribers", event.body);
+    const data = await post("/api/subscribers", event.body);
     return generateResponse(200, data);
   } catch (err) {
     return generateError(500, err);

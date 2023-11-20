@@ -1369,7 +1369,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
     },
     "build": {
       "commands": [
-        "cdk-assets --path \\"assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.assets.json\\" --verbose publish \\"f929f220bfd6f91501147d6367f17f6963855dc34410a7f932b53af2c5967773:239828624774-us-east-1\\""
+        "cdk-assets --path \\"assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.assets.json\\" --verbose publish \\"e1a60c67ede5fe9c5c6ab510e3b9383d07cfeabc8c589d4bab389790d0546816:239828624774-us-east-1\\""
       ]
     }
   }
@@ -3524,12 +3524,12 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "f929f220bfd6f91501147d6367f17f6963855dc34410a7f932b53af2c5967773.zip",
+          "S3Key": "e1a60c67ede5fe9c5c6ab510e3b9383d07cfeabc8c589d4bab389790d0546816.zip",
         },
         "Environment": {
           "Variables": {
             "group": "105375129470501965",
-            "key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiY2NjYjkxY2UyMzQ4NDg1ZTE3OTQwYTk4ODM0MDIyZDhkMWM3MjRmNTYxNWNlMGI4MzQ1YzEwNDNmZmQwNzgwM2JkOGZiMWVkMTQ1YTU4OWMiLCJpYXQiOjE3MDA0MjI1OTIuNDI1OTE0LCJuYmYiOjE3MDA0MjI1OTIuNDI1OTE2LCJleHAiOjQ4NTYwOTYxOTIuNDE3NDg1LCJzdWIiOiI3MTk4MzciLCJzY29wZXMiOltdfQ.ISo9MfLWs2CvJPd46pQNh1VH308LLYmpOosgUUL3XDMFFffESWb2toU3r8vdBJFlEUJTDKTl3pVrPN71XZ6e3yEvuDYTPWSimiUOR16xe8NFhy-GFina5Dhd9mwXckG0H_uHT3a10_XOi2Bf5--MEtHkdzLhFcXld10HMCaCRagZg5RcI1h80wkUZuAbZu1hvWcNYqad4-PAF3xNRAq8ZRs67uMEmQCi8u3CLo-fY1CXc4krlLVjUesj3hhE9AA05QqSQKreG2ExgATPqw1SyypvLgteM733IPlNGtbi85onwgf5tWTwBCbcvXOkP-y0bUtvzCMuW2hRcAqxmkfQrcwJqz7lUyFO8VFtHi2368SYWaqYdgNihE-Ii9IMSZudswptki9FQMhwNAqgMB7M4_nUMoaqQsBFxes8LyqX6h4KTg8OkNdqbFbQ0eKKRUkvS_l155-5XeVnl66n_p_vtmUF4zmVQaSurFdn4kzgerG8cvNsKt7xQaY2i_p5lOdAGIiEBWMMUrpl1Tqvb5j_aM1ievutMniyaWMiTtKEzo0SDrLEIiOAsZeg8yZL06PctPdkP6Z3178mHY4nBU5PMkwmcQZF1eC9Z1loB5hMHt0nkeJhDX2XIUmTn-TLGq2FI5Z1o6NLqVq8n_1H5DYyAAW4g8GrwAS2-uTMwrvZrBM",
+            "key": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI0IiwianRpIjoiOTM3NDc0NTNkNGNkYjM3MzI2ODY4ZjVmZThlM2RmMGQ1ZWJiODVhYmY2OWNjYjc5NzcxMzJhN2Y0NjgxYzU2NjAyNmE2MjdmOTU5MmMyZjUiLCJpYXQiOjE3MDA1MDM5MTIuNjQ5Mzc5LCJuYmYiOjE3MDA1MDM5MTIuNjQ5MzgyLCJleHAiOjQ4NTYxNzc1MTIuNjMwODQyLCJzdWIiOiI3MTk4MzciLCJzY29wZXMiOltdfQ.onG5hHV7oPgZuCmrAleEQvFP5ONglLBSuAYXCBGKDt0Z0Wwab5-6LsNkC5fKAj3QbsS7kKUVUkM7n6g6FySWWfZv9rr7_gmI27J4v6dDSG0-vLV4lcmJwhoqm311JWjKJhzABLe6Q6zqFBKPy60xxC_f1Qu2WPSvX3AGJ3pMKO0ANHdreEgFEUQFGRLkkgKgnlLgeJMxJlSsMMHXXp850-jUh3OIVUdDig7MHW94bjATl8z4zeeuK1T0EGknptEqte0cKjSxxPReijTCaLsgq_CVbI5MSouWNU7yOSna_GBWIEHE0IWXjnKXzQxTS2PP6-A68SmE1MlXGHii7Sf6NMkwdZmtOuAXt1tsfUcVfTvb4HCCyLgXz_S0VdAhXQo-Nx_CJ5fmNTf94rEw9bGrZ32h2gZ0U5S7UwjS5QU_5WF7NXOLyFvF2QS5ZrvcgUsEcoZKReR-a71Ok8CdbnPzEFF9elS7zq1Y9HhojTJXp1YLisifNPzhZTVJzMokf1DRt-jP8OfNZbwQOcKsmeA-xOUb7f-zc9XehfKOtO9XcFMV1Lfh6a0u9Hc5RG7vJ56A2fVX78Q-Csm40za-SmaVx_VyYmqnU864Dc44DtHrSvb_5FvdgKZcAmQzdzzp_Atj9hR6MvG3wg5N2NxmIOz1uShVV6kHpU1yJK6PHbwsSUc",
             "myDomain": "coelhor.dev",
           },
         },
