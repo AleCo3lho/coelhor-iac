@@ -8,7 +8,7 @@ const defaultOptions = {
   port: 443,
   headers: {
     "Content-Type": "application/json",
-    Authorization: key,
+    "Authorization": key,
   },
 };
 
