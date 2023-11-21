@@ -95,7 +95,7 @@ export class CoelhorIac extends Stack {
     blogAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const fnNewsletter = new lambda.Function(this, "NewsletterFunc", {
-      runtime: lambda.Runtime.NODEJS_LATEST,
+      runtime: lambda.Runtime.NODEJS_16_X,
       handler: "index.handler",
       code: lambda.Code.fromAsset("src/utils/lambdas/newsletter"),
     });

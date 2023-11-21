@@ -3577,7 +3577,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs16.x",
         "Tags": [
           {
             "Key": "Author",
