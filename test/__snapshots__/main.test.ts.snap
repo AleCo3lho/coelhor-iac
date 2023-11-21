@@ -1369,7 +1369,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
     },
     "build": {
       "commands": [
-        "cdk-assets --path \\"assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.assets.json\\" --verbose publish \\"6bc4728da930dd4e58c389083b361ad42fdb507f34bb0b650736fa547739495e:239828624774-us-east-1\\""
+        "cdk-assets --path \\"assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.assets.json\\" --verbose publish \\"e0c8765e42b025d3f50050fd4fff7a01a629bbafbb0baf7e398d4132c9016106:239828624774-us-east-1\\""
       ]
     }
   }
@@ -3307,12 +3307,11 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::ApiGateway::RestApi",
       "UpdateReplacePolicy": "Delete",
     },
-    "CoelhorAPIDeployment33FA297D0eae5379f5aaeb6104098d36beee6e77": {
+    "CoelhorAPIDeployment33FA297D412f5a75dd15179fd6147d817bf25c37": {
       "DependsOn": [
         "CoelhorAPInewsletterOPTIONS63727C51",
         "CoelhorAPInewsletterPOST6D5C9F89",
         "CoelhorAPInewsletterBC50490C",
-        "CoelhorAPIOPTIONS894DC290",
       ],
       "Properties": {
         "Description": "Automatically created by the RestApi construct",
@@ -3328,7 +3327,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "CoelhorAPIDeployment33FA297D0eae5379f5aaeb6104098d36beee6e77",
+          "Ref": "CoelhorAPIDeployment33FA297D412f5a75dd15179fd6147d817bf25c37",
         },
         "RestApiId": {
           "Ref": "CoelhorAPID9CE5F72",
@@ -3346,49 +3345,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         ],
       },
       "Type": "AWS::ApiGateway::Stage",
-    },
-    "CoelhorAPIOPTIONS894DC290": {
-      "Properties": {
-        "ApiKeyRequired": false,
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'",
-              },
-              "StatusCode": "204",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-            },
-            "StatusCode": "204",
-          },
-        ],
-        "ResourceId": {
-          "Fn::GetAtt": [
-            "CoelhorAPID9CE5F72",
-            "RootResourceId",
-          ],
-        },
-        "RestApiId": {
-          "Ref": "CoelhorAPID9CE5F72",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
     },
     "CoelhorAPInewsletterBC50490C": {
       "DeletionPolicy": "Delete",
@@ -3417,8 +3373,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             {
               "ResponseParameters": {
                 "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET,PUT,POST,DELETE,PATCH,HEAD'",
-                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Methods": "'POST'",
+                "method.response.header.Access-Control-Allow-Origin": "'https://coelhor.dev'",
+                "method.response.header.Vary": "'Origin'",
               },
               "StatusCode": "204",
             },
@@ -3434,6 +3391,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               "method.response.header.Access-Control-Allow-Headers": true,
               "method.response.header.Access-Control-Allow-Methods": true,
               "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Vary": true,
             },
             "StatusCode": "204",
           },
@@ -3609,7 +3567,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "6bc4728da930dd4e58c389083b361ad42fdb507f34bb0b650736fa547739495e.zip",
+          "S3Key": "e0c8765e42b025d3f50050fd4fff7a01a629bbafbb0baf7e398d4132c9016106.zip",
         },
         "Handler": "index.handler",
         "Role": {

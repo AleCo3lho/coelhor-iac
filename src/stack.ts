@@ -107,15 +107,16 @@ export class CoelhorIac extends Stack {
         certificate: blogCert,
       },
       proxy: false,
-      defaultCorsPreflightOptions: {
-        allowOrigins: apigw.Cors.ALL_ORIGINS,
-      },
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const newsletter = api.root.addResource("newsletter");
     newsletter.addMethod("POST");
     newsletter.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    newsletter.addCorsPreflight({
+      allowOrigins: ["https://coelhor.dev"],
+      allowMethods: ["POST"],
+    });
 
     const apiAliasRecord = new route53.ARecord(this, "ApiAliasRecord", {
       target: route53.RecordTarget.fromAlias(new route53Targets.ApiGateway(api)),
