@@ -3654,6 +3654,242 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::IAM::Policy",
     },
+    "SESBucket0C480B59": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AccessControl": "BucketOwnerFullControl",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+        },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "SESBucketAutoDeleteObjectsCustomResource6D82AEBC": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "SESBucketPolicyDA85C13C",
+      ],
+      "Properties": {
+        "BucketName": {
+          "Ref": "SESBucket0C480B59",
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3AutoDeleteObjects",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "SESBucketPolicyDA85C13C": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "SESBucket0C480B59",
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:PutBucketPolicy",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn",
+                  ],
+                },
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "SESBucket0C480B59",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "SESBucket0C480B59",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "s3:PutObject",
+              "Condition": {
+                "StringEquals": {
+                  "aws:Referer": {
+                    "Ref": "AWS::AccountId",
+                  },
+                },
+              },
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "ses.amazonaws.com",
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "SESBucket0C480B59",
+                        "Arn",
+                      ],
+                    },
+                    "/emails/newsletter/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "SESIdentity8C041D13": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "EmailIdentity": "coelhor.dev",
+      },
+      "Type": "AWS::SES::EmailIdentity",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "SESIdentityDkimDnsToken1604A5086": {
+      "Properties": {
+        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "Name": {
+          "Fn::GetAtt": [
+            "SESIdentity8C041D13",
+            "DkimDNSTokenName1",
+          ],
+        },
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "SESIdentity8C041D13",
+              "DkimDNSTokenValue1",
+            ],
+          },
+        ],
+        "TTL": "1800",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "SESIdentityDkimDnsToken244558F15": {
+      "Properties": {
+        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "Name": {
+          "Fn::GetAtt": [
+            "SESIdentity8C041D13",
+            "DkimDNSTokenName2",
+          ],
+        },
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "SESIdentity8C041D13",
+              "DkimDNSTokenValue2",
+            ],
+          },
+        ],
+        "TTL": "1800",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "SESIdentityDkimDnsToken35BE79D54": {
+      "Properties": {
+        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "Name": {
+          "Fn::GetAtt": [
+            "SESIdentity8C041D13",
+            "DkimDNSTokenName3",
+          ],
+        },
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "SESIdentity8C041D13",
+              "DkimDNSTokenValue3",
+            ],
+          },
+        ],
+        "TTL": "1800",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "SESReceiveB3E3FA19": {
+      "DeletionPolicy": "Delete",
+      "Type": "AWS::SES::ReceiptRuleSet",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "SESReceiveRule0628D5CA0": {
+      "DependsOn": [
+        "SESBucketPolicyDA85C13C",
+      ],
+      "Properties": {
+        "Rule": {
+          "Actions": [
+            {
+              "S3Action": {
+                "BucketName": {
+                  "Ref": "SESBucket0C480B59",
+                },
+                "ObjectKeyPrefix": "emails/newsletter/",
+              },
+            },
+          ],
+          "Enabled": true,
+          "Recipients": [
+            "newsletter@coelhor.dev",
+          ],
+        },
+        "RuleSetName": {
+          "Ref": "SESReceiveB3E3FA19",
+        },
+      },
+      "Type": "AWS::SES::ReceiptRule",
+    },
+    "SESSendAB50E6BA": {
+      "DeletionPolicy": "Delete",
+      "Type": "AWS::SES::ConfigurationSet",
+      "UpdateReplacePolicy": "Delete",
+    },
   },
   "Rules": {
     "CheckBootstrapVersion": {

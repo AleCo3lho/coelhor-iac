@@ -10,6 +10,8 @@ import * as ssm from "aws-cdk-lib/aws-ssm";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import * as iam from "aws-cdk-lib/aws-iam";
+import * as ses from "aws-cdk-lib/aws-ses";
+import * as sesactions from "aws-cdk-lib/aws-ses-actions";
 import { prodConfig } from "./config";
 
 export class CoelhorIac extends Stack {
@@ -132,6 +134,37 @@ export class CoelhorIac extends Stack {
       recordName: `api.${prodConfig.domain}`,
     });
     apiAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const sesBucket = new s3.Bucket(this, "SESBucket", {
+      autoDeleteObjects: true,
+      removalPolicy: RemovalPolicy.DESTROY,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
+      accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
+    });
+    sesBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const sesReceive = new ses.ReceiptRuleSet(this, "SESReceive", {
+      rules: [
+        {
+          recipients: ["newsletter@coelhor.dev"],
+          actions: [
+            new sesactions.S3({
+              bucket: sesBucket,
+              objectKeyPrefix: "emails/newsletter/",
+            }),
+          ],
+        },
+      ],
+    });
+    sesReceive.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const sesEmailIdentity = new ses.EmailIdentity(this, "SESIdentity", {
+      identity: ses.Identity.publicHostedZone(hostedzone),
+    });
+    sesEmailIdentity.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const sesSend = new ses.ConfigurationSet(this, "SESSend", {});
+    sesSend.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     Tags.of(this).add("Project", "coelhor-iac");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");
