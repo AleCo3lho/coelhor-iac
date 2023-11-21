@@ -168,6 +168,17 @@ export class CoelhorIac extends Stack {
     });
     sesEmailIdentity.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
+    const sesMXRecord = new route53.MxRecord(this, "SESMXRecord", {
+      zone: hostedzone,
+      values: [
+        {
+          hostName: `inbound-smtp.${prodConfig.env.region}.amazonaws.com`,
+          priority: 10,
+        },
+      ],
+    });
+    sesMXRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
     Tags.of(this).add("Project", "coelhor-iac");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");
   }

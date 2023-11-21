@@ -3858,6 +3858,20 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::Route53::RecordSet",
     },
+    "SESMXRecord6978E6E1": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "Name": "coelhor.dev.",
+        "ResourceRecords": [
+          "10 inbound-smtp.us-east-1.amazonaws.com",
+        ],
+        "TTL": "1800",
+        "Type": "MX",
+      },
+      "Type": "AWS::Route53::RecordSet",
+      "UpdateReplacePolicy": "Delete",
+    },
     "SESReceiveB3E3FA19": {
       "DeletionPolicy": "Delete",
       "Type": "AWS::SES::ReceiptRuleSet",
