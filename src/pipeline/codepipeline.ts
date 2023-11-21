@@ -48,6 +48,7 @@ export class CodePipelineStack extends Stack {
       }),
       selfMutation: true,
       crossAccountKeys: false,
+      publishAssetsInParallel: false,
     });
 
     pipeline.addStage(new PipelineStage(this, "Prod", {}));

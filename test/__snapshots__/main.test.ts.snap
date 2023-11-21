@@ -1281,7 +1281,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
     },
   },
   "Resources": {
-    "PipelineStackAssetsFileAsset139747991": {
+    "PipelineStackAssetsFileAsset0F049AEA": {
       "Properties": {
         "Artifacts": {
           "Type": "CODEPIPELINE",
@@ -1289,7 +1289,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
         "Cache": {
           "Type": "NO_CACHE",
         },
-        "Description": "Pipeline step MyCodePipelineStack/Pipeline/Assets/FileAsset1",
+        "Description": "Pipeline step MyCodePipelineStack/Pipeline/Assets/FileAsset",
         "EncryptionKey": "alias/aws/s3",
         "Environment": {
           "ComputeType": "BUILD_GENERAL1_SMALL",
@@ -1305,75 +1305,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
           ],
         },
         "Source": {
-          "BuildSpec": "{
-  "version": "0.2",
-  "phases": {
-    "install": {
-      "commands": [
-        "npm install -g cdk-assets@2"
-      ]
-    },
-    "build": {
-      "commands": [
-        "cdk-assets --path \\"assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.assets.json\\" --verbose publish \\"b7f33614a69548d6bafe224d751a7ef238cde19097415e553fe8b63a4c8fd8a6:239828624774-us-east-1\\""
-      ]
-    }
-  }
-}",
-          "Type": "CODEPIPELINE",
-        },
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
-          },
-        ],
-      },
-      "Type": "AWS::CodeBuild::Project",
-    },
-    "PipelineStackAssetsFileAsset231FF7529": {
-      "Properties": {
-        "Artifacts": {
-          "Type": "CODEPIPELINE",
-        },
-        "Cache": {
-          "Type": "NO_CACHE",
-        },
-        "Description": "Pipeline step MyCodePipelineStack/Pipeline/Assets/FileAsset2",
-        "EncryptionKey": "alias/aws/s3",
-        "Environment": {
-          "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/standard:7.0",
-          "ImagePullCredentialsType": "CODEBUILD",
-          "PrivilegedMode": false,
-          "Type": "LINUX_CONTAINER",
-        },
-        "ServiceRole": {
-          "Fn::GetAtt": [
-            "PipelineStackAssetsFileRole7DF1BA0E",
-            "Arn",
-          ],
-        },
-        "Source": {
-          "BuildSpec": "{
-  "version": "0.2",
-  "phases": {
-    "install": {
-      "commands": [
-        "npm install -g cdk-assets@2"
-      ]
-    },
-    "build": {
-      "commands": [
-        "cdk-assets --path \\"assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.assets.json\\" --verbose publish \\"16d171a7b231ef9c48b41c605ba46f58a132c4eff0df99ed3e9500b35bbbefd9:239828624774-us-east-1\\""
-      ]
-    }
-  }
-}",
+          "BuildSpec": "buildspec-c8c826ac7295073da298eabd1d3ee4510915576e16-FileAsset.yaml",
           "Type": "CODEPIPELINE",
         },
         "Tags": [
@@ -1611,21 +1543,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "PipelineStackAssetsFileAsset139747991",
-                  "Arn",
-                ],
-              },
-            },
-            {
-              "Action": [
-                "codebuild:BatchGetBuilds",
-                "codebuild:StartBuild",
-                "codebuild:StopBuild",
-              ],
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "PipelineStackAssetsFileAsset231FF7529",
+                  "PipelineStackAssetsFileAsset0F049AEA",
                   "Arn",
                 ],
               },
@@ -2098,7 +2016,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                 },
                 "Configuration": {
                   "ProjectName": {
-                    "Ref": "PipelineStackAssetsFileAsset139747991",
+                    "Ref": "PipelineStackAssetsFileAsset0F049AEA",
                   },
                 },
                 "InputArtifacts": [
@@ -2106,33 +2024,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "FileAsset1",
-                "RoleArn": {
-                  "Fn::GetAtt": [
-                    "PipelineStackCodeBuildActionRoleBF300C35",
-                    "Arn",
-                  ],
-                },
-                "RunOrder": 1,
-              },
-              {
-                "ActionTypeId": {
-                  "Category": "Build",
-                  "Owner": "AWS",
-                  "Provider": "CodeBuild",
-                  "Version": "1",
-                },
-                "Configuration": {
-                  "ProjectName": {
-                    "Ref": "PipelineStackAssetsFileAsset231FF7529",
-                  },
-                },
-                "InputArtifacts": [
-                  {
-                    "Name": "Synth_Output",
-                  },
-                ],
-                "Name": "FileAsset2",
+                "Name": "FileAsset",
                 "RoleArn": {
                   "Fn::GetAtt": [
                     "PipelineStackCodeBuildActionRoleBF300C35",
