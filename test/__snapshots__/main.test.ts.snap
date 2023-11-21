@@ -3835,11 +3835,11 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "cf284e0a551f3620946362dab0af964df88f2cf6f8ce99ff893a8cc1669b8d7a.zip",
+          "S3Key": "ac21492f13ff51267a238d48b6c2f6a93d9a30e156058b8a51745c478d8572d2.zip",
         },
         "Environment": {
           "Variables": {
-            "API_URL": "https://api.coelhor.dev",
+            "API_URL": "https://api.coelhor.dev/",
             "BASE_URL": "https://coelhor.dev/",
             "CONFIRM_SUBSCRIBE_PAGE": "confirm",
             "CONFIRM_UNSUBSCRIBE_PAGE": "unsubscribed",

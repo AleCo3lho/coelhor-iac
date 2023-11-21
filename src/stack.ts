@@ -195,7 +195,7 @@ export class CoelhorIac extends Stack {
       environment: {
         DB_TABLE_NAME: simpleSubscribeDB.tableName,
         BASE_URL: `https://${prodConfig.domain}/`,
-        API_URL: `https://api.${prodConfig.domain}`,
+        API_URL: `https://api.${prodConfig.domain}/`,
         ERROR_PAGE: "error",
         SUCCESS_PAGE: "success",
         CONFIRM_SUBSCRIBE_PAGE: "confirm",
