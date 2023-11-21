@@ -1369,7 +1369,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
     },
     "build": {
       "commands": [
-        "cdk-assets --path \\"assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.assets.json\\" --verbose publish \\"d0834d0e46901384104ca50f7f171320555ba67d61d61120d95e1b093da917ea:239828624774-us-east-1\\""
+        "cdk-assets --path \\"assembly-MyCodePipelineStack-Prod/MyCodePipelineStackProdInfraStackE3DE142A.assets.json\\" --verbose publish \\"f3c9dd9ea47d33b8badc7feb0effad72eedf8e96fde3834e6431eca67f6ee8f9:239828624774-us-east-1\\""
       ]
     }
   }
@@ -3568,7 +3568,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "d0834d0e46901384104ca50f7f171320555ba67d61d61120d95e1b093da917ea.zip",
+          "S3Key": "f3c9dd9ea47d33b8badc7feb0effad72eedf8e96fde3834e6431eca67f6ee8f9.zip",
         },
         "Handler": "index.handler",
         "Role": {

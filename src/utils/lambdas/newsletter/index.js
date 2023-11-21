@@ -2,20 +2,21 @@ const https = require('https');
 const JsonResponse = require('./response');
 const SecretsManager = require('./SecretsManager.js');
 
-var secretName = 'mailerliteSecret';
-var region = 'us-east-1';
-var apiValue = await SecretsManager.getSecret(secretName, region);
-
 const defaultOptions = {
     host: 'connect.mailerlite.com',
     port: 443,
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiValue}`,
+        'Authorization': '',
     }
 }
 
-const post = (path, payload) => new Promise((resolve, reject) => {
+const post = (path, payload) => new Promise(async (resolve, reject) => {
+    const secretName = 'mailerliteSecret';
+    const region = 'us-east-1';
+    const apiValue = await SecretsManager.getSecret(secretName, region);
+    console.log(apiValue)
+    defaultOptions.headers.Authorization = `Bearer ${apiValue}`
     const options = { ...defaultOptions, path, method: 'POST' };
     const req = https.request(options, res => {
         let buffer = "";
