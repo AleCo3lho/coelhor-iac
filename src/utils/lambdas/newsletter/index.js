@@ -1,37 +1,17 @@
 const https = require('https');
 const JsonResponse = require('./response');
+const SecretsManager = require('./SecretsManager.js');
 
-import {
-    SecretsManagerClient,
-    GetSecretValueCommand,
-  } from "@aws-sdk/client-secrets-manager";
-
-const secret_name = "mailerliteSecret";
-const client = new SecretsManagerClient({
-    region: "us-east-1",
-});
-
-let responseSecret;
-
-try {
-    responseSecret = await client.send(
-        new GetSecretValueCommand({
-        SecretId: secret_name,
-        VersionStage: "AWSCURRENT", // VersionStage defaults to AWSCURRENT if unspecified
-    })
-);
-} catch (error) {
-    throw error;
-}
-
-const token = responseSecret.SecretString;
+var secretName = 'mailerliteSecret';
+var region = 'us-east-1';
+var apiValue = await SecretsManager.getSecret(secretName, region);
 
 const defaultOptions = {
     host: 'connect.mailerlite.com',
     port: 443,
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'Authorization': `Bearer ${apiValue}`,
     }
 }
 
