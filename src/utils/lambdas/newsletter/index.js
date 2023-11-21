@@ -1,6 +1,6 @@
 const https = require('https');
 const JsonResponse = require('./response');
-const SecretsManager = require('./SecretsManager.js');
+const SecretsManager = require('./secretsManager.js');
 
 const defaultOptions = {
     host: 'connect.mailerlite.com',
