@@ -3782,6 +3782,11 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     "SESIdentity8C041D13": {
       "DeletionPolicy": "Delete",
       "Properties": {
+        "ConfigurationSetAttributes": {
+          "ConfigurationSetName": {
+            "Ref": "SESSendAB50E6BA",
+          },
+        },
         "EmailIdentity": "coelhor.dev",
       },
       "Type": "AWS::SES::EmailIdentity",

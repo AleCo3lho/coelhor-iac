@@ -158,13 +158,14 @@ export class CoelhorIac extends Stack {
     });
     sesReceive.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const sesEmailIdentity = new ses.EmailIdentity(this, "SESIdentity", {
-      identity: ses.Identity.publicHostedZone(hostedzone),
-    });
-    sesEmailIdentity.applyRemovalPolicy(RemovalPolicy.DESTROY);
-
     const sesSend = new ses.ConfigurationSet(this, "SESSend", {});
     sesSend.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const sesEmailIdentity = new ses.EmailIdentity(this, "SESIdentity", {
+      identity: ses.Identity.publicHostedZone(hostedzone),
+      configurationSet: sesSend,
+    });
+    sesEmailIdentity.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     Tags.of(this).add("Project", "coelhor-iac");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");
