@@ -3801,6 +3801,157 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::SES::ConfigurationSet",
       "UpdateReplacePolicy": "Delete",
     },
+    "SimpleSubscribeDBAEFAAC3F": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AttributeDefinitions": [
+          {
+            "AttributeName": "pk",
+            "AttributeType": "S",
+          },
+        ],
+        "BillingMode": "PAY_PER_REQUEST",
+        "KeySchema": [
+          {
+            "AttributeName": "pk",
+            "KeyType": "HASH",
+          },
+        ],
+        "Replicas": [
+          {
+            "Region": "us-east-1",
+          },
+        ],
+      },
+      "Type": "AWS::DynamoDB::GlobalTable",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "SimpleSubscribeFunc0DDBEAB0": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "SimpleSubscribeFuncServiceRoleDefaultPolicy7A78F95F",
+        "SimpleSubscribeFuncServiceRole6624F743",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
+          "S3Key": "cf284e0a551f3620946362dab0af964df88f2cf6f8ce99ff893a8cc1669b8d7a.zip",
+        },
+        "Environment": {
+          "Variables": {
+            "API_URL": "https://api.coelhor.dev",
+            "BASE_URL": "https://coelhor.dev/",
+            "CONFIRM_SUBSCRIBE_PAGE": "confirm",
+            "CONFIRM_UNSUBSCRIBE_PAGE": "unsubscribed",
+            "DB_TABLE_NAME": {
+              "Ref": "SimpleSubscribeDBAEFAAC3F",
+            },
+            "ERROR_PAGE": "error",
+            "SENDER_EMAIL": "no-reply@coelhor.dev",
+            "SENDER_NAME": "Alexandre Coelho Ramos",
+            "SUBSCRIBE_PATH": "signup",
+            "SUCCESS_PAGE": "success",
+            "UNSUBSCRIBE_PATH": "unsubscribe",
+            "VERIFY_PATH": "verify",
+          },
+        },
+        "Handler": "bootstrap",
+        "Role": {
+          "Fn::GetAtt": [
+            "SimpleSubscribeFuncServiceRole6624F743",
+            "Arn",
+          ],
+        },
+        "Runtime": "provided.al2",
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
+      },
+      "Type": "AWS::Lambda::Function",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "SimpleSubscribeFuncServiceRole6624F743": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+              ],
+            ],
+          },
+        ],
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor-iac",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
+    "SimpleSubscribeFuncServiceRoleDefaultPolicy7A78F95F": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ses:SendEmail",
+                "ses:SendRawEmail",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:ses:us-east-1:239828624774:identity/*",
+            },
+            {
+              "Action": "dynamodb:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "SimpleSubscribeDBAEFAAC3F",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "SimpleSubscribeFuncServiceRoleDefaultPolicy7A78F95F",
+        "Roles": [
+          {
+            "Ref": "SimpleSubscribeFuncServiceRole6624F743",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
   },
   "Rules": {
     "CheckBootstrapVersion": {

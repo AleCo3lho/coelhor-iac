@@ -12,6 +12,8 @@ import * as apigw from "aws-cdk-lib/aws-apigateway";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as ses from "aws-cdk-lib/aws-ses";
 import * as sesactions from "aws-cdk-lib/aws-ses-actions";
+import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
+import * as go from "@aws-cdk/aws-lambda-go-alpha";
 import { prodConfig } from "./config";
 
 export class CoelhorIac extends Stack {
@@ -178,6 +180,43 @@ export class CoelhorIac extends Stack {
       ],
     });
     sesMXRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const simpleSubscribeDB = new dynamodb.TableV2(this, "SimpleSubscribeDB", {
+      partitionKey: {
+        name: "pk",
+        type: dynamodb.AttributeType.STRING,
+      },
+      billing: dynamodb.Billing.onDemand(),
+    });
+    simpleSubscribeDB.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const fnSimpleSubscribe = new go.GoFunction(this, "SimpleSubscribeFunc", {
+      entry: "src/utils/lambdas/simpleSubscriber",
+      environment: {
+        DB_TABLE_NAME: simpleSubscribeDB.tableName,
+        BASE_URL: `https://${prodConfig.domain}/`,
+        API_URL: `https://api.${prodConfig.domain}`,
+        ERROR_PAGE: "error",
+        SUCCESS_PAGE: "success",
+        CONFIRM_SUBSCRIBE_PAGE: "confirm",
+        CONFIRM_UNSUBSCRIBE_PAGE: "unsubscribed",
+        SUBSCRIBE_PATH: "signup",
+        UNSUBSCRIBE_PATH: "unsubscribe",
+        VERIFY_PATH: "verify",
+        SENDER_EMAIL: `no-reply@${prodConfig.domain}`,
+        SENDER_NAME: "Alexandre Coelho Ramos",
+      },
+    });
+    fnSimpleSubscribe.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    fnSimpleSubscribe.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["ses:SendEmail", "ses:SendRawEmail"],
+        resources: [`arn:aws:ses:us-east-1:${prodConfig.env.account}:identity/*`],
+      }),
+    );
+
+    simpleSubscribeDB.grantFullAccess(fnSimpleSubscribe);
 
     Tags.of(this).add("Project", "coelhor-iac");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");
