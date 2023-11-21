@@ -9,6 +9,7 @@ import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as ssm from "aws-cdk-lib/aws-ssm";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
+import * as iam from "aws-cdk-lib/aws-iam";
 import { prodConfig } from "./config";
 
 export class CoelhorIac extends Stack {
@@ -99,6 +100,13 @@ export class CoelhorIac extends Stack {
       code: lambda.Code.fromAsset("src/utils/lambdas/newsletter"),
     });
     fnNewsletter.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    fnNewsletter.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["secretsmanager:GetSecretValue"],
+        resources: ["arn:aws:secretsmanager:us-east-1:239828624774:secret:mailerliteSecret-5jMU1Z"],
+      }),
+    );
 
     const api = new apigw.LambdaRestApi(this, "CoelhorAPI", {
       handler: fnNewsletter,

@@ -3562,6 +3562,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     "NewsletterFuncDA99F3F4": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
+        "NewsletterFuncServiceRoleDefaultPolicyD38F4ADA",
         "NewsletterFuncServiceRole83654915",
       ],
       "Properties": {
@@ -3631,6 +3632,27 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         ],
       },
       "Type": "AWS::IAM::Role",
+    },
+    "NewsletterFuncServiceRoleDefaultPolicyD38F4ADA": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": "secretsmanager:GetSecretValue",
+              "Effect": "Allow",
+              "Resource": "arn:aws:secretsmanager:us-east-1:239828624774:secret:mailerliteSecret-5jMU1Z",
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "NewsletterFuncServiceRoleDefaultPolicyD38F4ADA",
+        "Roles": [
+          {
+            "Ref": "NewsletterFuncServiceRole83654915",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
     },
   },
   "Rules": {
