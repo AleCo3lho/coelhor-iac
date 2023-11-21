@@ -147,6 +147,7 @@ export class CoelhorIac extends Stack {
       rules: [
         {
           recipients: ["newsletter@coelhor.dev"],
+          enabled: true,
           actions: [
             new sesactions.S3({
               bucket: sesBucket,
