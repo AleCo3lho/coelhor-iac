@@ -177,7 +177,7 @@ export class CoelhorIac extends Stack {
     });
     apiDomain.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const api = new apigwv2.HttpApi(this, "CoelhorAPI", {
+    const api = new apigwv2.HttpApi(this, "CoelhorAPIV2", {
       defaultIntegration: fnSimpleSubscribeIntegration,
       createDefaultStage: true,
       defaultDomainMapping: {
