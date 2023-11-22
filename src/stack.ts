@@ -171,29 +171,29 @@ export class CoelhorIac extends Stack {
       "SimpleSubscribeIntegration",
       fnSimpleSubscribe,
     );
-    const apiDomain = new apigwv2.DomainName(this, "CoelhorAPIDomain", {
-      certificate: blogCert,
-      domainName: `api.${prodConfig.domain}`,
-    });
-    apiDomain.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    // const apiDomain = new apigwv2.DomainName(this, "CoelhorAPIDomain", {
+    //   certificate: blogCert,
+    //   domainName: `api.${prodConfig.domain}`,
+    // });
+    // apiDomain.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const api = new apigwv2.HttpApi(this, "CoelhorAPIV2", {
       defaultIntegration: fnSimpleSubscribeIntegration,
       createDefaultStage: true,
-      defaultDomainMapping: {
-        domainName: apiDomain,
-      },
+      // defaultDomainMapping: {
+      //   domainName: apiDomain,
+      // },
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const apiARecord = new route53.ARecord(this, "ApiARecord", {
-      target: route53.RecordTarget.fromAlias(
-        new route53Targets.ApiGatewayv2DomainProperties(apiDomain.regionalDomainName, apiDomain.regionalHostedZoneId),
-      ),
-      zone: hostedzone,
-      deleteExisting: true,
-    });
-    apiARecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    // const apiARecord = new route53.ARecord(this, "ApiARecord", {
+    //   target: route53.RecordTarget.fromAlias(
+    //     new route53Targets.ApiGatewayv2DomainProperties(apiDomain.regionalDomainName, apiDomain.regionalHostedZoneId),
+    //   ),
+    //   zone: hostedzone,
+    //   deleteExisting: true,
+    // });
+    // apiARecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const sesMXRecord = new route53.MxRecord(this, "SESMXRecord", {
       zone: hostedzone,
