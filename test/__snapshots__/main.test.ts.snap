@@ -2688,6 +2688,16 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
 
 exports[`snapshot for CoelhorIac matches previous state 1`] = `
 {
+  "Mappings": {
+    "AWSCloudFrontPartitionHostedZoneIdMap": {
+      "aws": {
+        "zoneId": "Z2FDTNDATAQYW2",
+      },
+      "aws-cn": {
+        "zoneId": "Z3RFFRIM2A3IF5",
+      },
+    },
+  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -2715,6 +2725,33 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         },
         "HostedZoneId": "Z0595012323F7RI1KVDD2",
         "Name": "api.coelhor.dev.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "BlogAliasRecord6BC43687": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::GetAtt": [
+              "BlogCF6DF9B024",
+              "DomainName",
+            ],
+          },
+          "HostedZoneId": {
+            "Fn::FindInMap": [
+              "AWSCloudFrontPartitionHostedZoneIdMap",
+              {
+                "Ref": "AWS::Partition",
+              },
+              "zoneId",
+            ],
+          },
+        },
+        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "Name": "coelhor.dev.",
         "Type": "A",
       },
       "Type": "AWS::Route53::RecordSet",
@@ -3500,7 +3537,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "a1a315b498e6c45653fa19a7a7c3f1cda1f0a106038896b92242870395b00252.zip",
+          "S3Key": "eb82043f6f68d47c909defeecfaaf2d8f8d46481788f53fb0dd4635bdf937bf1.zip",
         },
         "Environment": {
           "Variables": {

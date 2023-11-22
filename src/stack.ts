@@ -91,12 +91,12 @@ export class CoelhorIac extends Stack {
       parameterName: "/blog/cf/distribution-id",
     });
 
-    // const blogAliasRecord = new route53.ARecord(this, "BlogAliasRecord", {
-    //   target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(blogCF)),
-    //   zone: hostedzone,
-    //   recordName: `${prodConfig.domain}`,
-    // });
-    // blogAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    const blogAliasRecord = new route53.ARecord(this, "BlogAliasRecord", {
+      target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(blogCF)),
+      zone: hostedzone,
+      recordName: `${prodConfig.domain}`,
+    });
+    blogAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const sesBucket = new s3.Bucket(this, "SESBucket", {
       autoDeleteObjects: true,
@@ -170,6 +170,7 @@ export class CoelhorIac extends Stack {
     const fnSimpleSubscribeIntegration = new apigwv2integ.HttpLambdaIntegration(
       "SimpleSubscribeIntegration",
       fnSimpleSubscribe,
+      { payloadFormatVersion: apigwv2.PayloadFormatVersion.VERSION_2_0 },
     );
     const apiDomain = new apigwv2.DomainName(this, "CoelhorAPIDomain", {
       certificate: blogCert,
