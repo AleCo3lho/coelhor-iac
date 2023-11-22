@@ -185,15 +185,14 @@ export class CoelhorIac extends Stack {
       },
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    const apiStageUrl = api.defaultStage?.domainUrl || "";
 
-    const apiAliasRecord = new route53.ARecord(this, "ApiAliasRecord", {
-      target: route53.RecordTarget.fromAlias(
-        new route53Targets.ApiGatewayv2DomainProperties(apiDomain.name, hostedzone.hostedZoneId),
-      ),
+    const apiCnameRecord = new route53.CnameRecord(this, "ApiCnameRecord", {
+      domainName: apiStageUrl,
       zone: hostedzone,
       recordName: `api.${prodConfig.domain}`,
     });
-    apiAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    apiCnameRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const sesMXRecord = new route53.MxRecord(this, "SESMXRecord", {
       zone: hostedzone,
