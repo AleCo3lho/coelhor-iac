@@ -7,7 +7,6 @@ import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as ssm from "aws-cdk-lib/aws-ssm";
-import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as apigw from "aws-cdk-lib/aws-apigateway";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as ses from "aws-cdk-lib/aws-ses";
@@ -98,45 +97,6 @@ export class CoelhorIac extends Stack {
     });
     blogAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const fnNewsletter = new lambda.Function(this, "NewsletterFunc", {
-      runtime: lambda.Runtime.NODEJS_16_X,
-      handler: "index.handler",
-      code: lambda.Code.fromAsset("src/utils/lambdas/newsletter"),
-    });
-    fnNewsletter.applyRemovalPolicy(RemovalPolicy.DESTROY);
-    fnNewsletter.addToRolePolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: ["secretsmanager:GetSecretValue"],
-        resources: ["arn:aws:secretsmanager:us-east-1:239828624774:secret:mailerliteSecret-5jMU1Z"],
-      }),
-    );
-
-    const api = new apigw.LambdaRestApi(this, "CoelhorAPI", {
-      handler: fnNewsletter,
-      domainName: {
-        domainName: `api.${prodConfig.domain}`,
-        certificate: blogCert,
-      },
-      proxy: false,
-    });
-    api.applyRemovalPolicy(RemovalPolicy.DESTROY);
-
-    const newsletter = api.root.addResource("newsletter");
-    newsletter.addMethod("POST");
-    newsletter.applyRemovalPolicy(RemovalPolicy.DESTROY);
-    newsletter.addCorsPreflight({
-      allowOrigins: ["https://coelhor.dev"],
-      allowMethods: ["POST"],
-    });
-
-    const apiAliasRecord = new route53.ARecord(this, "ApiAliasRecord", {
-      target: route53.RecordTarget.fromAlias(new route53Targets.ApiGateway(api)),
-      zone: hostedzone,
-      recordName: `api.${prodConfig.domain}`,
-    });
-    apiAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
-
     const sesBucket = new s3.Bucket(this, "SESBucket", {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
@@ -169,17 +129,6 @@ export class CoelhorIac extends Stack {
       configurationSet: sesSend,
     });
     sesEmailIdentity.applyRemovalPolicy(RemovalPolicy.DESTROY);
-
-    const sesMXRecord = new route53.MxRecord(this, "SESMXRecord", {
-      zone: hostedzone,
-      values: [
-        {
-          hostName: `inbound-smtp.${prodConfig.env.region}.amazonaws.com`,
-          priority: 10,
-        },
-      ],
-    });
-    sesMXRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const simpleSubscribeDB = new dynamodb.TableV2(this, "SimpleSubscribeDB", {
       partitionKey: {
@@ -215,8 +164,35 @@ export class CoelhorIac extends Stack {
         resources: [`arn:aws:ses:us-east-1:${prodConfig.env.account}:*`],
       }),
     );
-
     simpleSubscribeDB.grantFullAccess(fnSimpleSubscribe);
+
+    const api = new apigw.LambdaRestApi(this, "CoelhorAPI", {
+      handler: fnSimpleSubscribe,
+      domainName: {
+        domainName: `api.${prodConfig.domain}`,
+        certificate: blogCert,
+      },
+      proxy: true,
+    });
+    api.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const apiAliasRecord = new route53.ARecord(this, "ApiAliasRecord", {
+      target: route53.RecordTarget.fromAlias(new route53Targets.ApiGateway(api)),
+      zone: hostedzone,
+      recordName: `api.${prodConfig.domain}`,
+    });
+    apiAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const sesMXRecord = new route53.MxRecord(this, "SESMXRecord", {
+      zone: hostedzone,
+      values: [
+        {
+          hostName: `inbound-smtp.${prodConfig.env.region}.amazonaws.com`,
+          priority: 10,
+        },
+      ],
+    });
+    sesMXRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     Tags.of(this).add("Project", "coelhor-iac");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");

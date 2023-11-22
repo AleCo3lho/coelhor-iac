@@ -192,10 +192,10 @@ func sendEmailWithSES(email string, id string) (*ses.SendEmailOutput, error) {
 	log.Print("EMAIL: ", email)
 
 	// HTML format
-	msg := fmt.Sprintf("<p>Hello! You're receiving this email because you requested a subscription to my list.</p><p>To complete your subscription, please click this link to finish signing up:</p><p><a class=\"ulink\" href=\"%s%s/?email=%s&id=%s\" target=\"_blank\">Confirm subscription</a>.</p><p>If you did not request this email, you can safely ignore it. Your email address has not yet been added to my list.</p>", os.Getenv("API_URL"), os.Getenv("VERIFY_PATH"), email, id)
+	msg := fmt.Sprintf("<p>Olá! Você está recebendo este e-mail porque solicitou uma inscrição em minha lista..</p><p>Para concluir sua assinatura, clique neste link para finalizar a inscrição:</p><p><a class=\"ulink\" href=\"%s%s/?email=%s&id=%s\" target=\"_blank\">Confirme a assinatura</a>.</p><p>Se você não solicitou este e-mail, pode ignorá-lo com segurança. Seu endereço de e-mail ainda não foi adicionado à minha lista.</p>", os.Getenv("API_URL"), os.Getenv("VERIFY_PATH"), email, id)
 
 	// Plain text format
-	txt := fmt.Sprintf("Hello! You're receiving this email because you requested a subscription to my list.\n\nTo complete your subscription, please visit this link to finish signing up.\n\n%s%s/?email=%s&id=%s\n\nIf you did not request this email, you can safely ignore it. Your email address has not yet been added to my list.", os.Getenv("API_URL"), os.Getenv("VERIFY_PATH"), email, id)
+	txt := fmt.Sprintf("Olá! Você está recebendo este e-mail porque solicitou uma inscrição em minha lista.\n\nPara concluir sua assinatura, visite este link para finalizar a inscrição.\n\n%s%s/?email=%s&id=%s\n\nSe você não solicitou este e-mail, pode ignorá-lo com segurança. Seu endereço de e-mail ainda não foi adicionado à minha lista.", os.Getenv("API_URL"), os.Getenv("VERIFY_PATH"), email, id)
 
 	// Build the "from" value
 	source := fmt.Sprintf("\"%s\" <%s>", os.Getenv("SENDER_NAME"), os.Getenv("SENDER_EMAIL"))
@@ -219,7 +219,7 @@ func sendEmailWithSES(email string, id string) (*ses.SendEmailOutput, error) {
 			},
 			Subject: &ses.Content{
 				Charset: aws.String("UTF-8"),
-				Data:    aws.String("Confirm your subscription"),
+				Data:    aws.String("Confirme sua inscrição"),
 			},
 		},
 		ReturnPath: aws.String(os.Getenv("SENDER_EMAIL")),

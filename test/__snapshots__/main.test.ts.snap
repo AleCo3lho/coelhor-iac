@@ -3084,6 +3084,107 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Delete",
     },
+    "CoelhorAPIANY5C951DEC": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SimpleSubscribeFunc0DDBEAB0",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Fn::GetAtt": [
+            "CoelhorAPID9CE5F72",
+            "RootResourceId",
+          ],
+        },
+        "RestApiId": {
+          "Ref": "CoelhorAPID9CE5F72",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "CoelhorAPIANYApiPermissionMyTestStackCoelhorAPIEA0AF46AANY7E908441": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SimpleSubscribeFunc0DDBEAB0",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:us-east-1:239828624774:",
+              {
+                "Ref": "CoelhorAPID9CE5F72",
+              },
+              "/",
+              {
+                "Ref": "CoelhorAPIDeploymentStageprodF381D796",
+              },
+              "/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "CoelhorAPIANYApiPermissionTestMyTestStackCoelhorAPIEA0AF46AANY07F4C87A": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SimpleSubscribeFunc0DDBEAB0",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:us-east-1:239828624774:",
+              {
+                "Ref": "CoelhorAPID9CE5F72",
+              },
+              "/test-invoke-stage/*/",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
     "CoelhorAPIAccountF70085FE": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
@@ -3199,11 +3300,11 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::ApiGateway::RestApi",
       "UpdateReplacePolicy": "Delete",
     },
-    "CoelhorAPIDeployment33FA297D412f5a75dd15179fd6147d817bf25c37": {
+    "CoelhorAPIDeployment33FA297Dcef29274292c5c15e3663581a3dc79b9": {
       "DependsOn": [
-        "CoelhorAPInewsletterOPTIONS63727C51",
-        "CoelhorAPInewsletterPOST6D5C9F89",
-        "CoelhorAPInewsletterBC50490C",
+        "CoelhorAPIproxyANYC75FC8D5",
+        "CoelhorAPIproxy9CAD34CF",
+        "CoelhorAPIANY5C951DEC",
       ],
       "Properties": {
         "Description": "Automatically created by the RestApi construct",
@@ -3219,7 +3320,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "CoelhorAPIDeployment33FA297D412f5a75dd15179fd6147d817bf25c37",
+          "Ref": "CoelhorAPIDeployment33FA297Dcef29274292c5c15e3663581a3dc79b9",
         },
         "RestApiId": {
           "Ref": "CoelhorAPID9CE5F72",
@@ -3238,8 +3339,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "CoelhorAPInewsletterBC50490C": {
-      "DeletionPolicy": "Delete",
+    "CoelhorAPIproxy9CAD34CF": {
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
@@ -3247,98 +3347,19 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "RootResourceId",
           ],
         },
-        "PathPart": "newsletter",
+        "PathPart": "{proxy+}",
         "RestApiId": {
           "Ref": "CoelhorAPID9CE5F72",
         },
       },
       "Type": "AWS::ApiGateway::Resource",
-      "UpdateReplacePolicy": "Delete",
     },
-    "CoelhorAPInewsletterOPTIONS63727C51": {
-      "Properties": {
-        "ApiKeyRequired": false,
-        "AuthorizationType": "NONE",
-        "HttpMethod": "OPTIONS",
-        "Integration": {
-          "IntegrationResponses": [
-            {
-              "ResponseParameters": {
-                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
-                "method.response.header.Access-Control-Allow-Methods": "'POST'",
-                "method.response.header.Access-Control-Allow-Origin": "'https://coelhor.dev'",
-                "method.response.header.Vary": "'Origin'",
-              },
-              "StatusCode": "204",
-            },
-          ],
-          "RequestTemplates": {
-            "application/json": "{ statusCode: 200 }",
-          },
-          "Type": "MOCK",
-        },
-        "MethodResponses": [
-          {
-            "ResponseParameters": {
-              "method.response.header.Access-Control-Allow-Headers": true,
-              "method.response.header.Access-Control-Allow-Methods": true,
-              "method.response.header.Access-Control-Allow-Origin": true,
-              "method.response.header.Vary": true,
-            },
-            "StatusCode": "204",
-          },
-        ],
-        "ResourceId": {
-          "Ref": "CoelhorAPInewsletterBC50490C",
-        },
-        "RestApiId": {
-          "Ref": "CoelhorAPID9CE5F72",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "CoelhorAPInewsletterPOST6D5C9F89": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "POST",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "NewsletterFuncDA99F3F4",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": {
-          "Ref": "CoelhorAPInewsletterBC50490C",
-        },
-        "RestApiId": {
-          "Ref": "CoelhorAPID9CE5F72",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "CoelhorAPInewsletterPOSTApiPermissionMyTestStackCoelhorAPIEA0AF46APOSTnewsletter4FEC3692": {
+    "CoelhorAPIproxyANYApiPermissionMyTestStackCoelhorAPIEA0AF46AANYproxy87C4EF3C": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "NewsletterFuncDA99F3F4",
+            "SimpleSubscribeFunc0DDBEAB0",
             "Arn",
           ],
         },
@@ -3359,19 +3380,19 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               {
                 "Ref": "CoelhorAPIDeploymentStageprodF381D796",
               },
-              "/POST/newsletter",
+              "/*/*",
             ],
           ],
         },
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "CoelhorAPInewsletterPOSTApiPermissionTestMyTestStackCoelhorAPIEA0AF46APOSTnewsletterCD4F4A82": {
+    "CoelhorAPIproxyANYApiPermissionTestMyTestStackCoelhorAPIEA0AF46AANYproxy67617C7B": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
           "Fn::GetAtt": [
-            "NewsletterFuncDA99F3F4",
+            "SimpleSubscribeFunc0DDBEAB0",
             "Arn",
           ],
         },
@@ -3388,12 +3409,48 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               {
                 "Ref": "CoelhorAPID9CE5F72",
               },
-              "/test-invoke-stage/POST/newsletter",
+              "/test-invoke-stage/*/*",
             ],
           ],
         },
       },
       "Type": "AWS::Lambda::Permission",
+    },
+    "CoelhorAPIproxyANYC75FC8D5": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "ANY",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SimpleSubscribeFunc0DDBEAB0",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "CoelhorAPIproxy9CAD34CF",
+        },
+        "RestApiId": {
+          "Ref": "CoelhorAPID9CE5F72",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
     },
     "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
       "DependsOn": [
@@ -3450,101 +3507,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         ],
       },
       "Type": "AWS::IAM::Role",
-    },
-    "NewsletterFuncDA99F3F4": {
-      "DeletionPolicy": "Delete",
-      "DependsOn": [
-        "NewsletterFuncServiceRoleDefaultPolicyD38F4ADA",
-        "NewsletterFuncServiceRole83654915",
-      ],
-      "Properties": {
-        "Code": {
-          "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "16d171a7b231ef9c48b41c605ba46f58a132c4eff0df99ed3e9500b35bbbefd9.zip",
-        },
-        "Handler": "index.handler",
-        "Role": {
-          "Fn::GetAtt": [
-            "NewsletterFuncServiceRole83654915",
-            "Arn",
-          ],
-        },
-        "Runtime": "nodejs16.x",
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
-          },
-        ],
-      },
-      "Type": "AWS::Lambda::Function",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "NewsletterFuncServiceRole83654915": {
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "lambda.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
-              ],
-            ],
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-    },
-    "NewsletterFuncServiceRoleDefaultPolicyD38F4ADA": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": "secretsmanager:GetSecretValue",
-              "Effect": "Allow",
-              "Resource": "arn:aws:secretsmanager:us-east-1:239828624774:secret:mailerliteSecret-5jMU1Z",
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "NewsletterFuncServiceRoleDefaultPolicyD38F4ADA",
-        "Roles": [
-          {
-            "Ref": "NewsletterFuncServiceRole83654915",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
     },
     "SESBucket0C480B59": {
       "DeletionPolicy": "Delete",
@@ -3835,7 +3797,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "d915d23ddff97d47d7fa42779b656ddb98a284589528bc1a84961e37a0c54dfb.zip",
+          "S3Key": "f7aba6c4b57e5bb88fc870fe610ad38f01fe385e526244f4677b19befdb86284.zip",
         },
         "Environment": {
           "Variables": {
