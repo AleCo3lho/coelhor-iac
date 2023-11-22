@@ -3657,7 +3657,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "ccf8606505da18f3b771c85455ee9a6d6f070cf429d31b4aab6308955615d2db.zip",
+          "S3Key": "2a17297d7fd6d2dc2934079a8157d311cd0664b37b646c1056ffc93c43a0916a.zip",
         },
         "Environment": {
           "Variables": {
