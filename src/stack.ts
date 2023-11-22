@@ -172,9 +172,16 @@ export class CoelhorIac extends Stack {
         domainName: `api.${prodConfig.domain}`,
         certificate: blogCert,
       },
-      proxy: true,
+      proxy: false,
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const signup = api.root.addResource("signup");
+    signup.addMethod("GET");
+    const unsubscribe = api.root.addResource("unsubscribe");
+    unsubscribe.addMethod("GET");
+    const verify = api.root.addResource("verify");
+    verify.addMethod("GET");
 
     const apiAliasRecord = new route53.ARecord(this, "ApiAliasRecord", {
       target: route53.RecordTarget.fromAlias(new route53Targets.ApiGateway(api)),

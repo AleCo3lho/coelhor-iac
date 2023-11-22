@@ -366,7 +366,7 @@ func lambdaHandler(ctx context.Context, event events.APIGatewayV2HTTPRequest) (e
 	}
 
 	// No event.RawPath match
-	log.Printf("No path match for path: %s", event.RawPath)
+	log.Printf("No path match for path: %s, event: %v", event.RawPath, event)
 	resp.Headers["Location"] = errorPage
 	return resp, nil
 }

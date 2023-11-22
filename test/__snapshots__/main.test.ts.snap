@@ -3084,107 +3084,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Delete",
     },
-    "CoelhorAPIANY5C951DEC": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "SimpleSubscribeFunc0DDBEAB0",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": {
-          "Fn::GetAtt": [
-            "CoelhorAPID9CE5F72",
-            "RootResourceId",
-          ],
-        },
-        "RestApiId": {
-          "Ref": "CoelhorAPID9CE5F72",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "CoelhorAPIANYApiPermissionMyTestStackCoelhorAPIEA0AF46AANY7E908441": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "SimpleSubscribeFunc0DDBEAB0",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-east-1:239828624774:",
-              {
-                "Ref": "CoelhorAPID9CE5F72",
-              },
-              "/",
-              {
-                "Ref": "CoelhorAPIDeploymentStageprodF381D796",
-              },
-              "/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "CoelhorAPIANYApiPermissionTestMyTestStackCoelhorAPIEA0AF46AANY07F4C87A": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "SimpleSubscribeFunc0DDBEAB0",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-east-1:239828624774:",
-              {
-                "Ref": "CoelhorAPID9CE5F72",
-              },
-              "/test-invoke-stage/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
     "CoelhorAPIAccountF70085FE": {
       "DeletionPolicy": "Retain",
       "DependsOn": [
@@ -3300,11 +3199,14 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::ApiGateway::RestApi",
       "UpdateReplacePolicy": "Delete",
     },
-    "CoelhorAPIDeployment33FA297Dcef29274292c5c15e3663581a3dc79b9": {
+    "CoelhorAPIDeployment33FA297D2d27818a498da561e192d57a38659ad4": {
       "DependsOn": [
-        "CoelhorAPIproxyANYC75FC8D5",
-        "CoelhorAPIproxy9CAD34CF",
-        "CoelhorAPIANY5C951DEC",
+        "CoelhorAPIsignupGET0E2764B3",
+        "CoelhorAPIsignup62E68F05",
+        "CoelhorAPIunsubscribeGETE8ED5AE3",
+        "CoelhorAPIunsubscribeD2964972",
+        "CoelhorAPIverifyGETB26DF019",
+        "CoelhorAPIverify54E7EC56",
       ],
       "Properties": {
         "Description": "Automatically created by the RestApi construct",
@@ -3320,7 +3222,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       ],
       "Properties": {
         "DeploymentId": {
-          "Ref": "CoelhorAPIDeployment33FA297Dcef29274292c5c15e3663581a3dc79b9",
+          "Ref": "CoelhorAPIDeployment33FA297D2d27818a498da561e192d57a38659ad4",
         },
         "RestApiId": {
           "Ref": "CoelhorAPID9CE5F72",
@@ -3339,7 +3241,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::ApiGateway::Stage",
     },
-    "CoelhorAPIproxy9CAD34CF": {
+    "CoelhorAPIsignup62E68F05": {
       "Properties": {
         "ParentId": {
           "Fn::GetAtt": [
@@ -3347,14 +3249,50 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "RootResourceId",
           ],
         },
-        "PathPart": "{proxy+}",
+        "PathPart": "signup",
         "RestApiId": {
           "Ref": "CoelhorAPID9CE5F72",
         },
       },
       "Type": "AWS::ApiGateway::Resource",
     },
-    "CoelhorAPIproxyANYApiPermissionMyTestStackCoelhorAPIEA0AF46AANYproxy87C4EF3C": {
+    "CoelhorAPIsignupGET0E2764B3": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SimpleSubscribeFunc0DDBEAB0",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "CoelhorAPIsignup62E68F05",
+        },
+        "RestApiId": {
+          "Ref": "CoelhorAPID9CE5F72",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "CoelhorAPIsignupGETApiPermissionMyTestStackCoelhorAPIEA0AF46AGETsignup3603CD11": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3380,14 +3318,14 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               {
                 "Ref": "CoelhorAPIDeploymentStageprodF381D796",
               },
-              "/*/*",
+              "/GET/signup",
             ],
           ],
         },
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "CoelhorAPIproxyANYApiPermissionTestMyTestStackCoelhorAPIEA0AF46AANYproxy67617C7B": {
+    "CoelhorAPIsignupGETApiPermissionTestMyTestStackCoelhorAPIEA0AF46AGETsignupAACEE1B1": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3409,17 +3347,94 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               {
                 "Ref": "CoelhorAPID9CE5F72",
               },
-              "/test-invoke-stage/*/*",
+              "/test-invoke-stage/GET/signup",
             ],
           ],
         },
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "CoelhorAPIproxyANYC75FC8D5": {
+    "CoelhorAPIunsubscribeD2964972": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "CoelhorAPID9CE5F72",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "unsubscribe",
+        "RestApiId": {
+          "Ref": "CoelhorAPID9CE5F72",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "CoelhorAPIunsubscribeGETApiPermissionMyTestStackCoelhorAPIEA0AF46AGETunsubscribe904B4407": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SimpleSubscribeFunc0DDBEAB0",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:us-east-1:239828624774:",
+              {
+                "Ref": "CoelhorAPID9CE5F72",
+              },
+              "/",
+              {
+                "Ref": "CoelhorAPIDeploymentStageprodF381D796",
+              },
+              "/GET/unsubscribe",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "CoelhorAPIunsubscribeGETApiPermissionTestMyTestStackCoelhorAPIEA0AF46AGETunsubscribe982652D9": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SimpleSubscribeFunc0DDBEAB0",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:us-east-1:239828624774:",
+              {
+                "Ref": "CoelhorAPID9CE5F72",
+              },
+              "/test-invoke-stage/GET/unsubscribe",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "CoelhorAPIunsubscribeGETE8ED5AE3": {
       "Properties": {
         "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
+        "HttpMethod": "GET",
         "Integration": {
           "IntegrationHttpMethod": "POST",
           "Type": "AWS_PROXY",
@@ -3444,7 +3459,120 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           },
         },
         "ResourceId": {
-          "Ref": "CoelhorAPIproxy9CAD34CF",
+          "Ref": "CoelhorAPIunsubscribeD2964972",
+        },
+        "RestApiId": {
+          "Ref": "CoelhorAPID9CE5F72",
+        },
+      },
+      "Type": "AWS::ApiGateway::Method",
+    },
+    "CoelhorAPIverify54E7EC56": {
+      "Properties": {
+        "ParentId": {
+          "Fn::GetAtt": [
+            "CoelhorAPID9CE5F72",
+            "RootResourceId",
+          ],
+        },
+        "PathPart": "verify",
+        "RestApiId": {
+          "Ref": "CoelhorAPID9CE5F72",
+        },
+      },
+      "Type": "AWS::ApiGateway::Resource",
+    },
+    "CoelhorAPIverifyGETApiPermissionMyTestStackCoelhorAPIEA0AF46AGETverify89E089CA": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SimpleSubscribeFunc0DDBEAB0",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:us-east-1:239828624774:",
+              {
+                "Ref": "CoelhorAPID9CE5F72",
+              },
+              "/",
+              {
+                "Ref": "CoelhorAPIDeploymentStageprodF381D796",
+              },
+              "/GET/verify",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "CoelhorAPIverifyGETApiPermissionTestMyTestStackCoelhorAPIEA0AF46AGETverifyE567FC52": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "SimpleSubscribeFunc0DDBEAB0",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:us-east-1:239828624774:",
+              {
+                "Ref": "CoelhorAPID9CE5F72",
+              },
+              "/test-invoke-stage/GET/verify",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "CoelhorAPIverifyGETB26DF019": {
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "GET",
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition",
+                },
+                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "SimpleSubscribeFunc0DDBEAB0",
+                    "Arn",
+                  ],
+                },
+                "/invocations",
+              ],
+            ],
+          },
+        },
+        "ResourceId": {
+          "Ref": "CoelhorAPIverify54E7EC56",
         },
         "RestApiId": {
           "Ref": "CoelhorAPID9CE5F72",
@@ -3797,7 +3925,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "f7aba6c4b57e5bb88fc870fe610ad38f01fe385e526244f4677b19befdb86284.zip",
+          "S3Key": "d3f68d3259e006353a38c4f4adc044a44215f545e255db8c61a9b368e96ebdb3.zip",
         },
         "Environment": {
           "Variables": {
