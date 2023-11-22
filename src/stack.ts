@@ -71,18 +71,6 @@ export class CoelhorIac extends Stack {
       },
       domainNames: [`${prodConfig.domain}`, `*.${prodConfig.domain}`],
       certificate: blogCert,
-      errorResponses: [
-        {
-          httpStatus: 404,
-          responseHttpStatus: 200,
-          responsePagePath: "/index.html",
-        },
-        {
-          httpStatus: 403,
-          responseHttpStatus: 200,
-          responsePagePath: "/index.html",
-        },
-      ],
     });
 
     blogCF.applyRemovalPolicy(RemovalPolicy.DESTROY);

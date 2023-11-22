@@ -2905,18 +2905,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "coelhor.dev",
             "*.coelhor.dev",
           ],
-          "CustomErrorResponses": [
-            {
-              "ErrorCode": 404,
-              "ResponseCode": 200,
-              "ResponsePagePath": "/index.html",
-            },
-            {
-              "ErrorCode": 403,
-              "ResponseCode": 200,
-              "ResponsePagePath": "/index.html",
-            },
-          ],
           "DefaultCacheBehavior": {
             "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
             "Compress": true,
@@ -3537,7 +3525,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "eb82043f6f68d47c909defeecfaaf2d8f8d46481788f53fb0dd4635bdf937bf1.zip",
+          "S3Key": "66ae3c2c703307e1e1c9addea30398a28af3fe74e21e6992aeb21c8d8ad6beee.zip",
         },
         "Environment": {
           "Variables": {
