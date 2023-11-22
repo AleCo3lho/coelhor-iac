@@ -183,7 +183,7 @@ export class CoelhorIac extends Stack {
 
     const simpleSubscribeDB = new dynamodb.TableV2(this, "SimpleSubscribeDB", {
       partitionKey: {
-        name: "pk",
+        name: "email",
         type: dynamodb.AttributeType.STRING,
       },
       billing: dynamodb.Billing.onDemand(),

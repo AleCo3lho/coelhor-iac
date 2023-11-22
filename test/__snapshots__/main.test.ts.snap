@@ -3806,14 +3806,14 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "AttributeDefinitions": [
           {
-            "AttributeName": "pk",
+            "AttributeName": "email",
             "AttributeType": "S",
           },
         ],
         "BillingMode": "PAY_PER_REQUEST",
         "KeySchema": [
           {
-            "AttributeName": "pk",
+            "AttributeName": "email",
             "KeyType": "HASH",
           },
         ],
@@ -3835,7 +3835,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "ac21492f13ff51267a238d48b6c2f6a93d9a30e156058b8a51745c478d8572d2.zip",
+          "S3Key": "3945ae738cbf0c6eb02611371c17c00933263aca913f0f3fae9fb24b4e5f53c0.zip",
         },
         "Environment": {
           "Variables": {
