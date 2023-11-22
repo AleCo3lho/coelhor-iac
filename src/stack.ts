@@ -7,7 +7,8 @@ import * as cloudfront from "aws-cdk-lib/aws-cloudfront";
 import * as origins from "aws-cdk-lib/aws-cloudfront-origins";
 import * as route53Targets from "aws-cdk-lib/aws-route53-targets";
 import * as ssm from "aws-cdk-lib/aws-ssm";
-import * as apigw from "aws-cdk-lib/aws-apigateway";
+import * as apigwv2 from "@aws-cdk/aws-apigatewayv2-alpha";
+import * as apigwv2integ from "@aws-cdk/aws-apigatewayv2-integrations-alpha";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as ses from "aws-cdk-lib/aws-ses";
 import * as sesactions from "aws-cdk-lib/aws-ses-actions";
@@ -166,18 +167,29 @@ export class CoelhorIac extends Stack {
     );
     simpleSubscribeDB.grantFullAccess(fnSimpleSubscribe);
 
-    const api = new apigw.LambdaRestApi(this, "CoelhorAPI", {
-      handler: fnSimpleSubscribe,
-      domainName: {
-        domainName: `api.${prodConfig.domain}`,
-        certificate: blogCert,
+    const fnSimpleSubscribeIntegration = new apigwv2integ.HttpLambdaIntegration(
+      "SimpleSubscribeIntegration",
+      fnSimpleSubscribe,
+    );
+    const apiDomain = new apigwv2.DomainName(this, "CoelhorAPIDomain", {
+      certificate: blogCert,
+      domainName: `api.${prodConfig.domain}`,
+    });
+    apiDomain.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
+    const api = new apigwv2.HttpApi(this, "CoelhorAPI", {
+      defaultIntegration: fnSimpleSubscribeIntegration,
+      createDefaultStage: true,
+      defaultDomainMapping: {
+        domainName: apiDomain,
       },
-      proxy: true,
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const apiAliasRecord = new route53.ARecord(this, "ApiAliasRecord", {
-      target: route53.RecordTarget.fromAlias(new route53Targets.ApiGateway(api)),
+      target: route53.RecordTarget.fromAlias(
+        new route53Targets.ApiGatewayv2DomainProperties(apiDomain.name, hostedzone.hostedZoneId),
+      ),
       zone: hostedzone,
       recordName: `api.${prodConfig.domain}`,
     });

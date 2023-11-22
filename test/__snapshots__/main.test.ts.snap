@@ -2698,30 +2698,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
     },
   },
-  "Outputs": {
-    "CoelhorAPIEndpointDF1D53F1": {
-      "Value": {
-        "Fn::Join": [
-          "",
-          [
-            "https://",
-            {
-              "Ref": "CoelhorAPID9CE5F72",
-            },
-            ".execute-api.us-east-1.",
-            {
-              "Ref": "AWS::URLSuffix",
-            },
-            "/",
-            {
-              "Ref": "CoelhorAPIDeploymentStageprodF381D796",
-            },
-            "/",
-          ],
-        ],
-      },
-    },
-  },
   "Parameters": {
     "BootstrapVersion": {
       "Default": "/cdk-bootstrap/hnb659fds/version",
@@ -2735,17 +2711,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "AliasTarget": {
           "DNSName": {
-            "Fn::GetAtt": [
-              "CoelhorAPICustomDomain6C42D498",
-              "RegionalDomainName",
-            ],
+            "Ref": "CoelhorAPIDomain049ECDA2",
           },
-          "HostedZoneId": {
-            "Fn::GetAtt": [
-              "CoelhorAPICustomDomain6C42D498",
-              "RegionalHostedZoneId",
-            ],
-          },
+          "HostedZoneId": "Z0595012323F7RI1KVDD2",
         },
         "HostedZoneId": "Z0595012323F7RI1KVDD2",
         "Name": "api.coelhor.dev.",
@@ -3084,277 +3052,57 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::CertificateManager::Certificate",
       "UpdateReplacePolicy": "Delete",
     },
-    "CoelhorAPIANY5C951DEC": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "SimpleSubscribeFunc0DDBEAB0",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": {
-          "Fn::GetAtt": [
-            "CoelhorAPID9CE5F72",
-            "RootResourceId",
-          ],
-        },
-        "RestApiId": {
-          "Ref": "CoelhorAPID9CE5F72",
-        },
-      },
-      "Type": "AWS::ApiGateway::Method",
-    },
-    "CoelhorAPIANYApiPermissionMyTestStackCoelhorAPIEA0AF46AANY7E908441": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "SimpleSubscribeFunc0DDBEAB0",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-east-1:239828624774:",
-              {
-                "Ref": "CoelhorAPID9CE5F72",
-              },
-              "/",
-              {
-                "Ref": "CoelhorAPIDeploymentStageprodF381D796",
-              },
-              "/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "CoelhorAPIANYApiPermissionTestMyTestStackCoelhorAPIEA0AF46AANY07F4C87A": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "SimpleSubscribeFunc0DDBEAB0",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-east-1:239828624774:",
-              {
-                "Ref": "CoelhorAPID9CE5F72",
-              },
-              "/test-invoke-stage/*/",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "CoelhorAPIAccountF70085FE": {
-      "DeletionPolicy": "Retain",
-      "DependsOn": [
-        "CoelhorAPID9CE5F72",
-      ],
-      "Properties": {
-        "CloudWatchRoleArn": {
-          "Fn::GetAtt": [
-            "CoelhorAPICloudWatchRoleB7071360",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::ApiGateway::Account",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "CoelhorAPICloudWatchRoleB7071360": {
-      "DeletionPolicy": "Retain",
-      "Properties": {
-        "AssumeRolePolicyDocument": {
-          "Statement": [
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "Service": "apigateway.amazonaws.com",
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "ManagedPolicyArns": [
-          {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":iam::aws:policy/service-role/AmazonAPIGatewayPushToCloudWatchLogs",
-              ],
-            ],
-          },
-        ],
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Role",
-      "UpdateReplacePolicy": "Retain",
-    },
-    "CoelhorAPICustomDomain6C42D498": {
-      "Properties": {
-        "DomainName": "api.coelhor.dev",
-        "EndpointConfiguration": {
-          "Types": [
-            "REGIONAL",
-          ],
-        },
-        "RegionalCertificateArn": {
-          "Ref": "BlogCert0B44B7E7",
-        },
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::DomainName",
-    },
-    "CoelhorAPICustomDomainMapMyTestStackCoelhorAPIEA0AF46A08187D5C": {
-      "Properties": {
-        "DomainName": {
-          "Ref": "CoelhorAPICustomDomain6C42D498",
-        },
-        "RestApiId": {
-          "Ref": "CoelhorAPID9CE5F72",
-        },
-        "Stage": {
-          "Ref": "CoelhorAPIDeploymentStageprodF381D796",
-        },
-      },
-      "Type": "AWS::ApiGateway::BasePathMapping",
-    },
     "CoelhorAPID9CE5F72": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "Name": "CoelhorAPI",
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
-          },
-        ],
+        "ProtocolType": "HTTP",
+        "Tags": {
+          "Author": "Alexandre Coelho Ramos",
+          "Project": "coelhor-iac",
+        },
       },
-      "Type": "AWS::ApiGateway::RestApi",
+      "Type": "AWS::ApiGatewayV2::Api",
       "UpdateReplacePolicy": "Delete",
     },
-    "CoelhorAPIDeployment33FA297Dcef29274292c5c15e3663581a3dc79b9": {
-      "DependsOn": [
-        "CoelhorAPIproxyANYC75FC8D5",
-        "CoelhorAPIproxy9CAD34CF",
-        "CoelhorAPIANY5C951DEC",
-      ],
+    "CoelhorAPIDefaultRouteFBB96523": {
       "Properties": {
-        "Description": "Automatically created by the RestApi construct",
-        "RestApiId": {
+        "ApiId": {
           "Ref": "CoelhorAPID9CE5F72",
         },
-      },
-      "Type": "AWS::ApiGateway::Deployment",
-    },
-    "CoelhorAPIDeploymentStageprodF381D796": {
-      "DependsOn": [
-        "CoelhorAPIAccountF70085FE",
-      ],
-      "Properties": {
-        "DeploymentId": {
-          "Ref": "CoelhorAPIDeployment33FA297Dcef29274292c5c15e3663581a3dc79b9",
-        },
-        "RestApiId": {
-          "Ref": "CoelhorAPID9CE5F72",
-        },
-        "StageName": "prod",
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "coelhor-iac",
-          },
-        ],
-      },
-      "Type": "AWS::ApiGateway::Stage",
-    },
-    "CoelhorAPIproxy9CAD34CF": {
-      "Properties": {
-        "ParentId": {
-          "Fn::GetAtt": [
-            "CoelhorAPID9CE5F72",
-            "RootResourceId",
+        "AuthorizationType": "NONE",
+        "RouteKey": "$default",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "CoelhorAPIDefaultRouteSimpleSubscribeIntegration0E39E142",
+              },
+            ],
           ],
         },
-        "PathPart": "{proxy+}",
-        "RestApiId": {
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "CoelhorAPIDefaultRouteSimpleSubscribeIntegration0E39E142": {
+      "Properties": {
+        "ApiId": {
           "Ref": "CoelhorAPID9CE5F72",
         },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "SimpleSubscribeFunc0DDBEAB0",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
       },
-      "Type": "AWS::ApiGateway::Resource",
+      "Type": "AWS::ApiGatewayV2::Integration",
     },
-    "CoelhorAPIproxyANYApiPermissionMyTestStackCoelhorAPIEA0AF46AANYproxy87C4EF3C": {
+    "CoelhorAPIDefaultRouteSimpleSubscribeIntegrationPermissionE2AC4021": {
       "Properties": {
         "Action": "lambda:InvokeFunction",
         "FunctionName": {
@@ -3375,10 +3123,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               ":execute-api:us-east-1:239828624774:",
               {
                 "Ref": "CoelhorAPID9CE5F72",
-              },
-              "/",
-              {
-                "Ref": "CoelhorAPIDeploymentStageprodF381D796",
               },
               "/*/*",
             ],
@@ -3387,70 +3131,58 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::Lambda::Permission",
     },
-    "CoelhorAPIproxyANYApiPermissionTestMyTestStackCoelhorAPIEA0AF46AANYproxy67617C7B": {
+    "CoelhorAPIDefaultStage90628C0A": {
+      "DependsOn": [
+        "CoelhorAPIDomain049ECDA2",
+      ],
       "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "SimpleSubscribeFunc0DDBEAB0",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-east-1:239828624774:",
-              {
-                "Ref": "CoelhorAPID9CE5F72",
-              },
-              "/test-invoke-stage/*/*",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "CoelhorAPIproxyANYC75FC8D5": {
-      "Properties": {
-        "AuthorizationType": "NONE",
-        "HttpMethod": "ANY",
-        "Integration": {
-          "IntegrationHttpMethod": "POST",
-          "Type": "AWS_PROXY",
-          "Uri": {
-            "Fn::Join": [
-              "",
-              [
-                "arn:",
-                {
-                  "Ref": "AWS::Partition",
-                },
-                ":apigateway:us-east-1:lambda:path/2015-03-31/functions/",
-                {
-                  "Fn::GetAtt": [
-                    "SimpleSubscribeFunc0DDBEAB0",
-                    "Arn",
-                  ],
-                },
-                "/invocations",
-              ],
-            ],
-          },
-        },
-        "ResourceId": {
-          "Ref": "CoelhorAPIproxy9CAD34CF",
-        },
-        "RestApiId": {
+        "ApiId": {
           "Ref": "CoelhorAPID9CE5F72",
         },
+        "AutoDeploy": true,
+        "StageName": "$default",
+        "Tags": {
+          "Author": "Alexandre Coelho Ramos",
+          "Project": "coelhor-iac",
+        },
       },
-      "Type": "AWS::ApiGateway::Method",
+      "Type": "AWS::ApiGatewayV2::Stage",
+    },
+    "CoelhorAPIDefaultStageMyTestStackCoelhorAPIDomainundefinedF0CD735A": {
+      "DependsOn": [
+        "CoelhorAPIDefaultStage90628C0A",
+        "CoelhorAPIDomain049ECDA2",
+      ],
+      "Properties": {
+        "ApiId": {
+          "Ref": "CoelhorAPID9CE5F72",
+        },
+        "DomainName": {
+          "Ref": "CoelhorAPIDomain049ECDA2",
+        },
+        "Stage": "$default",
+      },
+      "Type": "AWS::ApiGatewayV2::ApiMapping",
+    },
+    "CoelhorAPIDomain049ECDA2": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DomainName": "api.coelhor.dev",
+        "DomainNameConfigurations": [
+          {
+            "CertificateArn": {
+              "Ref": "BlogCert0B44B7E7",
+            },
+            "EndpointType": "REGIONAL",
+          },
+        ],
+        "Tags": {
+          "Author": "Alexandre Coelho Ramos",
+          "Project": "coelhor-iac",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::DomainName",
+      "UpdateReplacePolicy": "Delete",
     },
     "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
       "DependsOn": [
@@ -3797,7 +3529,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "02abd4799429617d0218080e654e0fb493b4900701219d55052443ae245ddc0a.zip",
+          "S3Key": "7ed0d3bc7967a741f320a02bb5f4cdc1998922460864ff2e4a861c0cf9a492ca.zip",
         },
         "Environment": {
           "Variables": {
