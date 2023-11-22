@@ -185,14 +185,6 @@ export class CoelhorIac extends Stack {
       },
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
-    const apiStageUrl = api.defaultStage?.domainUrl || "";
-
-    const apiCnameRecord = new route53.CnameRecord(this, "ApiCnameRecord", {
-      domainName: apiStageUrl,
-      zone: hostedzone,
-      recordName: `api.${prodConfig.domain}`,
-    });
-    apiCnameRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const sesMXRecord = new route53.MxRecord(this, "SESMXRecord", {
       zone: hostedzone,

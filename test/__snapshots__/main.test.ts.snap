@@ -2706,22 +2706,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     },
   },
   "Resources": {
-    "ApiAliasRecordBCE933A3": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "AliasTarget": {
-          "DNSName": {
-            "Ref": "CoelhorAPIDomain049ECDA2",
-          },
-          "HostedZoneId": "Z0595012323F7RI1KVDD2",
-        },
-        "HostedZoneId": "Z0595012323F7RI1KVDD2",
-        "Name": "api.coelhor.dev.",
-        "Type": "A",
-      },
-      "Type": "AWS::Route53::RecordSet",
-      "UpdateReplacePolicy": "Delete",
-    },
     "BlogAliasRecord6BC43687": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -3529,7 +3513,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "6635cc5b675df7ea226d0934513247077d682745c271d41fc81c74b041960fb8.zip",
+          "S3Key": "b7a6740f42e6e4fad611ec991db87544a69d8f289698b787d0ba2473e56b3b47.zip",
         },
         "Environment": {
           "Variables": {
