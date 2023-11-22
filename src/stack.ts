@@ -212,7 +212,7 @@ export class CoelhorIac extends Stack {
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ["ses:SendEmail", "ses:SendRawEmail"],
-        resources: [`arn:aws:ses:us-east-1:${prodConfig.env.account}:identity/*`],
+        resources: [`arn:aws:ses:us-east-1:${prodConfig.env.account}:*`],
       }),
     );
 

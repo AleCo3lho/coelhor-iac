@@ -3835,7 +3835,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "3945ae738cbf0c6eb02611371c17c00933263aca913f0f3fae9fb24b4e5f53c0.zip",
+          "S3Key": "d915d23ddff97d47d7fa42779b656ddb98a284589528bc1a84961e37a0c54dfb.zip",
         },
         "Environment": {
           "Variables": {
@@ -3928,7 +3928,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                 "ses:SendRawEmail",
               ],
               "Effect": "Allow",
-              "Resource": "arn:aws:ses:us-east-1:239828624774:identity/*",
+              "Resource": "arn:aws:ses:us-east-1:239828624774:*",
             },
             {
               "Action": "dynamodb:*",
