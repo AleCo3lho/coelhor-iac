@@ -2706,6 +2706,49 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     },
   },
   "Resources": {
+    "ApiARecordDeleteExistingRecordSetCustomResource63711C53": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "RecordName": "coelhor.dev.",
+        "RecordType": "A",
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomDeleteExistingRecordSetCustomResourceProviderHandlerAD00231E",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::DeleteExistingRecordSet",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "ApiARecordFA826994": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "ApiARecordDeleteExistingRecordSetCustomResource63711C53",
+      ],
+      "Properties": {
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::GetAtt": [
+              "CoelhorAPIDomain049ECDA2",
+              "RegionalDomainName",
+            ],
+          },
+          "HostedZoneId": {
+            "Fn::GetAtt": [
+              "CoelhorAPIDomain049ECDA2",
+              "RegionalHostedZoneId",
+            ],
+          },
+        },
+        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "Name": "coelhor.dev.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+      "UpdateReplacePolicy": "Delete",
+    },
     "BlogAliasRecord6BC43687": {
       "DeletionPolicy": "Delete",
       "Properties": {
@@ -3168,6 +3211,107 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::ApiGatewayV2::ApiMapping",
     },
+    "CustomDeleteExistingRecordSetCustomResourceProviderHandlerAD00231E": {
+      "DependsOn": [
+        "CustomDeleteExistingRecordSetCustomResourceProviderRole03A7ED08",
+      ],
+      "Properties": {
+        "Code": {
+          "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
+          "S3Key": "69687d169348399affdbd6b99dbeb83b9a8f8a6509a8710fd02cd2cccd39b745.zip",
+        },
+        "Handler": "__entrypoint__.handler",
+        "MemorySize": 128,
+        "Role": {
+          "Fn::GetAtt": [
+            "CustomDeleteExistingRecordSetCustomResourceProviderRole03A7ED08",
+            "Arn",
+          ],
+        },
+        "Runtime": "nodejs18.x",
+        "Timeout": 900,
+      },
+      "Type": "AWS::Lambda::Function",
+    },
+    "CustomDeleteExistingRecordSetCustomResourceProviderRole03A7ED08": {
+      "Properties": {
+        "AssumeRolePolicyDocument": {
+          "Statement": [
+            {
+              "Action": "sts:AssumeRole",
+              "Effect": "Allow",
+              "Principal": {
+                "Service": "lambda.amazonaws.com",
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "ManagedPolicyArns": [
+          {
+            "Fn::Sub": "arn:\${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole",
+          },
+        ],
+        "Policies": [
+          {
+            "PolicyDocument": {
+              "Statement": [
+                {
+                  "Action": "route53:GetChange",
+                  "Effect": "Allow",
+                  "Resource": "*",
+                },
+                {
+                  "Action": "route53:ListResourceRecordSets",
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":route53:::hostedzone/Z0595012323F7RI1KVDD2",
+                      ],
+                    ],
+                  },
+                },
+                {
+                  "Action": "route53:ChangeResourceRecordSets",
+                  "Condition": {
+                    "ForAllValues:StringEquals": {
+                      "route53:ChangeResourceRecordSetsActions": [
+                        "DELETE",
+                      ],
+                      "route53:ChangeResourceRecordSetsRecordTypes": [
+                        "A",
+                      ],
+                    },
+                  },
+                  "Effect": "Allow",
+                  "Resource": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":route53:::hostedzone/Z0595012323F7RI1KVDD2",
+                      ],
+                    ],
+                  },
+                },
+              ],
+              "Version": "2012-10-17",
+            },
+            "PolicyName": "Inline",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Role",
+    },
     "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
       "DependsOn": [
         "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
@@ -3513,7 +3657,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "b7a6740f42e6e4fad611ec991db87544a69d8f289698b787d0ba2473e56b3b47.zip",
+          "S3Key": "ccf8606505da18f3b771c85455ee9a6d6f070cf429d31b4aab6308955615d2db.zip",
         },
         "Environment": {
           "Variables": {

@@ -186,6 +186,15 @@ export class CoelhorIac extends Stack {
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
+    const apiARecord = new route53.ARecord(this, "ApiARecord", {
+      target: route53.RecordTarget.fromAlias(
+        new route53Targets.ApiGatewayv2DomainProperties(apiDomain.regionalDomainName, apiDomain.regionalHostedZoneId),
+      ),
+      zone: hostedzone,
+      deleteExisting: true,
+    });
+    apiARecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
     const sesMXRecord = new route53.MxRecord(this, "SESMXRecord", {
       zone: hostedzone,
       values: [
