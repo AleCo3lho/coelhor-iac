@@ -1,14 +1,8 @@
-# `CHANGE ME:` AWS CDK Template
+# `Coelhor.dev:` Iac
 
-Check the [wiki](https://github.com/LokaHQ/aws-cdk-template/wiki) about notes on this template! You can use [Github Discussions](https://github.com/LokaHQ/aws-cdk-template/discussions) to discuss it.
+This is the IaC repo for my personal blog, here is the architecture of what is implemented by now.
 
-How to use this Github Template Repository:
-- Click the "Use this template" button above.
-- Change the above page title in this README.
-- Make sure to document what this project is about - best place is this README file.
-- Possibly add a diagram of the architecture too.
-- Make sure you give proper name to the Stack (`CHANGE_ME_Stack` is not a valid name).
-- Remove this whole paragraph - it's about the template not about your project.
+![image](docs/coelhor-iac.excalidraw.svg)
 
 ## Pre-requisites
 
@@ -30,7 +24,7 @@ sso_role_name=DevOps      # Example permissionset name
 
 ## Useful commands for CDK
 
-* `yarn add …`        - add 3rd party packages from npmjs (see https://constructs.dev/)
+* `yarn add …`        - add 3rd party packages from npmjs (see <https://constructs.dev/>)
 * `yarn build`        - compile typescript to js
 * `yarn test`         - perform the jest unit tests
 * `yarn test:fix`     - update the jest test snapshot
@@ -47,7 +41,7 @@ sso_role_name=DevOps      # Example permissionset name
 
 Before using CDK in any AWS Account and Region, the Account + Region needs to be "cdk bootstraped"
 
-```
+```bash
 # check if your aws is properly configured
 aws sts get-caller-identity
 
