@@ -1,12 +1,10 @@
 package main
 
 import (
-	"bytes"
 	"context"
 	"fmt"
 	"log"
 	"sync"
-	"text/template"
 
 	"os"
 
@@ -20,16 +18,16 @@ import (
 )
 
 type Invocation struct {
-	Title string `json:"title"`
+	Title       string `json:"title"`
 	Description string `json:"description"`
-	Content string `json:"content"`
-	Plain string `json:"plain"`
-	Link string `json:"link"`
+	Content     string `json:"content"`
+	Plain       string `json:"plain"`
+	Link        string `json:"link"`
 }
 
 type Subscriber struct {
 	Email string
-	Id string
+	Id    string
 }
 
 type SendEmailErrors struct {
@@ -47,9 +45,9 @@ func scanForSubscribers(svc *dynamodb.DynamoDB, confirm bool) (*dynamodb.ScanOut
 		ExpressionAttributeValues: map[string]*dynamodb.AttributeValue{
 			":yes": {BOOL: aws.Bool(confirm)},
 		},
-		FilterExpression: aws.String("#C = :yes"),
+		FilterExpression:     aws.String("#C = :yes"),
 		ProjectionExpression: aws.String("email, id"),
-		TableName: aws.String(table),
+		TableName:            aws.String(table),
 	}
 
 	result, err := svc.Scan(input)
@@ -107,8 +105,8 @@ func updateIdsInDynamoDB(svc *dynamodb.DynamoDB, email string, id string, timest
 		},
 		// Use the shorthand references to update these keys
 		ConditionExpression: aws.String("#C = :yes"),
-		UpdateExpression: aws.String("SET #T = :timeval, #ID = :idval"),
-		TableName:        aws.String(table),
+		UpdateExpression:    aws.String("SET #T = :timeval, #ID = :idval"),
+		TableName:           aws.String(table),
 	}
 
 	result, err := svc.UpdateItem(input)
@@ -141,31 +139,12 @@ func updateIdsInDynamoDB(svc *dynamodb.DynamoDB, email string, id string, timest
 	return result, err
 }
 
-func buildEmail(event Invocation, emailAddress string, id string) (*ses.SendEmailInput) {
-	var htmlBody bytes.Buffer
-	templateData := struct {
-		Title       string
-		Description string
-		Content     string
-	}{
-		Title:       event.Title,
-		Description: event.Description,
-		Content:     event.Content,
-	}
+func buildEmail(event Invocation, emailAddress string, id string) *ses.SendEmailInput {
 
 	unsubLink := os.Getenv("UNSUBSCRIBE_LINK")
-
-	// Build the rich text email
-	t, terr := template.ParseFiles("template.html")
-	if terr != nil {
-		log.Fatalf("could not get email template: %s", terr)
-	}
-	t.Execute(&htmlBody, templateData)
-	rich := htmlBody.String() + "\n\n<hr>\n\n<p style=\"font-size: 0.9em;\">Você está inscrito em <a href=\"" + os.Getenv("WEBSITE") + "\">" + os.Getenv("TITLE") + "</a>. Clique aqui para <a href=\"" + unsubLink + "?email=" + emailAddress + "&id=" + id + "\">desinscrever-se</a>.</p>"
-	
 	// Build plain text format
 	plain := event.Title + "\n\n" + event.Description + "\n\n---\n\nVocê pode ler esse email em html, ou ler isto em meu blog: \n" + event.Link + "\n\n---\n\n" + event.Plain + "\n\n---\n\nVocê se increveu em " + os.Getenv("WEBSITE") + ". Para desinscrever-se, clique: " + unsubLink + "?email=" + emailAddress + "&id=" + id
-	
+
 	// Build the "from" value
 	source := fmt.Sprintf("\"%s\" <%s>", os.Getenv("SENDER_NAME"), os.Getenv("SENDER_EMAIL"))
 
@@ -180,10 +159,6 @@ func buildEmail(event Invocation, emailAddress string, id string) (*ses.SendEmai
 		},
 		Message: &ses.Message{
 			Body: &ses.Body{
-				Html: &ses.Content{
-					Charset: aws.String("UTF-8"),
-					Data:    aws.String(rich),
-				},
 				Text: &ses.Content{
 					Charset: aws.String("UTF-8"),
 					Data:    aws.String(plain),
@@ -212,8 +187,7 @@ func sendLotsOfEmails(svc *ses.SES, input *ses.SendEmailInput, errs *SendEmailEr
 		errs.Messages = append(errs.Messages, err)
 	}
 }
-	
-	
+
 func lambdaHandler(ctx context.Context, event Invocation) (string, error) {
 	// Get list of subscribers
 	dynamo_client := dynamodb.New(session.New())
@@ -223,19 +197,19 @@ func lambdaHandler(ctx context.Context, event Invocation) (string, error) {
 	}
 	subscribers := []Subscriber{}
 	dynamodbattribute.UnmarshalListOfMaps(scanoutput.Items, &subscribers)
-	
+
 	// Send each one an email
 	ses_session := ses.New(session.New())
 	sendCount := 0
 	wg := sync.WaitGroup{}
 	heardYouLikeErrors := SendEmailErrors{Messages: make([]error, 0)}
-	for _,sub := range subscribers {
+	for _, sub := range subscribers {
 		input := buildEmail(event, sub.Email, sub.Id)
 		go sendLotsOfEmails(ses_session, input, &heardYouLikeErrors, &wg)
 		sendCount++
 	}
 	wg.Wait() // Wait until all the emails are sent to log errors
-	for _,ses_err := range heardYouLikeErrors.Messages{
+	for _, ses_err := range heardYouLikeErrors.Messages {
 		if aerr, ok := ses_err.(awserr.Error); ok {
 			switch aerr.Code() {
 			case ses.ErrCodeMessageRejected:
