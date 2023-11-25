@@ -155,6 +155,27 @@ export class CoelhorIac extends Stack {
     );
     simpleSubscribeDB.grantFullAccess(fnSimpleSubscribe);
 
+    const fnRssMailer = new go.GoFunction(this, "RssMailerFunc", {
+      entry: "src/utils/lambdas/rss-mailer",
+      environment: {
+        DB_TABLE_NAME: simpleSubscribeDB.tableName,
+        WEBSITE: `https://${prodConfig.domain}/`,
+        UNSUBSCRIBE_LINK: `https://api.${prodConfig.domain}/unsubscribe/`,
+        SENDER_EMAIL: `no-reply@${prodConfig.domain}`,
+        SENDER_NAME: "Alexandre Coelho Ramos",
+        TITLE: "Coelhor.dev Posts",
+      },
+    });
+    fnRssMailer.applyRemovalPolicy(RemovalPolicy.DESTROY);
+    fnRssMailer.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["ses:SendEmail", "ses:SendRawEmail"],
+        resources: [`arn:aws:ses:us-east-1:${prodConfig.env.account}:*`],
+      }),
+    );
+    simpleSubscribeDB.grantFullAccess(fnRssMailer);
+
     const fnSimpleSubscribeIntegration = new apigwv2integ.HttpLambdaIntegration(
       "SimpleSubscribeIntegration",
       fnSimpleSubscribe,
