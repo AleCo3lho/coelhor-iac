@@ -14,20 +14,20 @@ import * as ses from "aws-cdk-lib/aws-ses";
 import * as sesactions from "aws-cdk-lib/aws-ses-actions";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as go from "@aws-cdk/aws-lambda-go-alpha";
-import { prodConfig } from "./config";
+import { Config } from "./config";
 
 export class CoelhorIac extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, config: Config, props?: StackProps) {
     super(scope, id, props);
 
     const hostedzone = route53.HostedZone.fromHostedZoneAttributes(this, "HostedZone", {
-      hostedZoneId: `${prodConfig.hostedzone}`,
-      zoneName: `${prodConfig.domain}`,
+      hostedZoneId: `${config.hostedzone}`,
+      zoneName: `${config.domain}`,
     });
 
     const blogCert = new acm.Certificate(this, "BlogCert", {
-      domainName: `${prodConfig.domain}`,
-      subjectAlternativeNames: [`*.${prodConfig.domain}`],
+      domainName: `${config.domain}`,
+      subjectAlternativeNames: [`*.${config.domain}`],
       validation: acm.CertificateValidation.fromDns(hostedzone),
     });
     blogCert.applyRemovalPolicy(RemovalPolicy.DESTROY);
@@ -69,7 +69,7 @@ export class CoelhorIac extends Stack {
           },
         ],
       },
-      domainNames: [`${prodConfig.domain}`, `*.${prodConfig.domain}`],
+      domainNames: [`${config.domain}`, `*.${config.domain}`],
       certificate: blogCert,
     });
 
@@ -82,7 +82,7 @@ export class CoelhorIac extends Stack {
     const blogAliasRecord = new route53.ARecord(this, "BlogAliasRecord", {
       target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(blogCF)),
       zone: hostedzone,
-      recordName: `${prodConfig.domain}`,
+      recordName: `${config.domain}`,
     });
     blogAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
@@ -132,8 +132,8 @@ export class CoelhorIac extends Stack {
       entry: "src/utils/lambdas/simpleSubscriber",
       environment: {
         DB_TABLE_NAME: simpleSubscribeDB.tableName,
-        BASE_URL: `https://${prodConfig.domain}/`,
-        API_URL: `https://api.${prodConfig.domain}/`,
+        BASE_URL: `https://${config.domain}/`,
+        API_URL: `https://api.${config.domain}/`,
         ERROR_PAGE: "error",
         SUCCESS_PAGE: "success",
         CONFIRM_SUBSCRIBE_PAGE: "confirm",
@@ -141,7 +141,7 @@ export class CoelhorIac extends Stack {
         SUBSCRIBE_PATH: "signup",
         UNSUBSCRIBE_PATH: "unsubscribe",
         VERIFY_PATH: "verify",
-        SENDER_EMAIL: `no-reply@${prodConfig.domain}`,
+        SENDER_EMAIL: `no-reply@${config.domain}`,
         SENDER_NAME: "Alexandre Coelho Ramos",
       },
     });
@@ -150,7 +150,7 @@ export class CoelhorIac extends Stack {
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ["ses:SendEmail", "ses:SendRawEmail"],
-        resources: [`arn:aws:ses:us-east-1:${prodConfig.env.account}:*`],
+        resources: [`arn:aws:ses:us-east-1:${config.env.account}:*`],
       }),
     );
     simpleSubscribeDB.grantFullAccess(fnSimpleSubscribe);
@@ -159,9 +159,9 @@ export class CoelhorIac extends Stack {
       entry: "src/utils/lambdas/rss-mailer",
       environment: {
         DB_TABLE_NAME: simpleSubscribeDB.tableName,
-        WEBSITE: `https://${prodConfig.domain}/`,
-        UNSUBSCRIBE_LINK: `https://api.${prodConfig.domain}/unsubscribe/`,
-        SENDER_EMAIL: `no-reply@${prodConfig.domain}`,
+        WEBSITE: `https://${config.domain}/`,
+        UNSUBSCRIBE_LINK: `https://api.${config.domain}/unsubscribe/`,
+        SENDER_EMAIL: `no-reply@${config.domain}`,
         SENDER_NAME: "Alexandre Coelho Ramos",
         TITLE: "Coelhor.dev Posts",
       },
@@ -171,7 +171,7 @@ export class CoelhorIac extends Stack {
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ["ses:SendEmail", "ses:SendRawEmail"],
-        resources: [`arn:aws:ses:us-east-1:${prodConfig.env.account}:*`],
+        resources: [`arn:aws:ses:us-east-1:${config.env.account}:*`],
       }),
     );
     simpleSubscribeDB.grantFullAccess(fnRssMailer);
@@ -183,7 +183,7 @@ export class CoelhorIac extends Stack {
     );
     const apiDomain = new apigwv2.DomainName(this, "CoelhorAPIDomain", {
       certificate: blogCert,
-      domainName: `api.${prodConfig.domain}`,
+      domainName: `api.${config.domain}`,
     });
     apiDomain.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
@@ -209,14 +209,14 @@ export class CoelhorIac extends Stack {
       zone: hostedzone,
       values: [
         {
-          hostName: `inbound-smtp.${prodConfig.env.region}.amazonaws.com`,
+          hostName: `inbound-smtp.${config.env.region}.amazonaws.com`,
           priority: 10,
         },
       ],
     });
     sesMXRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    Tags.of(this).add("Project", "coelhor-iac");
+    Tags.of(this).add("Project", "Coelhor.dev");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");
   }
 }

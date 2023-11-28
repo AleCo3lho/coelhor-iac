@@ -9,19 +9,9 @@ export class PipelineStage extends Stage {
   constructor(scope: Construct, id: string, props?: StageProps) {
     super(scope, id, props);
 
-    const blogIac = new CoelhorIac(this, "InfraStack", {
-      env: {
-        account: `${prodConfig.env.account}`,
-        region: `${prodConfig.env.region}`,
-      },
-    });
+    const blogIac = new CoelhorIac(this, "InfraStack", prodConfig);
 
-    const blogPipeline = new BlogPipelineStack(this, "BlogPipeline", {
-      env: {
-        account: `${prodConfig.env.account}`,
-        region: `${prodConfig.env.region}`,
-      },
-    });
+    const blogPipeline = new BlogPipelineStack(this, "BlogPipeline", prodConfig);
 
     blogPipeline.addDependency(blogIac);
   }
@@ -53,7 +43,7 @@ export class CodePipelineStack extends Stack {
 
     pipeline.addStage(new PipelineStage(this, "Prod", {}));
 
-    Tags.of(this).add("Project", "coelhor-iac");
+    Tags.of(this).add("Project", "Coelhor.dev");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");
   }
 }

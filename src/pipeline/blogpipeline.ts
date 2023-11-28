@@ -6,10 +6,10 @@ import * as codebuild from "aws-cdk-lib/aws-codebuild";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as iam from "aws-cdk-lib/aws-iam";
 import * as ssm from "aws-cdk-lib/aws-ssm";
-import { prodConfig } from "../config";
+import { Config } from "../config";
 
 export class BlogPipelineStack extends Stack {
-  constructor(scope: Construct, id: string, props?: StackProps) {
+  constructor(scope: Construct, id: string, config: Config, props?: StackProps) {
     super(scope, id, props);
 
     const blogCloudFrontID = ssm.StringParameter.fromStringParameterName(
@@ -23,9 +23,9 @@ export class BlogPipelineStack extends Stack {
     const buildArtifact = new codepipeline.Artifact("BuildOutput");
     const sourceAction = new cpactions.GitHubSourceAction({
       actionName: "GitHub_Source",
-      owner: `${prodConfig.owner}`,
-      repo: `${prodConfig.blogRepo}`,
-      branch: `${prodConfig.blogBranch}`,
+      owner: `${config.owner}`,
+      repo: `${config.blogRepo}`,
+      branch: `${config.blogBranch}`,
       oauthToken: oauth,
       output: sourceArtifact,
     });
@@ -86,7 +86,7 @@ export class BlogPipelineStack extends Stack {
     invalidateCFProject.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ["cloudfront:CreateInvalidation"],
-        resources: [`arn:aws:cloudfront::${prodConfig.env.account}:distribution/${blogCloudFrontID.stringValue}`],
+        resources: [`arn:aws:cloudfront::${config.env.account}:distribution/${blogCloudFrontID.stringValue}`],
       }),
     );
 
@@ -118,7 +118,7 @@ export class BlogPipelineStack extends Stack {
       ],
     });
 
-    Tags.of(this).add("Project", "coelhor-iac");
+    Tags.of(this).add("Project", "Coelhor.dev");
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");
   }
 }

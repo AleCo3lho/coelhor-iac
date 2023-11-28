@@ -8,12 +8,7 @@ import { BlogPipelineStack } from "../src/pipeline/blogpipeline";
 // Test for single stack
 test("snapshot for CoelhorIac matches previous state", () => {
   const app = new cdk.App();
-  const stack = new CoelhorIac(app, "MyTestStack", {
-    env: {
-      account: `${prodConfig.env.account}`,
-      region: `${prodConfig.env.region}`,
-    },
-  });
+  const stack = new CoelhorIac(app, "MyTestStack", prodConfig);
 
   const template = Template.fromStack(stack);
   expect(template.toJSON()).toMatchSnapshot();
@@ -36,12 +31,7 @@ test("snapshot for CodePipelineStack matches previous state", () => {
 // Test for pipeline stack
 test("snapshot for BlogPipiline matches previous state", () => {
   const app = new cdk.App();
-  const stack = new BlogPipelineStack(app, "MyBlogPipilineStack", {
-    env: {
-      account: `${prodConfig.env.account}`,
-      region: `${prodConfig.env.region}`,
-    },
-  });
+  const stack = new BlogPipelineStack(app, "MyBlogPipilineStack", prodConfig);
 
   const template = Template.fromStack(stack);
   expect(template.toJSON()).toMatchSnapshot();
