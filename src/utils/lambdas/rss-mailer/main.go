@@ -197,6 +197,7 @@ func lambdaHandler(ctx context.Context, event Invocation) (string, error) {
 	}
 	subscribers := []Subscriber{}
 	dynamodbattribute.UnmarshalListOfMaps(scanoutput.Items, &subscribers)
+	log.Print("Found ", len(subscribers), " subscribers.")
 
 	// Send each one an email
 	ses_session := ses.New(session.New())
@@ -206,6 +207,8 @@ func lambdaHandler(ctx context.Context, event Invocation) (string, error) {
 	for _, sub := range subscribers {
 		input := buildEmail(event, sub.Email, sub.Id)
 		go sendLotsOfEmails(ses_session, input, &heardYouLikeErrors, &wg)
+		log.Print("Ses Call:", ses_session, input)
+		log.Print("Email build:", event, sub.Email, sub.Id)
 		sendCount++
 	}
 	wg.Wait() // Wait until all the emails are sent to log errors
