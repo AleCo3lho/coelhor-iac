@@ -3429,7 +3429,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "bf4c9c44fd7ead71c2fd25ad69b78876eab3970fb6199cc421fbeccbf849d49d.zip",
+          "S3Key": "9a2be0c2d54dc9a304c531818140f08a1e03cc3a991fa8c437852ac1c2afca62.zip",
         },
         "Environment": {
           "Variables": {
@@ -3833,7 +3833,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           "S3Bucket": {
             "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
           },
-          "S3Key": "5686b77fbf276c0adcf19ccc3c29f1dbe52e6cb6d646e3f93b0142ad9b9650d9.zip",
+          "S3Key": "bb26e4c115c1540b400f4c7d567313812cf3a93097840ac05e1ceffd80803037.zip",
         },
         "Environment": {
           "Variables": {
