@@ -17,12 +17,7 @@ test("snapshot for CoelhorIac matches previous state", () => {
 // Test for pipeline stack
 test("snapshot for CodePipelineStack matches previous state", () => {
   const app = new cdk.App();
-  const stack = new CodePipelineStack(app, "MyCodePipelineStack", {
-    env: {
-      account: `${prodConfig.env.account}`,
-      region: `${prodConfig.env.region}`,
-    },
-  });
+  const stack = new CodePipelineStack(app, "MyCodePipelineStack", prodConfig);
 
   const template = Template.fromStack(stack);
   expect(template.toJSON()).toMatchSnapshot();

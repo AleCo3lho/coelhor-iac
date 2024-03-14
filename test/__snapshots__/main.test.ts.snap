@@ -128,15 +128,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":logs:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
+                      ":logs:us-east-1:239828624774:log-group:/aws/codebuild/",
                       {
                         "Ref": "Build45A36621",
                       },
@@ -151,15 +143,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":logs:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
+                      ":logs:us-east-1:239828624774:log-group:/aws/codebuild/",
                       {
                         "Ref": "Build45A36621",
                       },
@@ -186,15 +170,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                     {
                       "Ref": "AWS::Partition",
                     },
-                    ":codebuild:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":report-group/",
+                    ":codebuild:us-east-1:239828624774:report-group/",
                     {
                       "Ref": "Build45A36621",
                     },
@@ -383,15 +359,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":logs:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
+                      ":logs:us-east-1:239828624774:log-group:/aws/codebuild/",
                       {
                         "Ref": "InvalidateProjectE0DD82CD",
                       },
@@ -406,15 +374,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":logs:",
-                      {
-                        "Ref": "AWS::Region",
-                      },
-                      ":",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":log-group:/aws/codebuild/",
+                      ":logs:us-east-1:239828624774:log-group:/aws/codebuild/",
                       {
                         "Ref": "InvalidateProjectE0DD82CD",
                       },
@@ -441,15 +401,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                     {
                       "Ref": "AWS::Partition",
                     },
-                    ":codebuild:",
-                    {
-                      "Ref": "AWS::Region",
-                    },
-                    ":",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":report-group/",
+                    ":codebuild:us-east-1:239828624774:report-group/",
                     {
                       "Ref": "InvalidateProjectE0DD82CD",
                     },
@@ -598,11 +550,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
+                      ":iam::239828624774:root",
                     ],
                   ],
                 },
@@ -703,11 +651,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
+                      ":iam::239828624774:root",
                     ],
                   ],
                 },
@@ -972,11 +916,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
+                      ":iam::239828624774:root",
                     ],
                   ],
                 },
@@ -1044,11 +984,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":root",
+                      ":iam::239828624774:root",
                     ],
                   ],
                 },
@@ -1489,7 +1425,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
               "Action": "sts:AssumeRole",
               "Effect": "Allow",
               "Resource": {
-                "Fn::Sub": "arn:\${AWS::Partition}:iam::\${AWS::AccountId}:role/cdk-hnb659fds-file-publishing-role-\${AWS::AccountId}-\${AWS::Region}",
+                "Fn::Sub": "arn:\${AWS::Partition}:iam::239828624774:role/cdk-hnb659fds-file-publishing-role-239828624774-us-east-1",
               },
             },
             {
@@ -1713,18 +1649,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::239828624774:role/cdk-hnb659fds-deploy-role-239828624774-us-east-1",
                     ],
                   ],
                 },
@@ -1972,6 +1897,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
           "Type": "S3",
         },
         "Name": "BlogIacPipeline",
+        "PipelineType": "V1",
         "RestartExecutionOnUpdate": true,
         "RoleArn": {
           "Fn::GetAtt": [
@@ -2132,18 +2058,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                         {
                           "Ref": "AWS::Partition",
                         },
-                        ":iam::",
-                        {
-                          "Ref": "AWS::AccountId",
-                        },
-                        ":role/cdk-hnb659fds-cfn-exec-role-",
-                        {
-                          "Ref": "AWS::AccountId",
-                        },
-                        "-",
-                        {
-                          "Ref": "AWS::Region",
-                        },
+                        ":iam::239828624774:role/cdk-hnb659fds-cfn-exec-role-239828624774-us-east-1",
                       ],
                     ],
                   },
@@ -2165,18 +2080,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::239828624774:role/cdk-hnb659fds-deploy-role-239828624774-us-east-1",
                     ],
                   ],
                 },
@@ -2203,18 +2107,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::239828624774:role/cdk-hnb659fds-deploy-role-239828624774-us-east-1",
                     ],
                   ],
                 },
@@ -2239,18 +2132,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                         {
                           "Ref": "AWS::Partition",
                         },
-                        ":iam::",
-                        {
-                          "Ref": "AWS::AccountId",
-                        },
-                        ":role/cdk-hnb659fds-cfn-exec-role-",
-                        {
-                          "Ref": "AWS::AccountId",
-                        },
-                        "-",
-                        {
-                          "Ref": "AWS::Region",
-                        },
+                        ":iam::239828624774:role/cdk-hnb659fds-cfn-exec-role-239828624774-us-east-1",
                       ],
                     ],
                   },
@@ -2272,18 +2154,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::239828624774:role/cdk-hnb659fds-deploy-role-239828624774-us-east-1",
                     ],
                   ],
                 },
@@ -2310,18 +2181,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                       {
                         "Ref": "AWS::Partition",
                       },
-                      ":iam::",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      ":role/cdk-hnb659fds-deploy-role-",
-                      {
-                        "Ref": "AWS::AccountId",
-                      },
-                      "-",
-                      {
-                        "Ref": "AWS::Region",
-                      },
+                      ":iam::239828624774:role/cdk-hnb659fds-deploy-role-239828624774-us-east-1",
                     ],
                   ],
                 },
@@ -2443,18 +2303,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                     {
                       "Ref": "AWS::Partition",
                     },
-                    ":iam::",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    ":role/cdk-hnb659fds-deploy-role-",
-                    {
-                      "Ref": "AWS::AccountId",
-                    },
-                    "-",
-                    {
-                      "Ref": "AWS::Region",
-                    },
+                    ":iam::239828624774:role/cdk-hnb659fds-deploy-role-239828624774-us-east-1",
                   ],
                 ],
               },
@@ -2875,7 +2724,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             ],
           },
         },
-        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "HostedZoneId": {
+          "Ref": "HostedZoneDB99F866",
+        },
         "Name": "api.coelhor.dev.",
         "Type": "A",
       },
@@ -2902,7 +2753,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             ],
           },
         },
-        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "HostedZoneId": {
+          "Ref": "HostedZoneDB99F866",
+        },
         "Name": "coelhor.dev.",
         "Type": "A",
       },
@@ -3161,30 +3014,10 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                   return request;
                 }",
         "FunctionConfig": {
-          "Comment": {
-            "Fn::Join": [
-              "",
-              [
-                {
-                  "Ref": "AWS::Region",
-                },
-                "MyTestStackBlogCFRedirectDF86BDAA",
-              ],
-            ],
-          },
+          "Comment": "us-east-1MyTestStackBlogCFRedirectDF86BDAA",
           "Runtime": "cloudfront-js-1.0",
         },
-        "Name": {
-          "Fn::Join": [
-            "",
-            [
-              {
-                "Ref": "AWS::Region",
-              },
-              "MyTestStackBlogCFRedirectDF86BDAA",
-            ],
-          ],
-        },
+        "Name": "us-east-1MyTestStackBlogCFRedirectDF86BDAA",
       },
       "Type": "AWS::CloudFront::Function",
     },
@@ -3195,7 +3028,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         "DomainValidationOptions": [
           {
             "DomainName": "coelhor.dev",
-            "HostedZoneId": "Z0595012323F7RI1KVDD2",
+            "HostedZoneId": {
+              "Ref": "HostedZoneDB99F866",
+            },
           },
         ],
         "SubjectAlternativeNames": [
@@ -3308,15 +3143,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               {
                 "Ref": "AWS::Partition",
               },
-              ":execute-api:",
-              {
-                "Ref": "AWS::Region",
-              },
-              ":",
-              {
-                "Ref": "AWS::AccountId",
-              },
-              ":",
+              ":execute-api:us-east-1:239828624774:",
               {
                 "Ref": "CoelhorAPIV22F4CACE5",
               },
@@ -3366,10 +3193,8 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       ],
       "Properties": {
         "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "b7f33614a69548d6bafe224d751a7ef238cde19097415e553fe8b63a4c8fd8a6.zip",
+          "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
+          "S3Key": "6c1e9b465fa4b2d651dbc9ce3e732d8702a7b19137327684a71d89f1d355f1a2.zip",
         },
         "Description": {
           "Fn::Join": [
@@ -3418,6 +3243,22 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
+    "HostedZoneDB99F866": {
+      "Properties": {
+        "HostedZoneTags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "Coelhor.dev",
+          },
+        ],
+        "Name": "coelhor.dev.",
+      },
+      "Type": "AWS::Route53::HostedZone",
+    },
     "RssMailerFuncD9D6970D": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
@@ -3426,10 +3267,8 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       ],
       "Properties": {
         "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "9a2be0c2d54dc9a304c531818140f08a1e03cc3a991fa8c437852ac1c2afca62.zip",
+          "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
+          "S3Key": "f2bfb8f8aab175446164dec53cb57bf00fb8aa6ad8fd5145ffd3f9e3753612cf.zip",
         },
         "Environment": {
           "Variables": {
@@ -3680,7 +3519,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     },
     "SESIdentityDkimDnsToken1604A5086": {
       "Properties": {
-        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "HostedZoneId": {
+          "Ref": "HostedZoneDB99F866",
+        },
         "Name": {
           "Fn::GetAtt": [
             "SESIdentity8C041D13",
@@ -3702,7 +3543,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     },
     "SESIdentityDkimDnsToken244558F15": {
       "Properties": {
-        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "HostedZoneId": {
+          "Ref": "HostedZoneDB99F866",
+        },
         "Name": {
           "Fn::GetAtt": [
             "SESIdentity8C041D13",
@@ -3724,7 +3567,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     },
     "SESIdentityDkimDnsToken35BE79D54": {
       "Properties": {
-        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "HostedZoneId": {
+          "Ref": "HostedZoneDB99F866",
+        },
         "Name": {
           "Fn::GetAtt": [
             "SESIdentity8C041D13",
@@ -3747,7 +3592,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     "SESMXRecord6978E6E1": {
       "DeletionPolicy": "Delete",
       "Properties": {
-        "HostedZoneId": "Z0595012323F7RI1KVDD2",
+        "HostedZoneId": {
+          "Ref": "HostedZoneDB99F866",
+        },
         "Name": "coelhor.dev.",
         "ResourceRecords": [
           "10 inbound-smtp.us-east-1.amazonaws.com",
@@ -3813,9 +3660,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         ],
         "Replicas": [
           {
-            "Region": {
-              "Ref": "AWS::Region",
-            },
+            "Region": "us-east-1",
           },
         ],
       },
@@ -3830,10 +3675,8 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       ],
       "Properties": {
         "Code": {
-          "S3Bucket": {
-            "Fn::Sub": "cdk-hnb659fds-assets-\${AWS::AccountId}-\${AWS::Region}",
-          },
-          "S3Key": "bb26e4c115c1540b400f4c7d567313812cf3a93097840ac05e1ceffd80803037.zip",
+          "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
+          "S3Key": "b2012e3f33b4b2b1bc03327c72fd9edff7c5c69ecab1616f620e59c9b7515d44.zip",
         },
         "Environment": {
           "Variables": {

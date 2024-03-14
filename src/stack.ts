@@ -14,20 +14,23 @@ import * as ses from "aws-cdk-lib/aws-ses";
 import * as sesactions from "aws-cdk-lib/aws-ses-actions";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as go from "@aws-cdk/aws-lambda-go-alpha";
-import { Config } from "./config";
+
+export interface CoelhorIacProps extends StackProps {
+  readonly hostedzone: string;
+  readonly domain: string;
+}
 
 export class CoelhorIac extends Stack {
-  constructor(scope: Construct, id: string, config: Config, props?: StackProps) {
+  constructor(scope: Construct, id: string, props: CoelhorIacProps) {
     super(scope, id, props);
 
-    const hostedzone = route53.HostedZone.fromHostedZoneAttributes(this, "HostedZone", {
-      hostedZoneId: `${config.hostedzone}`,
-      zoneName: `${config.domain}`,
+    const hostedzone = new route53.HostedZone(this, "HostedZone", {
+      zoneName: props.domain,
     });
 
     const blogCert = new acm.Certificate(this, "BlogCert", {
-      domainName: `${config.domain}`,
-      subjectAlternativeNames: [`*.${config.domain}`],
+      domainName: props.domain,
+      subjectAlternativeNames: [`*.${props.domain}`],
       validation: acm.CertificateValidation.fromDns(hostedzone),
     });
     blogCert.applyRemovalPolicy(RemovalPolicy.DESTROY);
@@ -69,7 +72,7 @@ export class CoelhorIac extends Stack {
           },
         ],
       },
-      domainNames: [`${config.domain}`, `*.${config.domain}`],
+      domainNames: [`${props.domain}`, `*.${props.domain}`],
       certificate: blogCert,
     });
 
@@ -82,7 +85,7 @@ export class CoelhorIac extends Stack {
     const blogAliasRecord = new route53.ARecord(this, "BlogAliasRecord", {
       target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(blogCF)),
       zone: hostedzone,
-      recordName: `${config.domain}`,
+      recordName: props.domain,
     });
     blogAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
@@ -97,7 +100,7 @@ export class CoelhorIac extends Stack {
     const sesReceive = new ses.ReceiptRuleSet(this, "SESReceive", {
       rules: [
         {
-          recipients: ["newsletter@coelhor.dev"],
+          recipients: [`newsletter@${props.domain}`],
           enabled: true,
           actions: [
             new sesactions.S3({
@@ -132,8 +135,8 @@ export class CoelhorIac extends Stack {
       entry: "src/utils/lambdas/simpleSubscriber",
       environment: {
         DB_TABLE_NAME: simpleSubscribeDB.tableName,
-        BASE_URL: `https://${config.domain}/`,
-        API_URL: `https://api.${config.domain}/`,
+        BASE_URL: `https://${props.domain}/`,
+        API_URL: `https://api.${props.domain}/`,
         ERROR_PAGE: "error",
         SUCCESS_PAGE: "success",
         CONFIRM_SUBSCRIBE_PAGE: "confirm",
@@ -141,7 +144,7 @@ export class CoelhorIac extends Stack {
         SUBSCRIBE_PATH: "signup",
         UNSUBSCRIBE_PATH: "unsubscribe",
         VERIFY_PATH: "verify",
-        SENDER_EMAIL: `no-reply@${config.domain}`,
+        SENDER_EMAIL: `no-reply@${props.domain}`,
         SENDER_NAME: "Alexandre Coelho Ramos",
       },
     });
@@ -150,7 +153,7 @@ export class CoelhorIac extends Stack {
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ["ses:SendEmail", "ses:SendRawEmail"],
-        resources: [`arn:aws:ses:us-east-1:${config.env.account}:*`],
+        resources: [`arn:aws:ses:us-east-1:${props.env?.account}:*`],
       }),
     );
     simpleSubscribeDB.grantFullAccess(fnSimpleSubscribe);
@@ -159,9 +162,9 @@ export class CoelhorIac extends Stack {
       entry: "src/utils/lambdas/rss-mailer",
       environment: {
         DB_TABLE_NAME: simpleSubscribeDB.tableName,
-        WEBSITE: `https://${config.domain}/`,
-        UNSUBSCRIBE_LINK: `https://api.${config.domain}/unsubscribe/`,
-        SENDER_EMAIL: `no-reply@${config.domain}`,
+        WEBSITE: `https://${props.domain}/`,
+        UNSUBSCRIBE_LINK: `https://api.${props.domain}/unsubscribe/`,
+        SENDER_EMAIL: `no-reply@${props.domain}`,
         SENDER_NAME: "Alexandre Coelho Ramos",
         TITLE: "Coelhor.dev Posts",
       },
@@ -171,7 +174,7 @@ export class CoelhorIac extends Stack {
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ["ses:SendEmail", "ses:SendRawEmail"],
-        resources: [`arn:aws:ses:us-east-1:${config.env.account}:*`],
+        resources: [`arn:aws:ses:us-east-1:${props.env?.account}:*`],
       }),
     );
     simpleSubscribeDB.grantFullAccess(fnRssMailer);
@@ -183,7 +186,7 @@ export class CoelhorIac extends Stack {
     );
     const apiDomain = new apigwv2.DomainName(this, "CoelhorAPIDomain", {
       certificate: blogCert,
-      domainName: `api.${config.domain}`,
+      domainName: `api.${props.domain}`,
     });
     apiDomain.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
@@ -209,7 +212,7 @@ export class CoelhorIac extends Stack {
       zone: hostedzone,
       values: [
         {
-          hostName: `inbound-smtp.${config.env.region}.amazonaws.com`,
+          hostName: `inbound-smtp.${props.env?.region}.amazonaws.com`,
           priority: 10,
         },
       ],

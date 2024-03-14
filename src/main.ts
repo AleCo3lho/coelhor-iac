@@ -7,9 +7,4 @@ import { prodConfig } from "./config";
 const app = new cdk.App();
 
 // Pipeline deployment
-new CodePipelineStack(app, "Blog-CodePipelineStack", {
-  env: {
-    account: `${prodConfig.env.account}`,
-    region: `${prodConfig.env.region}`,
-  },
-});
+new CodePipelineStack(app, "Blog-CodePipelineStack", prodConfig);
