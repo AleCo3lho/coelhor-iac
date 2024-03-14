@@ -743,7 +743,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
                 },
                 "Configuration": {
                   "Branch": "main",
-                  "OAuthToken": "{{resolve:secretsmanager:GitHubToken:SecretString:::}}",
+                  "OAuthToken": "{{resolve:secretsmanager:eksCluster-gh-repo:SecretString:password::}}",
                   "Owner": "AleCo3lho",
                   "PollForSourceChanges": false,
                   "Repo": "coelhor-blog",
@@ -1223,7 +1223,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
       "Properties": {
         "Authentication": "GITHUB_HMAC",
         "AuthenticationConfiguration": {
-          "SecretToken": "{{resolve:secretsmanager:GitHubToken:SecretString:::}}",
+          "SecretToken": "{{resolve:secretsmanager:eksCluster-gh-repo:SecretString:password::}}",
         },
         "Filters": [
           {
@@ -2707,486 +2707,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     },
   },
   "Resources": {
-    "ApiARecordFA826994": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "AliasTarget": {
-          "DNSName": {
-            "Fn::GetAtt": [
-              "CoelhorAPIDomain049ECDA2",
-              "RegionalDomainName",
-            ],
-          },
-          "HostedZoneId": {
-            "Fn::GetAtt": [
-              "CoelhorAPIDomain049ECDA2",
-              "RegionalHostedZoneId",
-            ],
-          },
-        },
-        "HostedZoneId": {
-          "Ref": "HostedZoneDB99F866",
-        },
-        "Name": "api.coelhor.dev.",
-        "Type": "A",
-      },
-      "Type": "AWS::Route53::RecordSet",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "BlogAliasRecord6BC43687": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "AliasTarget": {
-          "DNSName": {
-            "Fn::GetAtt": [
-              "BlogCF6DF9B024",
-              "DomainName",
-            ],
-          },
-          "HostedZoneId": {
-            "Fn::FindInMap": [
-              "AWSCloudFrontPartitionHostedZoneIdMap",
-              {
-                "Ref": "AWS::Partition",
-              },
-              "zoneId",
-            ],
-          },
-        },
-        "HostedZoneId": {
-          "Ref": "HostedZoneDB99F866",
-        },
-        "Name": "coelhor.dev.",
-        "Type": "A",
-      },
-      "Type": "AWS::Route53::RecordSet",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "BlogBucket3E358F18": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "AccessControl": "BucketOwnerFullControl",
-        "PublicAccessBlockConfiguration": {
-          "BlockPublicAcls": true,
-          "IgnorePublicAcls": true,
-        },
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "aws-cdk:auto-delete-objects",
-            "Value": "true",
-          },
-          {
-            "Key": "Project",
-            "Value": "Coelhor.dev",
-          },
-        ],
-      },
-      "Type": "AWS::S3::Bucket",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "BlogBucketArn936154A4": {
-      "Properties": {
-        "Name": "/blog/s3/bucket-arn",
-        "Tags": {
-          "Author": "Alexandre Coelho Ramos",
-          "Project": "Coelhor.dev",
-        },
-        "Type": "String",
-        "Value": {
-          "Fn::GetAtt": [
-            "BlogBucket3E358F18",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "AWS::SSM::Parameter",
-    },
-    "BlogBucketAutoDeleteObjectsCustomResource9F11A136": {
-      "DeletionPolicy": "Delete",
-      "DependsOn": [
-        "BlogBucketPolicy81EFCEDB",
-      ],
-      "Properties": {
-        "BucketName": {
-          "Ref": "BlogBucket3E358F18",
-        },
-        "ServiceToken": {
-          "Fn::GetAtt": [
-            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
-            "Arn",
-          ],
-        },
-      },
-      "Type": "Custom::S3AutoDeleteObjects",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "BlogBucketPolicy81EFCEDB": {
-      "Properties": {
-        "Bucket": {
-          "Ref": "BlogBucket3E358F18",
-        },
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "s3:PutBucketPolicy",
-                "s3:GetBucket*",
-                "s3:List*",
-                "s3:DeleteObject*",
-              ],
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::GetAtt": [
-                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
-                    "Arn",
-                  ],
-                },
-              },
-              "Resource": [
-                {
-                  "Fn::GetAtt": [
-                    "BlogBucket3E358F18",
-                    "Arn",
-                  ],
-                },
-                {
-                  "Fn::Join": [
-                    "",
-                    [
-                      {
-                        "Fn::GetAtt": [
-                          "BlogBucket3E358F18",
-                          "Arn",
-                        ],
-                      },
-                      "/*",
-                    ],
-                  ],
-                },
-              ],
-            },
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Principal": {
-                "CanonicalUser": {
-                  "Fn::GetAtt": [
-                    "BlogCFOrigin1S3Origin81D7F982",
-                    "S3CanonicalUserId",
-                  ],
-                },
-              },
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Fn::GetAtt": [
-                        "BlogBucket3E358F18",
-                        "Arn",
-                      ],
-                    },
-                    "/*",
-                  ],
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-      },
-      "Type": "AWS::S3::BucketPolicy",
-    },
-    "BlogCF6DF9B024": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "DistributionConfig": {
-          "Aliases": [
-            "coelhor.dev",
-            "*.coelhor.dev",
-          ],
-          "DefaultCacheBehavior": {
-            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
-            "Compress": true,
-            "FunctionAssociations": [
-              {
-                "EventType": "viewer-request",
-                "FunctionARN": {
-                  "Fn::GetAtt": [
-                    "BlogCFRedirectA793392E",
-                    "FunctionARN",
-                  ],
-                },
-              },
-            ],
-            "TargetOriginId": "MyTestStackBlogCFOrigin1A38252BB",
-            "ViewerProtocolPolicy": "redirect-to-https",
-          },
-          "Enabled": true,
-          "HttpVersion": "http2",
-          "IPV6Enabled": true,
-          "Origins": [
-            {
-              "DomainName": {
-                "Fn::GetAtt": [
-                  "BlogBucket3E358F18",
-                  "RegionalDomainName",
-                ],
-              },
-              "Id": "MyTestStackBlogCFOrigin1A38252BB",
-              "S3OriginConfig": {
-                "OriginAccessIdentity": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "origin-access-identity/cloudfront/",
-                      {
-                        "Ref": "BlogCFOrigin1S3Origin81D7F982",
-                      },
-                    ],
-                  ],
-                },
-              },
-            },
-          ],
-          "ViewerCertificate": {
-            "AcmCertificateArn": {
-              "Ref": "BlogCert0B44B7E7",
-            },
-            "MinimumProtocolVersion": "TLSv1.2_2021",
-            "SslSupportMethod": "sni-only",
-          },
-        },
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Project",
-            "Value": "Coelhor.dev",
-          },
-        ],
-      },
-      "Type": "AWS::CloudFront::Distribution",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "BlogCFID2349172C": {
-      "Properties": {
-        "Name": "/blog/cf/distribution-id",
-        "Tags": {
-          "Author": "Alexandre Coelho Ramos",
-          "Project": "Coelhor.dev",
-        },
-        "Type": "String",
-        "Value": {
-          "Ref": "BlogCF6DF9B024",
-        },
-      },
-      "Type": "AWS::SSM::Parameter",
-    },
-    "BlogCFOrigin1S3Origin81D7F982": {
-      "Properties": {
-        "CloudFrontOriginAccessIdentityConfig": {
-          "Comment": "Identity for MyTestStackBlogCFOrigin1A38252BB",
-        },
-      },
-      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
-    },
-    "BlogCFRedirectA793392E": {
-      "Properties": {
-        "AutoPublish": true,
-        "FunctionCode": "
-                function handler(event) {
-                  var request = event.request;
-                  var uri = request.uri;
-                  if (uri.endsWith('/')) {
-                    request.uri += 'index.html';
-                  } 
-                  else if (!uri.includes('.')) {
-                    request.uri += '/index.html';
-                  }
-                  return request;
-                }",
-        "FunctionConfig": {
-          "Comment": "us-east-1MyTestStackBlogCFRedirectDF86BDAA",
-          "Runtime": "cloudfront-js-1.0",
-        },
-        "Name": "us-east-1MyTestStackBlogCFRedirectDF86BDAA",
-      },
-      "Type": "AWS::CloudFront::Function",
-    },
-    "BlogCert0B44B7E7": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "DomainName": "coelhor.dev",
-        "DomainValidationOptions": [
-          {
-            "DomainName": "coelhor.dev",
-            "HostedZoneId": {
-              "Ref": "HostedZoneDB99F866",
-            },
-          },
-        ],
-        "SubjectAlternativeNames": [
-          "*.coelhor.dev",
-        ],
-        "Tags": [
-          {
-            "Key": "Author",
-            "Value": "Alexandre Coelho Ramos",
-          },
-          {
-            "Key": "Name",
-            "Value": "MyTestStack/BlogCert",
-          },
-          {
-            "Key": "Project",
-            "Value": "Coelhor.dev",
-          },
-        ],
-        "ValidationMethod": "DNS",
-      },
-      "Type": "AWS::CertificateManager::Certificate",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "CoelhorAPIDomain049ECDA2": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "DomainName": "api.coelhor.dev",
-        "DomainNameConfigurations": [
-          {
-            "CertificateArn": {
-              "Ref": "BlogCert0B44B7E7",
-            },
-            "EndpointType": "REGIONAL",
-          },
-        ],
-        "Tags": {
-          "Author": "Alexandre Coelho Ramos",
-          "Project": "Coelhor.dev",
-        },
-      },
-      "Type": "AWS::ApiGatewayV2::DomainName",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "CoelhorAPIV22F4CACE5": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "Name": "CoelhorAPIV2",
-        "ProtocolType": "HTTP",
-        "Tags": {
-          "Author": "Alexandre Coelho Ramos",
-          "Project": "Coelhor.dev",
-        },
-      },
-      "Type": "AWS::ApiGatewayV2::Api",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "CoelhorAPIV2DefaultRoute29B4057E": {
-      "Properties": {
-        "ApiId": {
-          "Ref": "CoelhorAPIV22F4CACE5",
-        },
-        "AuthorizationType": "NONE",
-        "RouteKey": "$default",
-        "Target": {
-          "Fn::Join": [
-            "",
-            [
-              "integrations/",
-              {
-                "Ref": "CoelhorAPIV2DefaultRouteSimpleSubscribeIntegrationFFFA732D",
-              },
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::ApiGatewayV2::Route",
-    },
-    "CoelhorAPIV2DefaultRouteSimpleSubscribeIntegrationFFFA732D": {
-      "Properties": {
-        "ApiId": {
-          "Ref": "CoelhorAPIV22F4CACE5",
-        },
-        "IntegrationType": "AWS_PROXY",
-        "IntegrationUri": {
-          "Fn::GetAtt": [
-            "SimpleSubscribeFunc0DDBEAB0",
-            "Arn",
-          ],
-        },
-        "PayloadFormatVersion": "2.0",
-      },
-      "Type": "AWS::ApiGatewayV2::Integration",
-    },
-    "CoelhorAPIV2DefaultRouteSimpleSubscribeIntegrationPermissionDA55B8F1": {
-      "Properties": {
-        "Action": "lambda:InvokeFunction",
-        "FunctionName": {
-          "Fn::GetAtt": [
-            "SimpleSubscribeFunc0DDBEAB0",
-            "Arn",
-          ],
-        },
-        "Principal": "apigateway.amazonaws.com",
-        "SourceArn": {
-          "Fn::Join": [
-            "",
-            [
-              "arn:",
-              {
-                "Ref": "AWS::Partition",
-              },
-              ":execute-api:us-east-1:239828624774:",
-              {
-                "Ref": "CoelhorAPIV22F4CACE5",
-              },
-              "/*/*",
-            ],
-          ],
-        },
-      },
-      "Type": "AWS::Lambda::Permission",
-    },
-    "CoelhorAPIV2DefaultStage1F811073": {
-      "DependsOn": [
-        "CoelhorAPIDomain049ECDA2",
-      ],
-      "Properties": {
-        "ApiId": {
-          "Ref": "CoelhorAPIV22F4CACE5",
-        },
-        "AutoDeploy": true,
-        "StageName": "$default",
-        "Tags": {
-          "Author": "Alexandre Coelho Ramos",
-          "Project": "Coelhor.dev",
-        },
-      },
-      "Type": "AWS::ApiGatewayV2::Stage",
-    },
-    "CoelhorAPIV2DefaultStageMyTestStackCoelhorAPIDomainundefined32F69CBB": {
-      "DependsOn": [
-        "CoelhorAPIDomain049ECDA2",
-        "CoelhorAPIV2DefaultStage1F811073",
-      ],
-      "Properties": {
-        "ApiId": {
-          "Ref": "CoelhorAPIV22F4CACE5",
-        },
-        "DomainName": {
-          "Ref": "CoelhorAPIDomain049ECDA2",
-        },
-        "Stage": "$default",
-      },
-      "Type": "AWS::ApiGatewayV2::ApiMapping",
-    },
     "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F": {
       "DependsOn": [
         "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
@@ -3202,7 +2722,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             [
               "Lambda function for auto-deleting objects in ",
               {
-                "Ref": "BlogBucket3E358F18",
+                "Ref": "coelhordevBlogBucket7BB1D0CB",
               },
               " S3 bucket.",
             ],
@@ -3243,7 +2763,572 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::IAM::Role",
     },
-    "HostedZoneDB99F866": {
+    "SESIdentity8C041D13": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "ConfigurationSetAttributes": {
+          "ConfigurationSetName": {
+            "Ref": "coelhordevSESSendCD48A34D",
+          },
+        },
+        "EmailIdentity": "coelhor.dev",
+      },
+      "Type": "AWS::SES::EmailIdentity",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "SESIdentityDkimDnsToken1604A5086": {
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "coelhordevHostedZone6109CFBA",
+        },
+        "Name": {
+          "Fn::GetAtt": [
+            "SESIdentity8C041D13",
+            "DkimDNSTokenName1",
+          ],
+        },
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "SESIdentity8C041D13",
+              "DkimDNSTokenValue1",
+            ],
+          },
+        ],
+        "TTL": "1800",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "SESIdentityDkimDnsToken244558F15": {
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "coelhordevHostedZone6109CFBA",
+        },
+        "Name": {
+          "Fn::GetAtt": [
+            "SESIdentity8C041D13",
+            "DkimDNSTokenName2",
+          ],
+        },
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "SESIdentity8C041D13",
+              "DkimDNSTokenValue2",
+            ],
+          },
+        ],
+        "TTL": "1800",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "SESIdentityDkimDnsToken35BE79D54": {
+      "Properties": {
+        "HostedZoneId": {
+          "Ref": "coelhordevHostedZone6109CFBA",
+        },
+        "Name": {
+          "Fn::GetAtt": [
+            "SESIdentity8C041D13",
+            "DkimDNSTokenName3",
+          ],
+        },
+        "ResourceRecords": [
+          {
+            "Fn::GetAtt": [
+              "SESIdentity8C041D13",
+              "DkimDNSTokenValue3",
+            ],
+          },
+        ],
+        "TTL": "1800",
+        "Type": "CNAME",
+      },
+      "Type": "AWS::Route53::RecordSet",
+    },
+    "coelhordevAPIDomain3DD90303": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DomainName": "api.coelhor.dev",
+        "DomainNameConfigurations": [
+          {
+            "CertificateArn": {
+              "Ref": "coelhordevBlogCert1947D7AC",
+            },
+            "EndpointType": "REGIONAL",
+          },
+        ],
+        "Tags": {
+          "Author": "Alexandre Coelho Ramos",
+          "Project": "coelhor.dev",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::DomainName",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "coelhordevAPIV22A7FAF5C": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "Name": "coelhor.dev-APIV2",
+        "ProtocolType": "HTTP",
+        "Tags": {
+          "Author": "Alexandre Coelho Ramos",
+          "Project": "coelhor.dev",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Api",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "coelhordevAPIV2DefaultRouteB39C8B98": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "coelhordevAPIV22A7FAF5C",
+        },
+        "AuthorizationType": "NONE",
+        "RouteKey": "$default",
+        "Target": {
+          "Fn::Join": [
+            "",
+            [
+              "integrations/",
+              {
+                "Ref": "coelhordevAPIV2DefaultRoutecoelhordevSimpleSubscribeIntegration44B10D34",
+              },
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Route",
+    },
+    "coelhordevAPIV2DefaultRoutecoelhordevSimpleSubscribeIntegration44B10D34": {
+      "Properties": {
+        "ApiId": {
+          "Ref": "coelhordevAPIV22A7FAF5C",
+        },
+        "IntegrationType": "AWS_PROXY",
+        "IntegrationUri": {
+          "Fn::GetAtt": [
+            "coelhordevSimpleSubscribeFunc32E96548",
+            "Arn",
+          ],
+        },
+        "PayloadFormatVersion": "2.0",
+      },
+      "Type": "AWS::ApiGatewayV2::Integration",
+    },
+    "coelhordevAPIV2DefaultRoutecoelhordevSimpleSubscribeIntegrationPermissionBBF33DA7": {
+      "Properties": {
+        "Action": "lambda:InvokeFunction",
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "coelhordevSimpleSubscribeFunc32E96548",
+            "Arn",
+          ],
+        },
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition",
+              },
+              ":execute-api:us-east-1:239828624774:",
+              {
+                "Ref": "coelhordevAPIV22A7FAF5C",
+              },
+              "/*/*",
+            ],
+          ],
+        },
+      },
+      "Type": "AWS::Lambda::Permission",
+    },
+    "coelhordevAPIV2DefaultStage8FA6CCE4": {
+      "DependsOn": [
+        "coelhordevAPIDomain3DD90303",
+      ],
+      "Properties": {
+        "ApiId": {
+          "Ref": "coelhordevAPIV22A7FAF5C",
+        },
+        "AutoDeploy": true,
+        "StageName": "$default",
+        "Tags": {
+          "Author": "Alexandre Coelho Ramos",
+          "Project": "coelhor.dev",
+        },
+      },
+      "Type": "AWS::ApiGatewayV2::Stage",
+    },
+    "coelhordevAPIV2DefaultStageMyTestStackcoelhordevAPIDomainundefinedEF2CA9F8": {
+      "DependsOn": [
+        "coelhordevAPIDomain3DD90303",
+        "coelhordevAPIV2DefaultStage8FA6CCE4",
+      ],
+      "Properties": {
+        "ApiId": {
+          "Ref": "coelhordevAPIV22A7FAF5C",
+        },
+        "DomainName": {
+          "Ref": "coelhordevAPIDomain3DD90303",
+        },
+        "Stage": "$default",
+      },
+      "Type": "AWS::ApiGatewayV2::ApiMapping",
+    },
+    "coelhordevApiARecordD65C0D6E": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::GetAtt": [
+              "coelhordevAPIDomain3DD90303",
+              "RegionalDomainName",
+            ],
+          },
+          "HostedZoneId": {
+            "Fn::GetAtt": [
+              "coelhordevAPIDomain3DD90303",
+              "RegionalHostedZoneId",
+            ],
+          },
+        },
+        "HostedZoneId": {
+          "Ref": "coelhordevHostedZone6109CFBA",
+        },
+        "Name": "api.coelhor.dev.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "coelhordevBlogAliasRecord783B635D": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AliasTarget": {
+          "DNSName": {
+            "Fn::GetAtt": [
+              "coelhordevBlogCF25E4BE82",
+              "DomainName",
+            ],
+          },
+          "HostedZoneId": {
+            "Fn::FindInMap": [
+              "AWSCloudFrontPartitionHostedZoneIdMap",
+              {
+                "Ref": "AWS::Partition",
+              },
+              "zoneId",
+            ],
+          },
+        },
+        "HostedZoneId": {
+          "Ref": "coelhordevHostedZone6109CFBA",
+        },
+        "Name": "coelhor.dev.",
+        "Type": "A",
+      },
+      "Type": "AWS::Route53::RecordSet",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "coelhordevBlogBucket7BB1D0CB": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "AccessControl": "BucketOwnerFullControl",
+        "PublicAccessBlockConfiguration": {
+          "BlockPublicAcls": true,
+          "IgnorePublicAcls": true,
+        },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "aws-cdk:auto-delete-objects",
+            "Value": "true",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor.dev",
+          },
+        ],
+      },
+      "Type": "AWS::S3::Bucket",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "coelhordevBlogBucketArnF9DFB0BD": {
+      "Properties": {
+        "Name": "/blog/s3/bucket-arn",
+        "Tags": {
+          "Author": "Alexandre Coelho Ramos",
+          "Project": "coelhor.dev",
+        },
+        "Type": "String",
+        "Value": {
+          "Fn::GetAtt": [
+            "coelhordevBlogBucket7BB1D0CB",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "coelhordevBlogBucketAutoDeleteObjectsCustomResourceC74E4CB2": {
+      "DeletionPolicy": "Delete",
+      "DependsOn": [
+        "coelhordevBlogBucketPolicy737C7146",
+      ],
+      "Properties": {
+        "BucketName": {
+          "Ref": "coelhordevBlogBucket7BB1D0CB",
+        },
+        "ServiceToken": {
+          "Fn::GetAtt": [
+            "CustomS3AutoDeleteObjectsCustomResourceProviderHandler9D90184F",
+            "Arn",
+          ],
+        },
+      },
+      "Type": "Custom::S3AutoDeleteObjects",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "coelhordevBlogBucketPolicy737C7146": {
+      "Properties": {
+        "Bucket": {
+          "Ref": "coelhordevBlogBucket7BB1D0CB",
+        },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "s3:PutBucketPolicy",
+                "s3:GetBucket*",
+                "s3:List*",
+                "s3:DeleteObject*",
+              ],
+              "Effect": "Allow",
+              "Principal": {
+                "AWS": {
+                  "Fn::GetAtt": [
+                    "CustomS3AutoDeleteObjectsCustomResourceProviderRole3B1BD092",
+                    "Arn",
+                  ],
+                },
+              },
+              "Resource": [
+                {
+                  "Fn::GetAtt": [
+                    "coelhordevBlogBucket7BB1D0CB",
+                    "Arn",
+                  ],
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      {
+                        "Fn::GetAtt": [
+                          "coelhordevBlogBucket7BB1D0CB",
+                          "Arn",
+                        ],
+                      },
+                      "/*",
+                    ],
+                  ],
+                },
+              ],
+            },
+            {
+              "Action": "s3:GetObject",
+              "Effect": "Allow",
+              "Principal": {
+                "CanonicalUser": {
+                  "Fn::GetAtt": [
+                    "coelhordevBlogCFOrigin1S3OriginC94B37FC",
+                    "S3CanonicalUserId",
+                  ],
+                },
+              },
+              "Resource": {
+                "Fn::Join": [
+                  "",
+                  [
+                    {
+                      "Fn::GetAtt": [
+                        "coelhordevBlogBucket7BB1D0CB",
+                        "Arn",
+                      ],
+                    },
+                    "/*",
+                  ],
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+      },
+      "Type": "AWS::S3::BucketPolicy",
+    },
+    "coelhordevBlogCF25E4BE82": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DistributionConfig": {
+          "Aliases": [
+            "coelhor.dev",
+            "*.coelhor.dev",
+          ],
+          "DefaultCacheBehavior": {
+            "CachePolicyId": "658327ea-f89d-4fab-a63d-7e88639e58f6",
+            "Compress": true,
+            "FunctionAssociations": [
+              {
+                "EventType": "viewer-request",
+                "FunctionARN": {
+                  "Fn::GetAtt": [
+                    "coelhordevBlogCFRedirectCDFB86D4",
+                    "FunctionARN",
+                  ],
+                },
+              },
+            ],
+            "TargetOriginId": "MyTestStackcoelhordevBlogCFOrigin124A03D2E",
+            "ViewerProtocolPolicy": "redirect-to-https",
+          },
+          "Enabled": true,
+          "HttpVersion": "http2",
+          "IPV6Enabled": true,
+          "Origins": [
+            {
+              "DomainName": {
+                "Fn::GetAtt": [
+                  "coelhordevBlogBucket7BB1D0CB",
+                  "RegionalDomainName",
+                ],
+              },
+              "Id": "MyTestStackcoelhordevBlogCFOrigin124A03D2E",
+              "S3OriginConfig": {
+                "OriginAccessIdentity": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "origin-access-identity/cloudfront/",
+                      {
+                        "Ref": "coelhordevBlogCFOrigin1S3OriginC94B37FC",
+                      },
+                    ],
+                  ],
+                },
+              },
+            },
+          ],
+          "ViewerCertificate": {
+            "AcmCertificateArn": {
+              "Ref": "coelhordevBlogCert1947D7AC",
+            },
+            "MinimumProtocolVersion": "TLSv1.2_2021",
+            "SslSupportMethod": "sni-only",
+          },
+        },
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor.dev",
+          },
+        ],
+      },
+      "Type": "AWS::CloudFront::Distribution",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "coelhordevBlogCFIDD48DFFC0": {
+      "Properties": {
+        "Name": "/blog/cf/distribution-id",
+        "Tags": {
+          "Author": "Alexandre Coelho Ramos",
+          "Project": "coelhor.dev",
+        },
+        "Type": "String",
+        "Value": {
+          "Ref": "coelhordevBlogCF25E4BE82",
+        },
+      },
+      "Type": "AWS::SSM::Parameter",
+    },
+    "coelhordevBlogCFOrigin1S3OriginC94B37FC": {
+      "Properties": {
+        "CloudFrontOriginAccessIdentityConfig": {
+          "Comment": "Identity for MyTestStackcoelhordevBlogCFOrigin124A03D2E",
+        },
+      },
+      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
+    },
+    "coelhordevBlogCFRedirectCDFB86D4": {
+      "Properties": {
+        "AutoPublish": true,
+        "FunctionCode": "
+                function handler(event) {
+                  var request = event.request;
+                  var uri = request.uri;
+                  if (uri.endsWith('/')) {
+                    request.uri += 'index.html';
+                  } 
+                  else if (!uri.includes('.')) {
+                    request.uri += '/index.html';
+                  }
+                  return request;
+                }",
+        "FunctionConfig": {
+          "Comment": "us-east-1MyTestStackcoelhordevBlogCFRedirect39387605",
+          "Runtime": "cloudfront-js-1.0",
+        },
+        "Name": "us-east-1MyTestStackcoelhordevBlogCFRedirect39387605",
+      },
+      "Type": "AWS::CloudFront::Function",
+    },
+    "coelhordevBlogCert1947D7AC": {
+      "DeletionPolicy": "Delete",
+      "Properties": {
+        "DomainName": "coelhor.dev",
+        "DomainValidationOptions": [
+          {
+            "DomainName": "coelhor.dev",
+            "HostedZoneId": {
+              "Ref": "coelhordevHostedZone6109CFBA",
+            },
+          },
+        ],
+        "SubjectAlternativeNames": [
+          "*.coelhor.dev",
+        ],
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Name",
+            "Value": "MyTestStack/coelhor.dev-BlogCert",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor.dev",
+          },
+        ],
+        "ValidationMethod": "DNS",
+      },
+      "Type": "AWS::CertificateManager::Certificate",
+      "UpdateReplacePolicy": "Delete",
+    },
+    "coelhordevHostedZone6109CFBA": {
       "Properties": {
         "HostedZoneTags": [
           {
@@ -3252,28 +3337,28 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           },
           {
             "Key": "Project",
-            "Value": "Coelhor.dev",
+            "Value": "coelhor.dev",
           },
         ],
         "Name": "coelhor.dev.",
       },
       "Type": "AWS::Route53::HostedZone",
     },
-    "RssMailerFuncD9D6970D": {
+    "coelhordevRssMailerFunc3D1A4F27": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "RssMailerFuncServiceRoleDefaultPolicy6D5398A5",
-        "RssMailerFuncServiceRoleFA8257B8",
+        "coelhordevRssMailerFuncServiceRoleDefaultPolicy028EED11",
+        "coelhordevRssMailerFuncServiceRole9C21BFDF",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "f2bfb8f8aab175446164dec53cb57bf00fb8aa6ad8fd5145ffd3f9e3753612cf.zip",
+          "S3Key": "03d2b89f4621c51f33b3c901b4e9a805ef2bcdf96fbda1e584197ae185dc151e.zip",
         },
         "Environment": {
           "Variables": {
             "DB_TABLE_NAME": {
-              "Ref": "SimpleSubscribeDBAEFAAC3F",
+              "Ref": "coelhordevSimpleSubscribeDBD43524EE",
             },
             "SENDER_EMAIL": "no-reply@coelhor.dev",
             "SENDER_NAME": "Alexandre Coelho Ramos",
@@ -3285,7 +3370,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         "Handler": "bootstrap",
         "Role": {
           "Fn::GetAtt": [
-            "RssMailerFuncServiceRoleFA8257B8",
+            "coelhordevRssMailerFuncServiceRole9C21BFDF",
             "Arn",
           ],
         },
@@ -3297,48 +3382,14 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           },
           {
             "Key": "Project",
-            "Value": "Coelhor.dev",
+            "Value": "coelhor.dev",
           },
         ],
       },
       "Type": "AWS::Lambda::Function",
       "UpdateReplacePolicy": "Delete",
     },
-    "RssMailerFuncServiceRoleDefaultPolicy6D5398A5": {
-      "Properties": {
-        "PolicyDocument": {
-          "Statement": [
-            {
-              "Action": [
-                "ses:SendEmail",
-                "ses:SendRawEmail",
-              ],
-              "Effect": "Allow",
-              "Resource": "arn:aws:ses:us-east-1:239828624774:*",
-            },
-            {
-              "Action": "dynamodb:*",
-              "Effect": "Allow",
-              "Resource": {
-                "Fn::GetAtt": [
-                  "SimpleSubscribeDBAEFAAC3F",
-                  "Arn",
-                ],
-              },
-            },
-          ],
-          "Version": "2012-10-17",
-        },
-        "PolicyName": "RssMailerFuncServiceRoleDefaultPolicy6D5398A5",
-        "Roles": [
-          {
-            "Ref": "RssMailerFuncServiceRoleFA8257B8",
-          },
-        ],
-      },
-      "Type": "AWS::IAM::Policy",
-    },
-    "RssMailerFuncServiceRoleFA8257B8": {
+    "coelhordevRssMailerFuncServiceRole9C21BFDF": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -3373,13 +3424,47 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           },
           {
             "Key": "Project",
-            "Value": "Coelhor.dev",
+            "Value": "coelhor.dev",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "SESBucket0C480B59": {
+    "coelhordevRssMailerFuncServiceRoleDefaultPolicy028EED11": {
+      "Properties": {
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Action": [
+                "ses:SendEmail",
+                "ses:SendRawEmail",
+              ],
+              "Effect": "Allow",
+              "Resource": "arn:aws:ses:us-east-1:239828624774:*",
+            },
+            {
+              "Action": "dynamodb:*",
+              "Effect": "Allow",
+              "Resource": {
+                "Fn::GetAtt": [
+                  "coelhordevSimpleSubscribeDBD43524EE",
+                  "Arn",
+                ],
+              },
+            },
+          ],
+          "Version": "2012-10-17",
+        },
+        "PolicyName": "coelhordevRssMailerFuncServiceRoleDefaultPolicy028EED11",
+        "Roles": [
+          {
+            "Ref": "coelhordevRssMailerFuncServiceRole9C21BFDF",
+          },
+        ],
+      },
+      "Type": "AWS::IAM::Policy",
+    },
+    "coelhordevSESBucket9773770F": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "AccessControl": "BucketOwnerFullControl",
@@ -3398,21 +3483,21 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           },
           {
             "Key": "Project",
-            "Value": "Coelhor.dev",
+            "Value": "coelhor.dev",
           },
         ],
       },
       "Type": "AWS::S3::Bucket",
       "UpdateReplacePolicy": "Delete",
     },
-    "SESBucketAutoDeleteObjectsCustomResource6D82AEBC": {
+    "coelhordevSESBucketAutoDeleteObjectsCustomResource0949AF17": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "SESBucketPolicyDA85C13C",
+        "coelhordevSESBucketPolicy1EE018B1",
       ],
       "Properties": {
         "BucketName": {
-          "Ref": "SESBucket0C480B59",
+          "Ref": "coelhordevSESBucket9773770F",
         },
         "ServiceToken": {
           "Fn::GetAtt": [
@@ -3424,10 +3509,10 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "Custom::S3AutoDeleteObjects",
       "UpdateReplacePolicy": "Delete",
     },
-    "SESBucketPolicyDA85C13C": {
+    "coelhordevSESBucketPolicy1EE018B1": {
       "Properties": {
         "Bucket": {
-          "Ref": "SESBucket0C480B59",
+          "Ref": "coelhordevSESBucket9773770F",
         },
         "PolicyDocument": {
           "Statement": [
@@ -3450,7 +3535,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               "Resource": [
                 {
                   "Fn::GetAtt": [
-                    "SESBucket0C480B59",
+                    "coelhordevSESBucket9773770F",
                     "Arn",
                   ],
                 },
@@ -3460,7 +3545,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                     [
                       {
                         "Fn::GetAtt": [
-                          "SESBucket0C480B59",
+                          "coelhordevSESBucket9773770F",
                           "Arn",
                         ],
                       },
@@ -3489,7 +3574,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                   [
                     {
                       "Fn::GetAtt": [
-                        "SESBucket0C480B59",
+                        "coelhordevSESBucket9773770F",
                         "Arn",
                       ],
                     },
@@ -3504,96 +3589,11 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::S3::BucketPolicy",
     },
-    "SESIdentity8C041D13": {
-      "DeletionPolicy": "Delete",
-      "Properties": {
-        "ConfigurationSetAttributes": {
-          "ConfigurationSetName": {
-            "Ref": "SESSendAB50E6BA",
-          },
-        },
-        "EmailIdentity": "coelhor.dev",
-      },
-      "Type": "AWS::SES::EmailIdentity",
-      "UpdateReplacePolicy": "Delete",
-    },
-    "SESIdentityDkimDnsToken1604A5086": {
-      "Properties": {
-        "HostedZoneId": {
-          "Ref": "HostedZoneDB99F866",
-        },
-        "Name": {
-          "Fn::GetAtt": [
-            "SESIdentity8C041D13",
-            "DkimDNSTokenName1",
-          ],
-        },
-        "ResourceRecords": [
-          {
-            "Fn::GetAtt": [
-              "SESIdentity8C041D13",
-              "DkimDNSTokenValue1",
-            ],
-          },
-        ],
-        "TTL": "1800",
-        "Type": "CNAME",
-      },
-      "Type": "AWS::Route53::RecordSet",
-    },
-    "SESIdentityDkimDnsToken244558F15": {
-      "Properties": {
-        "HostedZoneId": {
-          "Ref": "HostedZoneDB99F866",
-        },
-        "Name": {
-          "Fn::GetAtt": [
-            "SESIdentity8C041D13",
-            "DkimDNSTokenName2",
-          ],
-        },
-        "ResourceRecords": [
-          {
-            "Fn::GetAtt": [
-              "SESIdentity8C041D13",
-              "DkimDNSTokenValue2",
-            ],
-          },
-        ],
-        "TTL": "1800",
-        "Type": "CNAME",
-      },
-      "Type": "AWS::Route53::RecordSet",
-    },
-    "SESIdentityDkimDnsToken35BE79D54": {
-      "Properties": {
-        "HostedZoneId": {
-          "Ref": "HostedZoneDB99F866",
-        },
-        "Name": {
-          "Fn::GetAtt": [
-            "SESIdentity8C041D13",
-            "DkimDNSTokenName3",
-          ],
-        },
-        "ResourceRecords": [
-          {
-            "Fn::GetAtt": [
-              "SESIdentity8C041D13",
-              "DkimDNSTokenValue3",
-            ],
-          },
-        ],
-        "TTL": "1800",
-        "Type": "CNAME",
-      },
-      "Type": "AWS::Route53::RecordSet",
-    },
-    "SESMXRecord6978E6E1": {
+    "coelhordevSESMXRecord0B9373E8": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "HostedZoneId": {
-          "Ref": "HostedZoneDB99F866",
+          "Ref": "coelhordevHostedZone6109CFBA",
         },
         "Name": "coelhor.dev.",
         "ResourceRecords": [
@@ -3605,14 +3605,14 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::Route53::RecordSet",
       "UpdateReplacePolicy": "Delete",
     },
-    "SESReceiveB3E3FA19": {
+    "coelhordevSESReceive2E192CD8": {
       "DeletionPolicy": "Delete",
       "Type": "AWS::SES::ReceiptRuleSet",
       "UpdateReplacePolicy": "Delete",
     },
-    "SESReceiveRule0628D5CA0": {
+    "coelhordevSESReceiveRule049DB20CB": {
       "DependsOn": [
-        "SESBucketPolicyDA85C13C",
+        "coelhordevSESBucketPolicy1EE018B1",
       ],
       "Properties": {
         "Rule": {
@@ -3620,7 +3620,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             {
               "S3Action": {
                 "BucketName": {
-                  "Ref": "SESBucket0C480B59",
+                  "Ref": "coelhordevSESBucket9773770F",
                 },
                 "ObjectKeyPrefix": "emails/newsletter/",
               },
@@ -3632,17 +3632,17 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           ],
         },
         "RuleSetName": {
-          "Ref": "SESReceiveB3E3FA19",
+          "Ref": "coelhordevSESReceive2E192CD8",
         },
       },
       "Type": "AWS::SES::ReceiptRule",
     },
-    "SESSendAB50E6BA": {
+    "coelhordevSESSendCD48A34D": {
       "DeletionPolicy": "Delete",
       "Type": "AWS::SES::ConfigurationSet",
       "UpdateReplacePolicy": "Delete",
     },
-    "SimpleSubscribeDBAEFAAC3F": {
+    "coelhordevSimpleSubscribeDBD43524EE": {
       "DeletionPolicy": "Delete",
       "Properties": {
         "AttributeDefinitions": [
@@ -3667,16 +3667,16 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Type": "AWS::DynamoDB::GlobalTable",
       "UpdateReplacePolicy": "Delete",
     },
-    "SimpleSubscribeFunc0DDBEAB0": {
+    "coelhordevSimpleSubscribeFunc32E96548": {
       "DeletionPolicy": "Delete",
       "DependsOn": [
-        "SimpleSubscribeFuncServiceRoleDefaultPolicy7A78F95F",
-        "SimpleSubscribeFuncServiceRole6624F743",
+        "coelhordevSimpleSubscribeFuncServiceRoleDefaultPolicy5F65CDD9",
+        "coelhordevSimpleSubscribeFuncServiceRole7BFA73C4",
       ],
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "b2012e3f33b4b2b1bc03327c72fd9edff7c5c69ecab1616f620e59c9b7515d44.zip",
+          "S3Key": "8c6668376e6db9c8234b75c2a9c915344a1edbdd3130de5342c79e38974fd6ef.zip",
         },
         "Environment": {
           "Variables": {
@@ -3685,7 +3685,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "CONFIRM_SUBSCRIBE_PAGE": "confirm",
             "CONFIRM_UNSUBSCRIBE_PAGE": "unsubscribed",
             "DB_TABLE_NAME": {
-              "Ref": "SimpleSubscribeDBAEFAAC3F",
+              "Ref": "coelhordevSimpleSubscribeDBD43524EE",
             },
             "ERROR_PAGE": "error",
             "SENDER_EMAIL": "no-reply@coelhor.dev",
@@ -3699,7 +3699,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         "Handler": "bootstrap",
         "Role": {
           "Fn::GetAtt": [
-            "SimpleSubscribeFuncServiceRole6624F743",
+            "coelhordevSimpleSubscribeFuncServiceRole7BFA73C4",
             "Arn",
           ],
         },
@@ -3711,14 +3711,14 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           },
           {
             "Key": "Project",
-            "Value": "Coelhor.dev",
+            "Value": "coelhor.dev",
           },
         ],
       },
       "Type": "AWS::Lambda::Function",
       "UpdateReplacePolicy": "Delete",
     },
-    "SimpleSubscribeFuncServiceRole6624F743": {
+    "coelhordevSimpleSubscribeFuncServiceRole7BFA73C4": {
       "Properties": {
         "AssumeRolePolicyDocument": {
           "Statement": [
@@ -3753,13 +3753,13 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           },
           {
             "Key": "Project",
-            "Value": "Coelhor.dev",
+            "Value": "coelhor.dev",
           },
         ],
       },
       "Type": "AWS::IAM::Role",
     },
-    "SimpleSubscribeFuncServiceRoleDefaultPolicy7A78F95F": {
+    "coelhordevSimpleSubscribeFuncServiceRoleDefaultPolicy5F65CDD9": {
       "Properties": {
         "PolicyDocument": {
           "Statement": [
@@ -3776,7 +3776,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               "Effect": "Allow",
               "Resource": {
                 "Fn::GetAtt": [
-                  "SimpleSubscribeDBAEFAAC3F",
+                  "coelhordevSimpleSubscribeDBD43524EE",
                   "Arn",
                 ],
               },
@@ -3784,10 +3784,10 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           ],
           "Version": "2012-10-17",
         },
-        "PolicyName": "SimpleSubscribeFuncServiceRoleDefaultPolicy7A78F95F",
+        "PolicyName": "coelhordevSimpleSubscribeFuncServiceRoleDefaultPolicy5F65CDD9",
         "Roles": [
           {
-            "Ref": "SimpleSubscribeFuncServiceRole6624F743",
+            "Ref": "coelhordevSimpleSubscribeFuncServiceRole7BFA73C4",
           },
         ],
       },

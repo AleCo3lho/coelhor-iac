@@ -15,27 +15,26 @@ import * as sesactions from "aws-cdk-lib/aws-ses-actions";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as go from "@aws-cdk/aws-lambda-go-alpha";
 
-export interface CoelhorIacProps extends StackProps {
-  readonly hostedzone: string;
+export interface BlogIacProps extends StackProps {
   readonly domain: string;
 }
 
-export class CoelhorIac extends Stack {
-  constructor(scope: Construct, id: string, props: CoelhorIacProps) {
+export class BlogIac extends Stack {
+  constructor(scope: Construct, id: string, props: BlogIacProps) {
     super(scope, id, props);
 
-    const hostedzone = new route53.HostedZone(this, "HostedZone", {
+    const hostedzone = new route53.HostedZone(this, `${props.domain}-HostedZone`, {
       zoneName: props.domain,
     });
 
-    const blogCert = new acm.Certificate(this, "BlogCert", {
+    const blogCert = new acm.Certificate(this, `${props.domain}-BlogCert`, {
       domainName: props.domain,
       subjectAlternativeNames: [`*.${props.domain}`],
       validation: acm.CertificateValidation.fromDns(hostedzone),
     });
     blogCert.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const blogBucket = new s3.Bucket(this, "BlogBucket", {
+    const blogBucket = new s3.Bucket(this, `${props.domain}-BlogBucket`, {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
@@ -43,19 +42,19 @@ export class CoelhorIac extends Stack {
     });
     blogBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    new ssm.StringParameter(this, "BlogBucketArn", {
+    new ssm.StringParameter(this, `${props.domain}-BlogBucketArn`, {
       stringValue: blogBucket.bucketArn,
       parameterName: "/blog/s3/bucket-arn",
     });
 
-    const blogCF = new cloudfront.Distribution(this, "BlogCF", {
+    const blogCF = new cloudfront.Distribution(this, `${props.domain}-BlogCF`, {
       defaultBehavior: {
         origin: new origins.S3Origin(blogBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         functionAssociations: [
           {
             eventType: cloudfront.FunctionEventType.VIEWER_REQUEST,
-            function: new cloudfront.Function(this, "BlogCFRedirect", {
+            function: new cloudfront.Function(this, `${props.domain}-BlogCFRedirect`, {
               code: cloudfront.FunctionCode.fromInline(`
                 function handler(event) {
                   var request = event.request;
@@ -77,19 +76,19 @@ export class CoelhorIac extends Stack {
     });
 
     blogCF.applyRemovalPolicy(RemovalPolicy.DESTROY);
-    new ssm.StringParameter(this, "BlogCFID", {
+    new ssm.StringParameter(this, `${props.domain}-BlogCFID`, {
       stringValue: blogCF.distributionId,
       parameterName: "/blog/cf/distribution-id",
     });
 
-    const blogAliasRecord = new route53.ARecord(this, "BlogAliasRecord", {
+    const blogAliasRecord = new route53.ARecord(this, `${props.domain}-BlogAliasRecord`, {
       target: route53.RecordTarget.fromAlias(new route53Targets.CloudFrontTarget(blogCF)),
       zone: hostedzone,
       recordName: props.domain,
     });
     blogAliasRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const sesBucket = new s3.Bucket(this, "SESBucket", {
+    const sesBucket = new s3.Bucket(this, `${props.domain}-SESBucket`, {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
@@ -97,7 +96,7 @@ export class CoelhorIac extends Stack {
     });
     sesBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const sesReceive = new ses.ReceiptRuleSet(this, "SESReceive", {
+    const sesReceive = new ses.ReceiptRuleSet(this, `${props.domain}-SESReceive`, {
       rules: [
         {
           recipients: [`newsletter@${props.domain}`],
@@ -113,7 +112,7 @@ export class CoelhorIac extends Stack {
     });
     sesReceive.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const sesSend = new ses.ConfigurationSet(this, "SESSend", {});
+    const sesSend = new ses.ConfigurationSet(this, `${props.domain}-SESSend`, {});
     sesSend.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
     const sesEmailIdentity = new ses.EmailIdentity(this, "SESIdentity", {
@@ -122,7 +121,7 @@ export class CoelhorIac extends Stack {
     });
     sesEmailIdentity.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const simpleSubscribeDB = new dynamodb.TableV2(this, "SimpleSubscribeDB", {
+    const simpleSubscribeDB = new dynamodb.TableV2(this, `${props.domain}-SimpleSubscribeDB`, {
       partitionKey: {
         name: "email",
         type: dynamodb.AttributeType.STRING,
@@ -131,7 +130,7 @@ export class CoelhorIac extends Stack {
     });
     simpleSubscribeDB.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const fnSimpleSubscribe = new go.GoFunction(this, "SimpleSubscribeFunc", {
+    const fnSimpleSubscribe = new go.GoFunction(this, `${props.domain}-SimpleSubscribeFunc`, {
       entry: "src/utils/lambdas/simpleSubscriber",
       environment: {
         DB_TABLE_NAME: simpleSubscribeDB.tableName,
@@ -158,7 +157,7 @@ export class CoelhorIac extends Stack {
     );
     simpleSubscribeDB.grantFullAccess(fnSimpleSubscribe);
 
-    const fnRssMailer = new go.GoFunction(this, "RssMailerFunc", {
+    const fnRssMailer = new go.GoFunction(this, `${props.domain}-RssMailerFunc`, {
       entry: "src/utils/lambdas/rss-mailer",
       environment: {
         DB_TABLE_NAME: simpleSubscribeDB.tableName,
@@ -180,17 +179,17 @@ export class CoelhorIac extends Stack {
     simpleSubscribeDB.grantFullAccess(fnRssMailer);
 
     const fnSimpleSubscribeIntegration = new apigwv2integ.HttpLambdaIntegration(
-      "SimpleSubscribeIntegration",
+      `${props.domain}-SimpleSubscribeIntegration`,
       fnSimpleSubscribe,
       { payloadFormatVersion: apigwv2.PayloadFormatVersion.VERSION_2_0 },
     );
-    const apiDomain = new apigwv2.DomainName(this, "CoelhorAPIDomain", {
+    const apiDomain = new apigwv2.DomainName(this, `${props.domain}-APIDomain`, {
       certificate: blogCert,
       domainName: `api.${props.domain}`,
     });
     apiDomain.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const api = new apigwv2.HttpApi(this, "CoelhorAPIV2", {
+    const api = new apigwv2.HttpApi(this, `${props.domain}-APIV2`, {
       defaultIntegration: fnSimpleSubscribeIntegration,
       createDefaultStage: true,
       defaultDomainMapping: {
@@ -199,7 +198,7 @@ export class CoelhorIac extends Stack {
     });
     api.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const apiARecord = new route53.ARecord(this, "ApiARecord", {
+    const apiARecord = new route53.ARecord(this, `${props.domain}-ApiARecord`, {
       target: route53.RecordTarget.fromAlias(
         new route53Targets.ApiGatewayv2DomainProperties(apiDomain.regionalDomainName, apiDomain.regionalHostedZoneId),
       ),
@@ -208,7 +207,7 @@ export class CoelhorIac extends Stack {
     });
     apiARecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    const sesMXRecord = new route53.MxRecord(this, "SESMXRecord", {
+    const sesMXRecord = new route53.MxRecord(this, `${props.domain}-SESMXRecord`, {
       zone: hostedzone,
       values: [
         {
@@ -219,7 +218,7 @@ export class CoelhorIac extends Stack {
     });
     sesMXRecord.applyRemovalPolicy(RemovalPolicy.DESTROY);
 
-    Tags.of(this).add("Project", "Coelhor.dev");
+    Tags.of(this).add("Project", `${props.domain}`);
     Tags.of(this).add("Author", "Alexandre Coelho Ramos");
   }
 }

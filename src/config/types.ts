@@ -4,7 +4,6 @@ export type Config = {
     region: string;
   };
   domain: string;
-  hostedzone?: string;
   blogRepo?: string;
   owner?: string;
   blogBranch?: string;

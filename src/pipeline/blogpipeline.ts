@@ -23,7 +23,9 @@ export class BlogPipelineStack extends Stack {
       "/blog/cf/distribution-id",
     );
     const blogBucketARN = ssm.StringParameter.fromStringParameterName(this, "BlogBucketARN", "/blog/s3/bucket-arn");
-    const oauth = SecretValue.secretsManager("GitHubToken");
+    const oauth = SecretValue.secretsManager("eksCluster-gh-repo", {
+      jsonField: "password",
+    });
     const sourceArtifact = new codepipeline.Artifact("SourceInput");
     const buildArtifact = new codepipeline.Artifact("BuildOutput");
     const sourceAction = new cpactions.GitHubSourceAction({

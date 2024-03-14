@@ -1,7 +1,7 @@
 import { Stack, StackProps, Stage, StageProps, Tags } from "aws-cdk-lib";
 import { CodePipeline, CodePipelineSource, ShellStep } from "aws-cdk-lib/pipelines";
 import { Construct } from "constructs";
-import { CoelhorIac } from "../stack";
+import { BlogIac } from "../stack";
 import { prodConfig } from "../config";
 import { BlogPipelineStack } from "./blogpipeline";
 
@@ -9,7 +9,7 @@ export class PipelineStage extends Stage {
   constructor(scope: Construct, id: string, props?: StageProps) {
     super(scope, id, props);
 
-    const blogIac = new CoelhorIac(this, "InfraStack", prodConfig);
+    const blogIac = new BlogIac(this, "InfraStack", prodConfig);
 
     const blogPipeline = new BlogPipelineStack(this, "BlogPipeline", prodConfig);
 
