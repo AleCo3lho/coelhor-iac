@@ -10,7 +10,6 @@ export class PipelineStage extends Stage {
     super(scope, id, props);
 
     const blogIac = new BlogIac(this, "InfraStack", prodConfig);
-
     const blogPipeline = new BlogPipelineStack(this, "BlogPipeline", prodConfig);
 
     blogPipeline.addDependency(blogIac);

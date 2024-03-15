@@ -74,8 +74,8 @@ export class BlogIac extends Stack {
       domainNames: [`${props.domain}`, `*.${props.domain}`],
       certificate: blogCert,
     });
-
     blogCF.applyRemovalPolicy(RemovalPolicy.DESTROY);
+
     new ssm.StringParameter(this, `${props.domain}-BlogCFID`, {
       stringValue: blogCF.distributionId,
       parameterName: "/blog/cf/distribution-id",
