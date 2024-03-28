@@ -2714,7 +2714,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "6c1e9b465fa4b2d651dbc9ce3e732d8702a7b19137327684a71d89f1d355f1a2.zip",
+          "S3Key": "dummy.zip",
         },
         "Description": {
           "Fn::Join": [
@@ -3353,7 +3353,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "e2889ff19a598a1f8e5e6851308fa06ebe78e54140722400aa99ecfed4efa339.zip",
+          "S3Key": "dummy.zip",
         },
         "Environment": {
           "Variables": {
@@ -3676,7 +3676,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "Properties": {
         "Code": {
           "S3Bucket": "cdk-hnb659fds-assets-239828624774-us-east-1",
-          "S3Key": "66d1e1bd12642e73ff546a6d0f63761d7a6017d7d2abf877c9cadebfb8c58718.zip",
+          "S3Key": "dummy.zip",
         },
         "Environment": {
           "Variables": {

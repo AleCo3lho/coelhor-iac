@@ -11,6 +11,10 @@ test("snapshot for CoelhorIac matches previous state", () => {
   const stack = new BlogIac(app, "MyTestStack", prodConfig);
 
   const template = Template.fromStack(stack);
+
+  const lambdaFunctions = template.findResources("AWS::Lambda::Function");
+  cleanUpLambdaImages(lambdaFunctions);
+
   expect(template.toJSON()).toMatchSnapshot();
 });
 
@@ -32,3 +36,13 @@ test("snapshot for BlogPipiline matches previous state", () => {
   expect(template.toJSON()).toMatchSnapshot();
 });
 
+/*** in-place mutate the resources to strip the Lambda function */
+function cleanUpLambdaImages(resources: any) {
+  for (const key of Object.keys(resources)) {
+    const resource = resources[key];
+    const lambdaFunction = resource["Properties"]["Code"];
+  
+    lambdaFunction["S3Key"] = "dummy.zip";
+   
+  }
+}
