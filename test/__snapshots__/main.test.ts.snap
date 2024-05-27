@@ -1332,24 +1332,6 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                 "Service": "codebuild.amazonaws.com",
               },
             },
-            {
-              "Action": "sts:AssumeRole",
-              "Effect": "Allow",
-              "Principal": {
-                "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::239828624774:root",
-                    ],
-                  ],
-                },
-              },
-            },
           ],
           "Version": "2012-10-17",
         },
@@ -3559,8 +3541,35 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
               "Action": "s3:PutObject",
               "Condition": {
                 "StringEquals": {
-                  "aws:Referer": {
+                  "aws:SourceAccount": {
                     "Ref": "AWS::AccountId",
+                  },
+                  "aws:SourceArn": {
+                    "Fn::Join": [
+                      "",
+                      [
+                        "arn:",
+                        {
+                          "Ref": "AWS::Partition",
+                        },
+                        ":ses:",
+                        {
+                          "Ref": "AWS::Region",
+                        },
+                        ":",
+                        {
+                          "Ref": "AWS::AccountId",
+                        },
+                        ":receipt-rule-set/",
+                        {
+                          "Ref": "coelhordevSESReceive2E192CD8",
+                        },
+                        ":receipt-rule/",
+                        {
+                          "Ref": "coelhordevSESReceiveRule049DB20CB",
+                        },
+                      ],
+                    ],
                   },
                 },
               },
@@ -3611,9 +3620,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "coelhordevSESReceiveRule049DB20CB": {
-      "DependsOn": [
-        "coelhordevSESBucketPolicy1EE018B1",
-      ],
       "Properties": {
         "Rule": {
           "Actions": [
