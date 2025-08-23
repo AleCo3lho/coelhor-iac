@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`snapshot for BlogPipiline matches previous state 1`] = `
 {
@@ -275,7 +275,7 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
         },
         "Environment": {
           "ComputeType": "BUILD_GENERAL1_SMALL",
-          "Image": "aws/codebuild/standard:1.0",
+          "Image": "aws/codebuild/standard:7.0",
           "ImagePullCredentialsType": "CODEBUILD",
           "PrivilegedMode": false,
           "Type": "LINUX_CONTAINER",
@@ -644,15 +644,9 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
               "Effect": "Allow",
               "Principal": {
                 "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::239828624774:root",
-                    ],
+                  "Fn::GetAtt": [
+                    "PipelineRoleD68726F7",
+                    "Arn",
                   ],
                 },
               },
@@ -909,15 +903,9 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
               "Effect": "Allow",
               "Principal": {
                 "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::239828624774:root",
-                    ],
+                  "Fn::GetAtt": [
+                    "PipelineRoleD68726F7",
+                    "Arn",
                   ],
                 },
               },
@@ -977,15 +965,9 @@ exports[`snapshot for BlogPipiline matches previous state 1`] = `
               "Effect": "Allow",
               "Principal": {
                 "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::239828624774:root",
-                    ],
+                  "Fn::GetAtt": [
+                    "PipelineRoleD68726F7",
+                    "Arn",
                   ],
                 },
               },
@@ -1289,7 +1271,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
         "Cache": {
           "Type": "NO_CACHE",
         },
-        "Description": "Pipeline step MyCodePipelineStack/Pipeline/Assets/FileAsset",
+        "Description": "Pipeline step MyCodePipelineStack/Pipeline/Assets/FileAssets",
         "EncryptionKey": "alias/aws/s3",
         "Environment": {
           "ComputeType": "BUILD_GENERAL1_SMALL",
@@ -2007,7 +1989,7 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
                     "Name": "Synth_Output",
                   },
                 ],
-                "Name": "FileAsset",
+                "Name": "FileAssets",
                 "RoleArn": {
                   "Fn::GetAtt": [
                     "PipelineStackCodeBuildActionRoleBF300C35",
@@ -2311,15 +2293,9 @@ exports[`snapshot for CodePipelineStack matches previous state 1`] = `
               "Effect": "Allow",
               "Principal": {
                 "AWS": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "arn:",
-                      {
-                        "Ref": "AWS::Partition",
-                      },
-                      ":iam::239828624774:root",
-                    ],
+                  "Fn::GetAtt": [
+                    "PipelineStackPipelineRoleC1A5441C",
+                    "Arn",
                   ],
                 },
               },
@@ -2718,7 +2694,7 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
             "Arn",
           ],
         },
-        "Runtime": "nodejs18.x",
+        "Runtime": "nodejs22.x",
         "Timeout": 900,
       },
       "Type": "AWS::Lambda::Function",
@@ -2754,6 +2730,16 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           },
         },
         "EmailIdentity": "coelhor.dev",
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor.dev",
+          },
+        ],
       },
       "Type": "AWS::SES::EmailIdentity",
       "UpdateReplacePolicy": "Delete",
@@ -3023,7 +3009,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         "AccessControl": "BucketOwnerFullControl",
         "PublicAccessBlockConfiguration": {
           "BlockPublicAcls": true,
+          "BlockPublicPolicy": false,
           "IgnorePublicAcls": true,
+          "RestrictPublicBuckets": false,
         },
         "Tags": [
           {
@@ -3125,32 +3113,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                 },
               ],
             },
-            {
-              "Action": "s3:GetObject",
-              "Effect": "Allow",
-              "Principal": {
-                "CanonicalUser": {
-                  "Fn::GetAtt": [
-                    "coelhordevBlogCFOrigin1S3OriginC94B37FC",
-                    "S3CanonicalUserId",
-                  ],
-                },
-              },
-              "Resource": {
-                "Fn::Join": [
-                  "",
-                  [
-                    {
-                      "Fn::GetAtt": [
-                        "coelhordevBlogBucket7BB1D0CB",
-                        "Arn",
-                      ],
-                    },
-                    "/*",
-                  ],
-                ],
-              },
-            },
           ],
           "Version": "2012-10-17",
         },
@@ -3187,26 +3149,29 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
           "IPV6Enabled": true,
           "Origins": [
             {
+              "CustomOriginConfig": {
+                "OriginProtocolPolicy": "http-only",
+                "OriginSSLProtocols": [
+                  "TLSv1.2",
+                ],
+              },
               "DomainName": {
-                "Fn::GetAtt": [
-                  "coelhordevBlogBucket7BB1D0CB",
-                  "RegionalDomainName",
+                "Fn::Select": [
+                  2,
+                  {
+                    "Fn::Split": [
+                      "/",
+                      {
+                        "Fn::GetAtt": [
+                          "coelhordevBlogBucket7BB1D0CB",
+                          "WebsiteURL",
+                        ],
+                      },
+                    ],
+                  },
                 ],
               },
               "Id": "MyTestStackcoelhordevBlogCFOrigin124A03D2E",
-              "S3OriginConfig": {
-                "OriginAccessIdentity": {
-                  "Fn::Join": [
-                    "",
-                    [
-                      "origin-access-identity/cloudfront/",
-                      {
-                        "Ref": "coelhordevBlogCFOrigin1S3OriginC94B37FC",
-                      },
-                    ],
-                  ],
-                },
-              },
             },
           ],
           "ViewerCertificate": {
@@ -3245,14 +3210,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       },
       "Type": "AWS::SSM::Parameter",
     },
-    "coelhordevBlogCFOrigin1S3OriginC94B37FC": {
-      "Properties": {
-        "CloudFrontOriginAccessIdentityConfig": {
-          "Comment": "Identity for MyTestStackcoelhordevBlogCFOrigin124A03D2E",
-        },
-      },
-      "Type": "AWS::CloudFront::CloudFrontOriginAccessIdentity",
-    },
     "coelhordevBlogCFRedirectCDFB86D4": {
       "Properties": {
         "AutoPublish": true,
@@ -3269,10 +3226,10 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                   return request;
                 }",
         "FunctionConfig": {
-          "Comment": "us-east-1MyTestStackcoelhordevBlogCFRedirect39387605",
+          "Comment": "us-east-1MyTestStackcoelhv-BlogCFRedirect39387605",
           "Runtime": "cloudfront-js-1.0",
         },
-        "Name": "us-east-1MyTestStackcoelhordevBlogCFRedirect39387605",
+        "Name": "us-east-1MyTestStackcoelhv-BlogCFRedirect39387605",
       },
       "Type": "AWS::CloudFront::Function",
     },
@@ -3544,33 +3501,6 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
                   "aws:SourceAccount": {
                     "Ref": "AWS::AccountId",
                   },
-                  "aws:SourceArn": {
-                    "Fn::Join": [
-                      "",
-                      [
-                        "arn:",
-                        {
-                          "Ref": "AWS::Partition",
-                        },
-                        ":ses:",
-                        {
-                          "Ref": "AWS::Region",
-                        },
-                        ":",
-                        {
-                          "Ref": "AWS::AccountId",
-                        },
-                        ":receipt-rule-set/",
-                        {
-                          "Ref": "coelhordevSESReceive2E192CD8",
-                        },
-                        ":receipt-rule/",
-                        {
-                          "Ref": "coelhordevSESReceiveRule049DB20CB",
-                        },
-                      ],
-                    ],
-                  },
                 },
               },
               "Effect": "Allow",
@@ -3620,6 +3550,9 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
       "UpdateReplacePolicy": "Delete",
     },
     "coelhordevSESReceiveRule049DB20CB": {
+      "DependsOn": [
+        "coelhordevSESBucketPolicy1EE018B1",
+      ],
       "Properties": {
         "Rule": {
           "Actions": [
@@ -3645,6 +3578,18 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
     },
     "coelhordevSESSendCD48A34D": {
       "DeletionPolicy": "Delete",
+      "Properties": {
+        "Tags": [
+          {
+            "Key": "Author",
+            "Value": "Alexandre Coelho Ramos",
+          },
+          {
+            "Key": "Project",
+            "Value": "coelhor.dev",
+          },
+        ],
+      },
       "Type": "AWS::SES::ConfigurationSet",
       "UpdateReplacePolicy": "Delete",
     },
@@ -3667,6 +3612,16 @@ exports[`snapshot for CoelhorIac matches previous state 1`] = `
         "Replicas": [
           {
             "Region": "us-east-1",
+            "Tags": [
+              {
+                "Key": "Author",
+                "Value": "Alexandre Coelho Ramos",
+              },
+              {
+                "Key": "Project",
+                "Value": "coelhor.dev",
+              },
+            ],
           },
         ],
       },

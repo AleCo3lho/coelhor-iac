@@ -37,7 +37,7 @@ export class BlogIac extends Stack {
     const blogBucket = new s3.Bucket(this, `${props.domain}-BlogBucket`, {
       autoDeleteObjects: true,
       removalPolicy: RemovalPolicy.DESTROY,
-      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
+      blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS_ONLY,
       accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
     });
     blogBucket.applyRemovalPolicy(RemovalPolicy.DESTROY);
@@ -49,7 +49,7 @@ export class BlogIac extends Stack {
 
     const blogCF = new cloudfront.Distribution(this, `${props.domain}-BlogCF`, {
       defaultBehavior: {
-        origin: new origins.S3Origin(blogBucket),
+        origin: new origins.S3StaticWebsiteOrigin(blogBucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
         functionAssociations: [
           {
